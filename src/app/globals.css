@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+.ant-typography {
+  @apply font-sans; /* Sử dụng font sans-serif từ Tailwind */
+}
+
+:root {
+  --antd-font-family: 'Roboto', sans-serif;
+}
+* {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.icon-cart {
+  font-size: 22px;
+  position: relative;
+  color: #212121;
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
