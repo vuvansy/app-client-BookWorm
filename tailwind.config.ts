@@ -147,6 +147,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      boxShadow: {
+        'custom': '0px 0px 4px 2px rgba(0, 0, 0, 0.1);',
+      },
       colors: {
         "bg-text": "#212121",
         "bg-main": "#F0F0F0",
@@ -156,6 +159,7 @@ const config: Config = {
         "red-fade": "#FEEBE9",
         "yellow-1": "#F6A500",
         "yellow-2": "#F39801",
+        "yellow-3": "#F7941E",
         "black": "#212121",
         "gray-1": "#7A7E7F",
         "gray-2": "#777",
