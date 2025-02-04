@@ -7,9 +7,9 @@ import { FaLocationDot } from 'react-icons/fa6';
 import { MdEmail } from 'react-icons/md';
 const AppFooter = () => {
     return (
-        <footer className='container mt-[30px]'>
-            <div className="flex flex-col lg:flex-row pt-[16px] " >
-                <div className="basis-2/6 text-info border-r border-black">
+        <footer className='mt-[30px] bg-bg-main '>
+            <div className=" container bg-white flex flex-col lg:flex-row pt-[16px]  rounded-tl-[8px] rounded-tr-[8px]" >
+                <div className="relative basis-2/6 text-info ">
                     <div className='w-[389px] h-[69px] mb-[8px] py-2.5 px-[15px]'>BookWorm</div>
                     <div className="ml-[10px] mt-[10px] ">
                         <p className='pr-[15px] pl-[10px]'>
@@ -30,6 +30,7 @@ const AppFooter = () => {
                             <a className='pr-[10px]' href="#"><AiFillInstagram className='w-[25px] h-[25px]' /></a>
                         </div>
                     </div>
+                    <div className="absolute right-0 top-1/2 transform -translate-y-1/2 h-[95%] border-r border-[#cecece]"></div>
                 </div>
                 <div className="basis-4/6 ml-[20px] mt-[10px] md:mt-0 md:ml-[10px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 ">
@@ -155,7 +156,7 @@ const AppFooter = () => {
                             </ul>
                         </div>
                     </div>
-                    <div className="mt-[15px] pl-[10px]">
+                    <div className="mt-[15px] pl-[10px] pb-[15px]">
                         <h3 className="text-body-bold">LIÊN HỆ</h3>
                         <div className="grid grid-cols-1 lg:grid-cols-3 mt-[10px] text-info pl-0 md:pl-[15px] ">
                             <div className="flex items-center "><FaLocationDot className='mr-2' /><p>60-62 Lê Lợi Q1, TP.HCM</p></div>
@@ -165,7 +166,9 @@ const AppFooter = () => {
 
                     </div>
                 </div>
+               
             </div>
+          
         </footer >
     )
 }
