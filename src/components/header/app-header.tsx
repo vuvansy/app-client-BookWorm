@@ -26,7 +26,7 @@ const content = (
         <div>
             <div className='flex pb-2'>
                 <Link href={"/"} className='block relative aspect-square w-[68px] h-[68px]'>
-                    <Image src={"/books/tet-oi-tet-dau-roi.webp"}
+                    <Image src={"/books/sachlichsu.webp"}
                         alt=""
                         fill
                         sizes="100"
@@ -62,9 +62,9 @@ const content = (
         <div className='flex justify-between items-center pt-[16px] pb-[4px]'>
             <div>
                 <p>Tổng cộng</p>
-                <span className='text-red1 !text-body-bold'>1.430.310 đ</span>
+                <span className='text-red1 !text-body-bold'>{(1430310).toLocaleString()} đ</span>
             </div>
-            <Link href={'/checkout/cart'}
+            <Link href={'/cart'}
                 className='w-[186px] h-[40px] border-[2px] border-red1 rounded-lg bg-red1 text-white text-caption-bold flex justify-center items-center hover:text-white'>
                 Xem giỏ hàng
             </Link>
@@ -88,7 +88,7 @@ const AppHeader = () => {
     }));
 
     return (
-        <>
+        <header>
             <div className='bg-red1 h-[36px] flex justify-between items-center'>
                 <div className='container flex justify-between text-white'>
                     <div className='flex items-center gap-x-[4px] cursor-pointer'>
@@ -102,7 +102,7 @@ const AppHeader = () => {
                     </div>
                 </div>
             </div>
-            <div className=''>
+            <div className='header-center'>
                 <div className='bg-[#F4EDD3] h-[60px] flex items-center'>
                     <div className='container flex justify-between items-center'>
                         <div className='basis-3/12'>
@@ -185,7 +185,7 @@ const AppHeader = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </header>
     )
 }
 
