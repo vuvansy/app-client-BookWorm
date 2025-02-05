@@ -1,9 +1,9 @@
-'use client';
-import PacmanLoader from "react-spinners/PacmanLoader";
-
+import { Spin } from 'antd';
 
 export default function Loading() {
-    return <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <PacmanLoader size={30} color="#36d6b4" />
-    </div>;
+    return (
+    <div className="fixed h-screen w-full inset-0 flex justify-center items-center bg-black bg-opacity-30 z-50">
+        <Spin size="large" />
+    </div>
+    );
 }
