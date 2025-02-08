@@ -130,6 +130,8 @@ const AppHeader = () => {
                                             count={10}
                                             size={"small"}
                                             showZero
+                                            style={{ backgroundColor: '#C92127' }}
+
                                         >
                                             <PiShoppingCartBold className='icon-cart top-[4px]' />
                                         </Badge>
@@ -145,7 +147,7 @@ const AppHeader = () => {
                         </div>
                     </div>
                 </div >
-                <div className='h-[40px] flex items-center'>
+                <div className='h-[40px] flex items-centers shadow-xl'>
                     <div className='container'>
                         <ul className='flex justify-center items-center gap-x-8 text-caption'>
                             <li>

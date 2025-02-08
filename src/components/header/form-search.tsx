@@ -26,7 +26,7 @@ const SearchForm = () => {
             >
                 <Input placeholder="Bạn tìm gì hôm nay..." className='h-[36px]' />
             </Form.Item>
-            <Button type="primary" htmlType="submit" className='!flex justify-center items-center !absolute top-1/2 transform -translate-y-1/2 right-0 !bg-[#FF0000] !border-solid !border-2 !rounded-none !rounded-r-[6px] !px-[12px] !h-[36px]'>
+            <Button type="primary" htmlType="submit" className='!flex justify-center items-center !absolute top-1/2 transform -translate-y-1/2 right-0 !bg-red1 !border-solid !border-2 !rounded-none !rounded-r-[6px] !px-[12px] !h-[36px]'>
                 <IoSearchSharp className='!w-[22px] !h-[22px]' />
             </Button>
 
