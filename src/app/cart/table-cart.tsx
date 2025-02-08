@@ -105,13 +105,13 @@ const TableCart = () => {
         <>
             <table className="table-auto border-collapse">
                 <thead>
-                    <tr className="">
-                        <th className="w-[6%] p-[6px]">STT</th>
-                        <th className="w-[16%] p-[6px]">Ảnh</th>
-                        <th className="w-[40%] p-[6px] min-w-[330px]">Sản phẩm</th>
-                        <th className="w-[12%] p-[6px]">Số lượng</th>
-                        <th className="w-[18%] p-[6px]">Thành tiền</th>
-                        <th className="w-[8%] p-[6px]"></th>
+                    <tr>
+                        <th className="w-[6%] p-[10px]">STT</th>
+                        <th className="w-[16%] p-[10px]">Ảnh</th>
+                        <th className="w-[40%] p-[10px] min-w-[330px]">Sản phẩm</th>
+                        <th className="w-[12%] p-[10px]">Số lượng</th>
+                        <th className="w-[18%] p-[10px]">Thành tiền</th>
+                        <th className="w-[8%] p-[10px]"></th>
                     </tr>
                 </thead>
                 <tbody>
