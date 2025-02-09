@@ -45,18 +45,18 @@ const DropDowAccount = () => {
             key: 'account',
         },
         {
-            label: (<Link href="/history" className="flex items-center gap-x-2">
+            label: (<Link href="/profile/order" className="flex items-center gap-x-2">
                 <MdOutlineBookmarks className="text-[18px]" />
                 <span>Đơn hàng của tôi</span>
             </Link>),
-            key: 'history',
+            key: 'order',
         },
         {
-            label: (<Link href="/like" className="flex items-center gap-x-2">
+            label: (<Link href="/profile/wishlist" className="flex items-center gap-x-2">
                 <MdOutlineFavoriteBorder className="text-[18px]" />
                 <span>Book yêu thích</span>
             </Link>),
-            key: 'like',
+            key: 'wishlist',
         },
         {
             label: (
