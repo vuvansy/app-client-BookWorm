@@ -25,12 +25,14 @@ const contentStyle: React.CSSProperties = {
 };
 
 const CarouselPage: React.FC = () => (
-  <div className="w-[830px] h-[320px]">
+  <div className="w-[830px] h-[320px] ">
     <Carousel autoplay>
       {imageCarousel.map((item) => (
         <div key={item.id}>
-          <h3 style={contentStyle}>
+          <h3 style={contentStyle} className="rounded-lg">
             <Image
+              className="rounded-lg"
+              objectFit="contain"
               src={item.image}
               alt="Example image"
               width={830}
