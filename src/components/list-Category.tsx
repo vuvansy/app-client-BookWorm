@@ -1,6 +1,7 @@
 import React from "react";
 import { BiCategory } from "react-icons/bi";
 import Image from "next/image";
+import Link from "next/link";
 
 const cate = [
   {
@@ -41,7 +42,7 @@ const cate = [
   {
     id: 8,
     name: "Ngoại văn",
-    image: "/image6.png",
+    image: "/image7.png",
   },
 ];
 const CategoryPage = () => {
@@ -51,21 +52,20 @@ const CategoryPage = () => {
         <BiCategory className="text-[red] w-[30px] h-[30px] mr-[10px] " />
         <div className="text-sub-heading-bold">Danh mục sản phẩm</div>
       </div>
-      <div className="flex container rounded-b-[10px] flex-row justify-between p-4">
+      <div className="flex  container rounded-b-[10px] flex-row justify-between p-4">
         {cate.map((item) => (
-          <div
-            key={item.id}
-            className="text-center w-[120px] flex flex-col items-center"
-          >
-            <Image
-              className="mb-4"
-              src={item.image}
-              alt=""
-              width={100}
-              height={100}
-            />
-            <p className="text-body1 capitalize">{item.name}</p>
-          </div>
+          <Link href="" key={item.id}>
+            <div className="text-center w-[120px] flex flex-col items-center hover:text-[#C92127] cursor-pointer">
+              <Image
+                className="mb-4"
+                src={item.image}
+                alt=""
+                width={100}
+                height={100}
+              />
+              <p className="text-body1 capitalize">{item.name}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

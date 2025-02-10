@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import StyledComponentsRegistry from '@/lib/antd.registry';
-import "./globals.css"
+import StyledComponentsRegistry from "@/lib/antd.registry";
+import "./globals.css";
 import AppHeader from "@/components/header/app-header";
 import AppFooter from "@/components/footer/app-footer";
 
