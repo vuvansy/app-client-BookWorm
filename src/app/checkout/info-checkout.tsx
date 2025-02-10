@@ -203,7 +203,7 @@ const InfoCheckout = () => {
             </div>
             <div className="basis-4/12 pl-[15px]">
                 <div className="bg-white rounded-lg px-[16px] py-[8px]">
-                    <h2 className="text-body-bold">ĐƠN HÀNG</h2>
+                    <h2 className="text-body-bold uppercase pt-2">Đơn hàng</h2>
                     <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
                         <p>Tạm tính</p>
                         <span>1,792,000 đ</span>

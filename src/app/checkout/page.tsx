@@ -32,7 +32,7 @@ const CheckoutPage = () => {
             </div>
             <div className="container mt-[20px]">
                 <div className="bg-white py-2 px-[16px] rounded-lg">
-                    <h1 className="uppercase py-2">Kiểm tra lại đơn hàng</h1>
+                    <h1 className="uppercase py-2 font-semibold">Kiểm tra lại đơn hàng</h1>
                     <div className="py-1">
                         <div className="pt-1 pb-2 border-t border-[#ced4da]">
                             <div className="flex py-1">

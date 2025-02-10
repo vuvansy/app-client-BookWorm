@@ -37,12 +37,12 @@ const DropDowAccount = () => {
     const userItems = [
         {
             label: (
-                <Link href="/history" className="flex items-center gap-x-2">
+                <Link href="/edit-profile" className="flex items-center gap-x-2">
                     <FaRegUser className="text-[18px]" />
                     <span>Quản lý tài khoản</span>
                 </Link>
             ),
-            key: 'account',
+            key: 'edit-profile',
         },
         {
             label: (<Link href="/profile/order" className="flex items-center gap-x-2">

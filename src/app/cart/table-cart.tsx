@@ -103,12 +103,12 @@ const TableCart = () => {
 
     return (
         <>
-            <table className="table-auto border-collapse">
+            <table className="table-auto border-collapse w-full text-[15px] mt-[6px]">
                 <thead>
                     <tr>
                         <th className="w-[6%] p-[10px]">STT</th>
                         <th className="w-[16%] p-[10px]">Ảnh</th>
-                        <th className="w-[40%] p-[10px] min-w-[330px]">Sản phẩm</th>
+                        <th className="w-[40%] p-[10px]">Sản phẩm</th>
                         <th className="w-[12%] p-[10px]">Số lượng</th>
                         <th className="w-[18%] p-[10px]">Thành tiền</th>
                         <th className="w-[8%] p-[10px]"></th>
@@ -132,7 +132,7 @@ const TableCart = () => {
                                             <Link href={`/product/${item.id}`} className="block w-full">{item.name}</Link>
                                         </div>
                                         <div className="">
-                                            <span className="text-bg-text font-semibold">{item.priceNew.toLocaleString()} đ</span>
+                                            <span className="text-bg-text font-semibold text-body1">{item.priceNew.toLocaleString()} đ</span>
                                             <span className="text-info text-gray-1 line-through ml-3">{item.priceOld.toLocaleString()} đ</span>
                                         </div>
                                     </div>
@@ -158,7 +158,7 @@ const TableCart = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className="text-center text-price-special font-semibold border-b border-solid border-[#ddd]">{(99000).toLocaleString()} đ</td>
+                                <td className="text-center text-price-special font-semibold border-b border-solid border-[#ddd] text-body1">{(99000).toLocaleString()} đ</td>
                                 <td className="text-center border-b border-solid border-[#ddd]">
                                     <div className="flex items-center justify-center h-full cursor-pointer">
                                         <FaRegTrashCan
@@ -174,7 +174,7 @@ const TableCart = () => {
                 </tbody>
             </table>
             <div className="py-[20px] flex justify-center">
-                <button className="w-[98%] h-[40px]  text-price-special font-semibold border border-solid border-[#ddd] rounded-lg">
+                <button className="w-[98%] h-[40px] text-caption text-price-special font-semibold border border-solid border-[#ddd] rounded-lg hover:bg-red1 hover:text-white">
                     Xóa hết giỏ hàng
                 </button>
             </div>
