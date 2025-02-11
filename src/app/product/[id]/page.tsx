@@ -1,0 +1,197 @@
+import React from 'react';
+import { Breadcrumb, ConfigProvider, Rate } from "antd";
+import { GrFormNext } from "react-icons/gr";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
+import QuantitySelector from './quantity';
+import ListCoupon from './listCoupon';
+import ProductDescription from './description';
+import CustomerReviews from './review';
+
+interface Product {
+    id: string;
+    name: string;
+    price_old: number;
+    price_new: number;
+    supplier: string;//Nhà cung cấp
+    author: string;// Tác giả
+    translator: string;//Người dịch
+    publisher: string;//Nhà xuất bản
+    year_publish: number;//Năm xuất bản
+    weight: number;//Trọng lượng
+    size: string;//Kích thước
+    page_number: number;//Số trang
+    book_cover: string;//Hình thức bìa
+
+}
+
+const Product: Product = {
+    id: '8935086856000',
+    name: 'Bạn Là Ai Giữa Muôn Vàn Phong Cách Sống',
+    price_old: 124000,
+    price_new: 62000,
+    supplier: 'FRIST NEW',
+    author: 'J Krishnamurti',
+    translator: 'Huỳnh Hiếu Thuận',
+    publisher: 'Hồng Đức',
+    year_publish: 2022,
+    weight: 339,
+    size: '20.5 x 14.5 x 1.4',
+    page_number: 304,
+    book_cover: 'Bìa mềm',
+
+}
+
+const Discount = (oldPrice: number, newPrice: number): number => {
+    if (oldPrice <= 0) return 0;
+    const discount = ((oldPrice - newPrice) / oldPrice) * 100;
+    return Math.round(discount);
+};
+
+const formatNumber = (num: number): string => {
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
+};
+
+const ProductDetailPage = () => {
+
+    const discount = Discount(Product.price_old, Product.price_new);
+
+    return (
+        <div className="bg-bg-main">
+            <div className="container pt-[15px]">
+                <Breadcrumb
+                    items={[
+                        {
+                            title: 'Trang Chủ',
+                        },
+                        {
+                            title: 'Sản Phẩm',
+                        },
+                    ]}
+                />
+            </div>
+            <div className="container pt-[15px] pb-5">
+                <div className=" flex justify-between gap-x-4">
+                    <div className="w-[40%] h-[671px] bg-white ">
+                        {/* box hình ảnh ở đây */}
+                    </div>
+                    <div className="w-[60%] flex flex-wrap gap-y-4">
+                        <div className="w-full px-4 pt-4 bg-white rounded-lg">
+                            <div className=" flex items-center text-heading4-bold leading-[30px]">{Product.name}</div>
+                            <div className="flex justify-between my-1">
+                                <div className=" ">
+                                    <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Nhà cung cấp :<div className="text-caption-bold">{Product.supplier}</div></div>
+                                    <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Hình thức bìa :<div className="text-caption-bold">{Product.book_cover}</div></div>
+
+                                </div>
+                                <div className=" ">
+                                    <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Tác giả :<div className="text-caption-bold">{Product.author}</div></div>
+                                    <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Nhà xuất bản :<div className="text-caption-bold">{Product.publisher}</div></div>
+                                </div>
+                            </div>
+                            <div className="py-[5px] flex gap-x-3 items-center">
+                                <div className=" flex items-center">
+                                    <ConfigProvider
+                                        theme={{
+                                            components: {
+                                                Rate: {
+                                                    starSize: 14,
+                                                }
+                                            },
+                                        }}
+                                    >
+                                        <Rate disabled allowHalf defaultValue={4.5} />
+                                    </ConfigProvider>
+                                </div>
+                                <div className="flex items-center">
+                                    <div className="text-caption-light border-r-2 border-gray-300 pr-4 text-yellow-1">
+                                        (2 đánh giá)
+                                    </div>
+                                    <div className="text-caption-light pl-4">
+                                        Đã bán {formatNumber(2200)}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="py-1 flex items-center gap-x-3">
+                                <div className="text-price-special text-heading2-bold">
+                                    {Product.price_new}đ
+                                </div>
+                                <div className="text-caption-light text-price-old line-through">
+                                    {Product.price_old}đ
+                                </div>
+                                <div className="px-[2px] leading-[22px] rounded-md bg-red1 font-semibold text-info flex items-center justify-center text-white">
+                                    -{discount}%
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="w-full px-4 pt-4 bg-white rounded-lg">
+                            <div className="leading-[30px] flex items-center gap-x-1 mb-4">
+                                <div className="text-sub-heading-bold">Ưu đãi liên quan</div>
+                                <div className="w-[115px] flex items-center justify-center text-caption text-blue-text-bold">Xem thêm <GrFormNext /> </div>
+                            </div>
+                            <ListCoupon />
+                            <div className=' flex items-center gap-x-8 my-4'>
+                                <div className='text-sub-heading'>Số lượng :</div>
+                                <QuantitySelector />
+                            </div>
+                            <div className='pb-4 flex gap-x-2'>
+                                <button className='w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'><FaShoppingCart className='w-[25px] h-[25px]' />Mua ngay</button>
+                                <button className='w-[220px] h-[45px] rounded-md border border-red1 text-red1 text-body-bold flex items-center justify-center gap-x-2'><FaCartPlus className='w-[25px] h-[25px]' />Thêm vào giỏ hàng</button>
+                            </div>
+
+                        </div>
+                        <div className="w-full pt-4 px-4 bg-white rounded-lg">
+                            <div className="flex items-center text-[18px] font-semibold leading-[24px]">Thông tin chi tiết</div>
+                            <div className="py-4 flex items-center justify-center  ">
+                                <div className="w-full">
+                                    <div className="grid grid-cols-2">
+                                        <div className="divide-y divide-bg-main">
+                                            <div className="text-price-old text-caption py-2">Mã hàng</div>
+                                            <div className="text-price-old text-caption py-2">Tên Nhà Cung Cấp</div>
+                                            <div className="text-price-old text-caption py-2">Tác giả</div>
+                                            <div className="text-price-old text-caption py-2">Người Dịch</div>
+                                            <div className="text-price-old text-caption py-2">NXB</div>
+                                            <div className="text-price-old text-caption py-2">Năm XB</div>
+                                            <div className="text-price-old text-caption py-2">Trọng lượng (gr)</div>
+                                            <div className="text-price-old text-caption py-2">Kích Thước Bao Bì</div>
+                                            <div className="text-price-old text-caption py-2">Số trang</div>
+                                            <div className="text-price-old text-caption py-2">Hình thức</div>
+                                        </div>
+                                        <div className="divide-y divide-bg-main">
+                                            <div className="text-bg-text text-caption py-2">{Product.id}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.supplier}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.author}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.translator}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.publisher}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.year_publish}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.weight}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.size}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.page_number}</div>
+                                            <div className="text-bg-text text-caption py-2">{Product.book_cover}</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="w-full py-2 flex flex-col gap-y-2">
+                                <div className='text-caption text-black'>Giá sản phẩm trên BookWorm.com đã bao gồm thuế theo luật hiện hành. Bên cạnh đó, tuỳ vào loại sản phẩm, hình thức và địa chỉ giao hàng mà có thể phát sinh thêm chi phí khác như Phụ phí đóng gói, phí vận chuyển, phụ phí hàng cồng kềnh,...</div>
+                                <div className='text-caption text-red1'>Chính sách khuyến mãi trên BookWorm.com không áp dụng cho Hệ thống Nhà sách Fahasa trên toàn quốc.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="container">
+                <ProductDescription />
+                <CustomerReviews />
+            </div>
+        </div>
+    )
+}
+
+export default ProductDetailPage;
+
