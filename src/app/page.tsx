@@ -14,7 +14,7 @@ import NewsBox from "@/components/box-news";
 const Home = () => {
   return (
     <main className="bg-bg-main">
-      <div className="container py-5 flex justify-between  ">
+      <div className="container pt-5 flex justify-between  ">
         <CarouselPage></CarouselPage>
         <div className="flex w-[392px] h-[100%] flex-wrap items-center justify-between ">
           <div className="w-full h-[155px] mb-[4px] rounded-lg	">
@@ -65,7 +65,7 @@ const Home = () => {
                   src="/label-flashsale.svg"
                   alt=""
                   fill
-                  objectFit="cover"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
             </Link>
@@ -157,8 +157,8 @@ const Home = () => {
       </div>
       <div className="container mt-5 bg-white rounded-lg">
         <p className="text-heading3-bold mb-5 pt-5 text-center">Tin Tức</p>
-        <div className="flex pb-5">
-          <div className="w-1/2">
+        <div className="flex gap-[30px] pb-5">
+          <div className="w-[585px]">
             <Link href="">
               <Image
                 src="/17358167219431528_512.webp"
@@ -182,7 +182,7 @@ const Home = () => {
               </p>
             </Link>
           </div>
-          <div className="w-1/2 pl-5 flex flex-wrap gap-5">
+          <div className="w-[585px] flex flex-wrap gap-2">
             <NewsBox />
             <NewsBox />
             <NewsBox />
@@ -190,9 +190,9 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="container bg-white mt-5">
-        <div className="flex ">
-          <div className="w-1/4 text-center px-[50px] py-[25px]">
+      <div className="container bg-bg-main mt-5">
+        <div className="flex justify-between ">
+          <div className="w-[300px] rounded-lg bg-white text-center px-[45px] py-[25px]">
             <div className="w-[50px] h-[50px] mx-auto">
               <Image
                 src="/Frame139.png"
@@ -212,7 +212,7 @@ const Home = () => {
               Tận hưởng các mặt hàng chất lượng hàng đầu với giá cả hợp lý
             </p>
           </div>
-          <div className="w-1/4 text-center px-[50px] py-[25px]">
+          <div className="w-[300px] rounded-lg  bg-white text-center px-[45px] py-[25px]">
             <div className="w-[50px] h-[50px] mx-auto">
               <Image
                 src="/Frame140.png"
@@ -232,7 +232,7 @@ const Home = () => {
               Nhận hỗ trợ ngay lập tức bất cứ khi nào bạn cần
             </p>
           </div>
-          <div className="w-1/4 text-center px-[50px] py-[25px]">
+          <div className="w-[300px] rounded-lg  bg-white text-center px-[45px] py-[25px]">
             <div className="w-[50px] h-[50px] mx-auto">
               <Image
                 src="/Frame141.png"
@@ -254,7 +254,7 @@ const Home = () => {
               Tùy chọn giao hàng nhanh chóng và đáng tin cậy
             </p>
           </div>
-          <div className="w-1/4 text-center px-[50px] py-[25px]">
+          <div className="w-[300px] rounded-lg  bg-white text-center px-[45px] py-[25px]">
             <div className="w-[50px] h-[50px] mx-auto">
               <Image
                 src="/Frame142.png"
