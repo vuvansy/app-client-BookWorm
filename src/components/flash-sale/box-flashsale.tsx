@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import BoxProduct from "../box-product";
+import BoxProduct from "../list-product/box-product-home";
 
 interface IProduct {
   id: string;

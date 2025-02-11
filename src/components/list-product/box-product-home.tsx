@@ -12,7 +12,7 @@ interface IProduct {
     priceOld: number;
 }
 
-const BoxProduct = (props: IProduct) => {
+const BoxProductHome = (props: IProduct) => {
     const { id, image, name, priceOld, priceNew } = props
 
     const discount =
@@ -84,4 +84,4 @@ const BoxProduct = (props: IProduct) => {
     )
 }
 
-export default BoxProduct
+export default BoxProductHome
