@@ -8,15 +8,26 @@ interface Coupon {
     value: string;
     min: number;
     max: number;
+    create_date: string;
     end_date: string;
 }
 
 const coupons = [
-    { name: "Mã giảm 12%", value: "12%", min: 129000, max: 30000, end_date: "21/02/2025" },
-    { name: "Mã giảm 20%", value: "20%", min: 200000, max: 50000, end_date: "22/02/2025" },
-    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, end_date: "23/02/2025" },
+    { name: "Mã giảm 12%", value: "12%", min: 129000, max: 30000, create_date: "01/01/2025", end_date: "21/02/2025" },
+    { name: "Mã giảm 20%", value: "20%", min: 200000, max: 50000, create_date: "02/01/2025", end_date: "22/02/2025" },
+    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "03/01/2025", end_date: "23/02/2025" },
+    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "04/01/2025", end_date: "23/02/2025" },
+    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "05/01/2025", end_date: "23/02/2025" },
+    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "06/01/2025", end_date: "23/02/2025" },
+
 ];
 const ListCoupon = () => {
+    const getLatestCoupons = (coupons: Coupon[]): Coupon[] => {
+        return coupons
+            .sort((a, b) => new Date(b.create_date).getTime() - new Date(a.create_date).getTime())
+            .slice(0, 4);
+    };
+    const latestCoupons = getLatestCoupons(coupons);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
     const showModal = (coupon: Coupon) => {
@@ -41,7 +52,7 @@ const ListCoupon = () => {
 
     return (
         <div className='w-full h-[45px] flex items-center gap-x-4'>
-            {coupons.map((coupon, index) => (
+            {latestCoupons.map((coupon, index) => (
                 <div key={index}>
                     <div className='h-[45px] border border-gray-300 rounded-lg flex items-center cursor-pointer' onClick={() => showModal(coupon)}>
                         <div className='w-7 h-8 m-2 bg-yellow-1 flex items-center justify-center rounded-sm'>

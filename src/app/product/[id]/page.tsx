@@ -1,12 +1,12 @@
 import React from 'react';
 import { Breadcrumb, ConfigProvider, Rate } from "antd";
-import { GrFormNext } from "react-icons/gr";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
 import QuantitySelector from './quantity';
 import ListCoupon from './listCoupon';
 import ProductDescription from './description';
 import CustomerReviews from './review';
+import MoreCoupon from './moreCoupon';
 import GalleryComponent from './gallery';
 
 interface Product {
@@ -156,7 +156,7 @@ const ProductDetailPage = () => {
                         <div className="w-full px-4 pt-4 bg-white rounded-lg">
                             <div className="leading-[30px] flex items-center gap-x-1 mb-4">
                                 <div className="text-sub-heading-bold">Ưu đãi liên quan</div>
-                                <div className="w-[115px] flex items-center justify-center text-caption text-blue-text-bold">Xem thêm <GrFormNext /> </div>
+                                <MoreCoupon />
                             </div>
                             <ListCoupon />
                             <div className=' flex items-center gap-x-8 my-4'>
