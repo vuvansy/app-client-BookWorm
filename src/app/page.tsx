@@ -7,9 +7,10 @@ import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
 import BoxFlashSale from "@/components/flash-sale/box-flashsale";
 import { FaBook } from "react-icons/fa";
-import ListProduct from "@/components/list-product/list-product";
+import ListProduct from "@/components/list-product/list-product-home";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
+import ListProductHome from "@/components/list-product/list-product-home";
 
 const Home = () => {
   return (
@@ -106,7 +107,7 @@ const Home = () => {
             Sản Phẩm Mới Ra Mắt
           </p>
         </div>
-        <ListProduct />
+        <ListProductHome />
       </div>
       <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">
@@ -115,7 +116,7 @@ const Home = () => {
             Xu Hướng Mỗi Ngày
           </p>
         </div>
-        <ListProduct />
+        <ListProductHome />
       </div>
       <div className="container bg-white rounded-lg overflow-hidden">
         <div className=" flex items-center">
