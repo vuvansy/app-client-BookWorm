@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { AiFillCaretRight } from "react-icons/ai";
 
@@ -83,18 +82,12 @@ function Sidebar() {
               className="flex space-x-[15px] min-h-[103px] py-[10px] border-b-[1px] border-[#EBEBEB]"
             >
               <div className="relative w-[90px] h-[83px] ">
-                <Link href={""}>
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    width={90}
-                    height={0}
-                    className="rounded object-cover h-auto"
-                  />
+                <Link href={`/post/${item.id}`}>
+                  <img  src={item.image} alt={item.title} className="rounded object-cover"/>
                 </Link>
               </div>
               <div className="flex w-[180px] flex-col ">
-                <Link href={""}>
+                <Link href={`/post/${item.id}`}>
                   <h3 className="line-clamp-3">{item.title}</h3>
                 </Link>
                 <span className="">{item.date}</span>
