@@ -32,7 +32,7 @@ const CarouselPage: React.FC = () => (
           <h3 style={contentStyle} className="rounded-lg">
             <Image
               className="rounded-lg"
-              objectFit="contain"
+              style={{ objectFit: "contain" }}
               src={item.image}
               alt="Example image"
               width={830}

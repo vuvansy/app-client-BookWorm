@@ -5,9 +5,15 @@ import React from "react";
 const NewsBox = () => {
   return (
     <Link href="">
-      <div className="w-[555px] h-[105px] flex">
-        <Image src="/image86.png" alt="" width={148} height={105} />
-        <div className="ml-[18px]">
+      <div className="w-[585px] h-[105px] flex gap-x-[16px]">
+        <Image
+          src="/17358177826395276_512.webp"
+          alt=""
+          width={160}
+          height={105}
+          className="object-cover"
+        />
+        <div className="">
           <p className="text-sub-heading-bold">
             Noel Siêu Sale upto 50%++ Ngàn Quà Tặng
           </p>
