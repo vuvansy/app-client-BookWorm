@@ -9,7 +9,7 @@ import { TbLogout } from "react-icons/tb";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { MdOutlineBookmarks } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
-import { FaUsersCog } from "react-icons/fa";
+import { RiUserSettingsLine } from "react-icons/ri";
 
 const DropDowAccount = () => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
@@ -57,6 +57,13 @@ const DropDowAccount = () => {
                 <span>Book yêu thích</span>
             </Link>),
             key: 'wishlist',
+        },
+        {
+            label: (<Link href="/change-password" className="flex items-center gap-x-2">
+                <RiUserSettingsLine className="text-[18px]" />
+                <span>Đổi mật khẩu</span>
+            </Link>),
+            key: 'change-password',
         },
         {
             label: (

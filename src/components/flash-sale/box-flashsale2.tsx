@@ -3,7 +3,7 @@ import { Keyboard, Pagination, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import BoxProduct from "../box-product";
+import BoxProduct from "../list-product/box-product-home";
 
 interface IProduct {
   id: string;
