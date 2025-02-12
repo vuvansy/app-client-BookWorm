@@ -7,6 +7,7 @@ import QuantitySelector from './quantity';
 import ListCoupon from './listCoupon';
 import ProductDescription from './description';
 import CustomerReviews from './review';
+import GalleryComponent from './gallery';
 
 interface Product {
     id: string;
@@ -61,7 +62,7 @@ const ProductDetailPage = () => {
 
     return (
         <div className="bg-bg-main">
-            <div className="container pt-[15px]">
+            <div className="container pt-[8px]">
                 <Breadcrumb
                     items={[
                         {
@@ -73,10 +74,34 @@ const ProductDetailPage = () => {
                     ]}
                 />
             </div>
-            <div className="container pt-[15px] pb-5">
+            <div className="container pt-[8px] pb-5">
                 <div className=" flex justify-between gap-x-4">
-                    <div className="w-[40%] h-[671px] bg-white ">
-                        {/* box hình ảnh ở đây */}
+                    <div className="w-[40%] max-h-[750px] bg-white sticky top-4 rounded-lg p-4">
+                        <GalleryComponent />
+                        <div>
+                            <h3 className='text-body-bold my-[14px]'>Chính sách ưu đãi của BookWorm</h3>
+                            <div className='flex items-center gap-x-1 mb-[14px]'>
+                                <img src="/icon/ico_truck_v2.webp" alt="" className='w-[18px] h-[18px]' />
+                                <div className='flex gap-x-1 text-caption'>
+                                    <p className='font-semibold'>Thời gian giao hàng:</p>
+                                    <p>Giao nhanh và uy tín</p>
+                                </div>
+                            </div>
+                            <div className='flex items-center gap-x-1 mb-[14px]'>
+                                <img src="/icon/ico_transfer_v2.webp" alt="" className='w-[18px] h-[18px]' />
+                                <div className='flex gap-x-1 text-caption'>
+                                    <p className='font-semibold'>Chính sánh đổi trả:</p>
+                                    <p>Đổi trả miễn phí toàn quốc</p>
+                                </div>
+                            </div>
+                            <div className='flex items-center gap-x-1 mb-[14px]'>
+                                <img src="/icon/ico_shop_v2.webp" alt="" className='w-[18px] h-[18px]' />
+                                <div className='flex gap-x-1 text-caption'>
+                                    <p className='font-semibold'>Chính sách khách sỉ:</p>
+                                    <p>Ưu đãi khi mua số lượng lớn</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="w-[60%] flex flex-wrap gap-y-4">
                         <div className="w-full px-4 pt-4 bg-white rounded-lg">

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .ant-typography {
   @apply font-sans; /* Sử dụng font sans-serif từ Tailwind */
 }
@@ -21,6 +22,15 @@
 
 body.modal-open {
   overflow: auto !important;
+}
+
+.active {
+  border: 2px solid #ee4d2d;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  box-sizing: border-box;
+  top: 0;
 }
 
 /* :root {
