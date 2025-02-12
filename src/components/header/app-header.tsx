@@ -151,10 +151,10 @@ const AppHeader = () => {
                     <div className='container'>
                         <ul className='flex justify-center items-center gap-x-8 text-caption'>
                             <li>
-                                <Link href={''} className='px-[10px] py-[8px] capitalize'>Trang chủ</Link>
+                                <Link href={'/'} className='px-[10px] py-[8px] capitalize'>Trang chủ</Link>
                             </li>
                             <li>
-                                <Link href={''} className='px-[10px] py-[8px] capitalize'>Giới thiệu</Link>
+                                <Link href={'/about'} className='px-[10px] py-[8px] capitalize'>Giới thiệu</Link>
                             </li>
                             <li>
                                 <Link href={''} className="flex items-center px-[10px] py-[8px] capitalize">
@@ -181,7 +181,7 @@ const AppHeader = () => {
                                 <Link href={''} className='px-[10px] py-[8px] capitalize'>Tuyển dụng</Link>
                             </li>
                             <li>
-                                <Link href={''} className='px-[10px] py-[8px] capitalize'>Tin tức</Link>
+                                <Link href={'/news'} className='px-[10px] py-[8px] capitalize'>Tin tức</Link>
                             </li>
                         </ul>
                     </div>
