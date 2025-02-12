@@ -65,7 +65,10 @@ const EditProfileForm = () => {
             <div className='flex justify-between'>
                 <div className='w-[190px] h-[230px] rounded-[10px] shadow-2xl drop-shadow-2xl flex align-center justify-center'>
                     <Form.Item>
-                        <Image src={imageUrl || defaultAvatarUrl} alt="avatar" width={130} height={130} className='mt-[10px] rounded-full' />
+                        <Image src={imageUrl || defaultAvatarUrl} alt="avatar" width={130} height={130} style={{ borderRadius: "50%" }} className='mt-[10px] rounded-full' preview={{
+                            maskClassName:
+                                " rounded-full w-[130px] h-[130px] mt-[10px]",
+                        }} />
                         <div className='flex justify-center mt-[45px] '>
                             <input type="file" onChange={handleFileChange} id="file-upload" accept="image/*"
                                 style={{ display: 'none' }}
