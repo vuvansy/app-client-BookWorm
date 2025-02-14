@@ -21,7 +21,7 @@ const BoxProduct = (props: IProduct) => {
 
   return (
     <div className="group">
-      <div className="w-[220px] relative bg-white group-hover:shadow-custom">
+      <div className="w-[220px] relative bg-white border group-hover:shadow-custom">
         {discount && (
           <div className="w-[44px] h-[44px] absolute z-10 top-[6px] right-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
             <span className="text-white text-body-bold">-{discount}%</span>
@@ -42,6 +42,7 @@ const BoxProduct = (props: IProduct) => {
                     height: "auto",
                   }}
                   className="w-full"
+                  priority
                 />
               </Link>
             </div>
