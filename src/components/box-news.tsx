@@ -5,7 +5,7 @@ import React from "react";
 const NewsBox = () => {
   return (
     <Link href="">
-      <div className="w-[585px] h-[105px] flex gap-x-[16px]">
+      <div className="w-[585px] h-[105px] flex gap-x-[16px] border">
         <Image
           src="/17358177826395276_512.webp"
           alt=""
