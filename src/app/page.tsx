@@ -60,8 +60,8 @@ const Home = () => {
       <div className="bg-bg-sale pt-5 mt-5 h-[480px] w-[100%]">
         <div className="container  flex items-center justify-between  rounded-lg px-6 py-[18px] mb-4 bg-white">
           <div className="flex items-center">
-            <Link href={""} className="relative">
-              <div className="w-[129px] h-[26px]">
+            <Link href={""} className="">
+              <div className="w-[129px] h-[26px] relative">
                 <Image
                   src="/label-flashsale.svg"
                   alt=""
@@ -123,7 +123,7 @@ const Home = () => {
           <Link href="">
             <div className="bg-[#FF7507] px-5 py-[7px] text-caption-bold text-white rounded-t-lg hover:text-black  ">
               Sách Tư Duy - Kỹ Năng
-            </div>{" "}
+            </div>
           </Link>
           <Link href="">
             <div className=" px-5 py-[7px] text-black  text-caption hover:text-[#C92127] ">
