@@ -41,25 +41,26 @@ const FilterBar: React.FC<FilterProps> = ({
   }, [filters, onFilterChange]);
 
   return (
-    <div className="flex flex-wrap gap-4 items-center pb-[15px] pt-[20px] pr-[15px] bg-white shadow-md">
-      <span className="text-caption pl-[30px]">Sắp xếp theo :</span>
-      <Select
-        className="text-[12px]"
-        value={filters.sortBy}
-        onChange={(value) =>
-          setFilters((prev) => ({ ...prev, sortBy: value }))
-        }
-        style={{ width: 160 }}
-        options={SORT_OPTIONS}
-      />
-
-      <Select
-        className="text-[12px]"
-        defaultValue={12}
-        onChange={onPageSizeChange} // Gọi trực tiếp mà không lưu vào state
-        style={{ width: 160 }}
-        options={PAGE_SIZE_OPTIONS}
-      />
+    <div className="w-full pt-[20px] max-h-[87px]">
+      <div className="flex gap-x-4 items-center pb-[15px] pt-[20px] pr-[15px] bg-white ">
+        <span className="text-caption pl-[30px]">Sắp xếp theo :</span>
+        <Select
+          className="text-[12px]"
+          value={filters.sortBy}
+          onChange={(value) =>
+            setFilters((prev) => ({ ...prev, sortBy: value }))
+          }
+          style={{ width: 160 }}
+          options={SORT_OPTIONS}
+        />
+        <Select
+          className="text-[12px]"
+          defaultValue={12}
+          onChange={onPageSizeChange} // Gọi trực tiếp mà không lưu vào state
+          style={{ width: 160 }}
+          options={PAGE_SIZE_OPTIONS}
+        />
+      </div>
     </div>
   );
 };
