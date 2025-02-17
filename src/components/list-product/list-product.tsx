@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Pagination } from "antd";
 import BoxProduct from "./box-product";
 import FilterBar from "./filter-bar";
+import { Divider } from "antd";
 
 interface Product {
   id: string;
@@ -71,8 +72,8 @@ const ListProduct = ({ products, filters }: ListProductProps) => {
   );
 
   return (
-    <div className="w-[925px] bg-white flex flex-wrap justify-center rounded-lg overflow-hidden">
-      <div className="w-[925px] pt-[20px] border-none overflow-hidden shadow-none">
+    <div className="w-[75%] bg-white rounded-lg ">
+      <div className="flex justify-center flex-wrap">
         <FilterBar
           onFilterChange={(newarrange) =>
             setArrange((prev) =>
@@ -88,19 +89,13 @@ const ListProduct = ({ products, filters }: ListProductProps) => {
             )
           }
         />
-      </div>
-      <div>
-        <div className="pb-[20px] overflow-hidden flex flex-col">
-          <div className="w-[915px] flex flex-wrap gap-y-[10px] gap-x-[10px] mt-[10px] mb-[25px] px-[2px]">
-            {paginatedProducts.length > 0 ? (
+        {/* <Divider className="!my-0" /> */}
+        <div className="pb-[20px]  flex flex-col">
+          <div className="w-full ml-[3px] flex flex-wrap gap-y-[10px] gap-x-[10px] mt-[10px] mb-[25px] px-[2px]">
+            {paginatedProducts.length > 0 &&
               paginatedProducts.map((product) => (
                 <BoxProduct key={product.id} {...product} />
-              ))
-            ) : (
-              <p className="text-center text-gray-500 w-full">
-                Không có sản phẩm nào phù hợp.
-              </p>
-            )}
+              ))}
           </div>
 
           <Pagination

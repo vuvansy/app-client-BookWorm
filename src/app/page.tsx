@@ -5,22 +5,22 @@ import Image from "next/image";
 import CategoryPage from "@/components/list-category";
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
-import BoxFlashSale from "@/components/flash-sale/box-flashsale";
+
 import { FaBook } from "react-icons/fa";
 import ListProduct from "@/components/list-product/list-product-home";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
+import BoxFlashSale from "@/components/box-flashsale";
 
 const Home = () => {
   return (
     <main className="bg-bg-main">
       <div className="container pt-5 flex justify-between  ">
         <CarouselPage></CarouselPage>
-        <div className="flex w-[392px] h-[100%] flex-wrap items-center justify-between ">
-          <div className="w-full h-[155px] mb-[4px] rounded-lg	">
+        <div className="flex w-[32%] h-[100%] gap-y-[7px] flex-wrap items-center justify-between ">
+          <div className="w-full h-max-[155px]  rounded-lg	">
             <Link href="">
-              {" "}
               <Image
                 className="rounded-lg"
                 src="/UuDai_T1_392x156.webp"
@@ -36,7 +36,7 @@ const Home = () => {
               />
             </Link>
           </div>
-          <div className="w-full h-[155px] mt-[4px] rounded-lg	">
+          <div className="w-full h-maxax-[155px]  rounded-lg	">
             <Link href="">
               {" "}
               <Image
@@ -159,7 +159,7 @@ const Home = () => {
       <div className="container mt-5 bg-white rounded-lg">
         <p className="text-heading3-bold mb-5 pt-5 text-center">Tin Tức</p>
         <div className="flex gap-[30px] pb-5">
-          <div className="w-[585px]">
+          <div className="w-[48%]">
             <Link href="">
               <Image
                 src="/17358167219431528_512.webp"
@@ -183,7 +183,7 @@ const Home = () => {
               </p>
             </Link>
           </div>
-          <div className="w-[585px] flex flex-wrap gap-2">
+          <div className="w-[48%] flex flex-wrap gap-2">
             <NewsBox />
             <NewsBox />
             <NewsBox />

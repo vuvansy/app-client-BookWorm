@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import BoxProduct from "../list-product/box-product-home";
+import BoxProductHome from "./list-product/box-product-home";
 
 interface IProduct {
   id: string;
@@ -50,21 +50,35 @@ const products: IProduct[] = [
     priceOld: 558000,
   },
   {
-    id: "5",
+    id: "6",
     image: "/9786044067162.webp",
     name: "The Things You Can See Only When You Slow Down",
     priceNew: 502200,
     priceOld: 558000,
   },
   {
-    id: "5",
+    id: "7",
     image: "/9786044067162.webp",
     name: "The Things You Can See Only When You Slow Down",
     priceNew: 502200,
     priceOld: 558000,
   },
   {
-    id: "5",
+    id: "8",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "9",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "10",
     image: "/9786044067162.webp",
     name: "The Things You Can See Only When You Slow Down",
     priceNew: 502200,
@@ -85,8 +99,7 @@ const BoxFlashSale: React.FC = () => {
 
   return (
     <div className="w-[1260px] pl-[14px]  relative mx-auto">
-      <div className="overflow-hidden  mx-auto ">
-        {/* Nút bấm bên trái */}
+      <div className="overflow-hidden   mx-auto ">
         <button
           onClick={prevSlide}
           className="absolute left-[-6px] top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200"
@@ -106,7 +119,7 @@ const BoxFlashSale: React.FC = () => {
         >
           {products.map((product) => (
             <div key={product.id}>
-              <BoxProduct {...product} />
+              <BoxProductHome {...product} />
             </div>
           ))}
         </Carousel>

@@ -32,7 +32,7 @@ export default function FilterBarLeft({ onFilterChange }: FilterBarLeftProps) {
   };
 
   return (
-    <div className="w-[290px] bg-white p-5 border rounded-lg">
+    <div className="w-full bg-white p-5 border rounded-lg">
       <div className="flex mb-4 items-center justify-between pt-[20px]">
         <div className="flex">
           <FaFilter size={24} />
@@ -43,7 +43,7 @@ export default function FilterBarLeft({ onFilterChange }: FilterBarLeftProps) {
       <div className="h-[1px] w-[250px] opacity-50 bg-gray-300"></div>
 
       <Form name="category">
-        <p className="text-body1 mb-2 mt-5">Danh mục sản phẩm</p>
+        <p className="text-body1 my-5">Danh mục sản phẩm</p>
         {categories.map((cate, index) => (
           <div key={index} className="mb-2 flex items-center">
             <input

@@ -65,11 +65,10 @@ export default function Page() {
   }) => {
     setFilters(newFilters);
   };
-  console.log(filters);
   return (
     <main className="bg-bg-main">
       <div className="container pt-[20px] flex gap-4">
-        <div className="max-w-[290px]">
+        <div className="w-[24%]">
           <FilterBarLeft onFilterChange={setFilters} />
         </div>
         <ListProduct products={products} filters={filters} />
