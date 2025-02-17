@@ -5,21 +5,90 @@ import Image from "next/image";
 import CategoryPage from "@/components/list-category";
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
-
 import { FaBook } from "react-icons/fa";
-import ListProduct from "@/components/list-product/list-product-home";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
 import BoxFlashSale from "@/components/box-flashsale";
-
+const products = [
+  {
+    id: "1",
+    image: "/9786044067162.webp",
+    name: "Trốn Lên Mái Nhà Để Khóc - Tặng Kèm Bookmark",
+    priceNew: 78850,
+    priceOld: 95000,
+  },
+  {
+    id: "2",
+    image: "/9786044067162.webp",
+    name: "Thuật Thao Túng - Góc Tối Ẩn Sau Mỗi Câu Nói",
+    priceNew: 97300,
+    priceOld: 139000,
+  },
+  {
+    id: "3",
+    image: "/9786044067162.webp",
+    name: "Một Đời Được Mất",
+    priceNew: 97300,
+    priceOld: 139000,
+  },
+  {
+    id: "4",
+    image: "/9786044067162.webp",
+    name: "The Angel Next Door Spoils Me Rotten 2",
+    priceNew: 201600,
+    priceOld: 224000,
+  },
+  {
+    id: "5",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "6",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "7",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "8",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "9",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+  {
+    id: "10",
+    image: "/9786044067162.webp",
+    name: "The Things You Can See Only When You Slow Down",
+    priceNew: 502200,
+    priceOld: 558000,
+  },
+];
 const Home = () => {
   return (
     <main className="bg-bg-main">
       <div className="container pt-5 flex justify-between  ">
         <CarouselPage></CarouselPage>
         <div className="flex w-[32%] h-[100%] gap-y-[7px] flex-wrap items-center justify-between ">
-          <div className="w-full h-max-[155px]  rounded-lg	">
+          <div className="w-full h-max-[155px] rounded-lg	">
             <Link href="">
               <Image
                 className="rounded-lg"
@@ -36,7 +105,7 @@ const Home = () => {
               />
             </Link>
           </div>
-          <div className="w-full h-maxax-[155px]  rounded-lg	">
+          <div className="w-full h-max-[155px] rounded-lg	">
             <Link href="">
               {" "}
               <Image
@@ -98,7 +167,7 @@ const Home = () => {
             </Link>
           </div>
         </div>
-        <BoxFlashSale />
+        <BoxFlashSale products={products} />
       </div>
       <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">
