@@ -88,7 +88,7 @@ const Home = () => {
       <div className="container pt-5 flex justify-between  ">
         <CarouselPage></CarouselPage>
         <div className="flex w-[32%] h-[100%] gap-y-[7px] flex-wrap items-center justify-between ">
-          <div className="w-full h-max-[155px] rounded-lg	">
+          <div className="w-full max-h-[155px] rounded-lg	">
             <Link href="">
               <Image
                 className="rounded-lg"
@@ -105,7 +105,7 @@ const Home = () => {
               />
             </Link>
           </div>
-          <div className="w-full h-max-[155px] rounded-lg	">
+          <div className="w-full max-h-[155px] rounded-lg	">
             <Link href="">
               {" "}
               <Image
