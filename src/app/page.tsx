@@ -2,7 +2,6 @@
 import CarouselPage from "@/components/carousel";
 import React from "react";
 import Image from "next/image";
-import CategoryPage from "@/components/list-category";
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
 import { FaBook } from "react-icons/fa";
@@ -10,6 +9,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
 import BoxFlashSale from "@/components/box-flashsale";
+import CategoryPage from "@/components/list-category";
 const products = [
   {
     id: "1",

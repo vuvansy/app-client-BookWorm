@@ -89,7 +89,7 @@ const ListProduct = ({ products, filters }: ListProductProps) => {
             )
           }
         />
-        {/* <Divider className="!my-0" /> */}
+        <Divider className="!my-0" />
         <div className="pb-[20px]  flex flex-col">
           <div className="w-full ml-[3px] flex flex-wrap gap-y-[10px] gap-x-[10px] mt-[10px] mb-[25px] px-[2px]">
             {paginatedProducts.length > 0 &&
