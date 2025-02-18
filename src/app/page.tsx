@@ -2,14 +2,16 @@
 import CarouselPage from "@/components/carousel";
 import React from "react";
 import Image from "next/image";
-import CategoryPage from "@/components/list-category";
 import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
 import { FaBook } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
-import BoxFlashSale from "@/components/box-flashsale";
+import ListFlashSale from "../components/list-flashsale";
+import CategoryPage from "@/components/list-category";
+
+
 const products = [
   {
     id: "1",
@@ -27,42 +29,42 @@ const products = [
   },
   {
     id: "3",
-    image: "/9786044067162.webp",
-    name: "Một Đời Được Mất",
+    image: "/books/sachlichsu.webp",
+    name: "Ôn Luyện Thi Tốt Nghiệp THPT Từ Năm 2025 - Môn Lịch Sử (Theo Chương Trình GDPT Mới)",
     priceNew: 97300,
     priceOld: 139000,
   },
   {
     id: "4",
-    image: "/9786044067162.webp",
+    image: "/books/sachngoaingu.jpeg",
     name: "The Angel Next Door Spoils Me Rotten 2",
     priceNew: 201600,
     priceOld: 224000,
   },
   {
     id: "5",
-    image: "/9786044067162.webp",
+    image: "/books/sachngoaingu.png",
     name: "The Things You Can See Only When You Slow Down",
     priceNew: 502200,
     priceOld: 558000,
   },
   {
     id: "6",
-    image: "/9786044067162.webp",
+    image: "/books/sachvanhoa.jpeg",
     name: "The Things You Can See Only When You Slow Down",
     priceNew: 502200,
     priceOld: 558000,
   },
   {
     id: "7",
-    image: "/9786044067162.webp",
-    name: "The Things You Can See Only When You Slow Down",
+    image: "/books/sachvanhoa.png",
+    name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
     priceNew: 502200,
     priceOld: 558000,
   },
   {
     id: "8",
-    image: "/9786044067162.webp",
+    image: "/books/SachYHoc1.png",
     name: "The Things You Can See Only When You Slow Down",
     priceNew: 502200,
     priceOld: 558000,
@@ -70,7 +72,7 @@ const products = [
   {
     id: "9",
     image: "/9786044067162.webp",
-    name: "The Things You Can See Only When You Slow Down",
+    name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
     priceNew: 502200,
     priceOld: 558000,
   },
@@ -107,7 +109,6 @@ const Home = () => {
           </div>
           <div className="w-full max-h-[155px] rounded-lg	">
             <Link href="">
-              {" "}
               <Image
                 className="rounded-lg"
                 src="/ShopeeT1_392x156.webp"
@@ -126,7 +127,7 @@ const Home = () => {
         </div>
       </div>
       <CategoryPage />
-      <div className="bg-bg-sale pt-5 mt-5 h-[480px] w-[100%]">
+      <div className="bg-bg-sale py-5">
         <div className="container  flex items-center justify-between  rounded-lg px-6 py-[18px] mb-4 bg-white">
           <div className="flex items-center">
             <Link href={""} className="">
@@ -167,7 +168,8 @@ const Home = () => {
             </Link>
           </div>
         </div>
-        <BoxFlashSale products={products} />
+        {/* <BoxFlashSale products={products} /> */}
+        <ListFlashSale products={products} />
       </div>
       <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">

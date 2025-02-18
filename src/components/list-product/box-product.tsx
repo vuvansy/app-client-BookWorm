@@ -70,7 +70,11 @@ const BoxProduct = (props: IProduct) => {
                 },
               }}
             >
-              <Rate disabled allowHalf defaultValue={rating} />
+              {rating > 0 ? (
+                <Rate disabled allowHalf defaultValue={rating} />
+              ) : (
+                <span className="text-gray-500 text-info">Chưa có đánh giá</span>
+              )}
             </ConfigProvider>
           </div>
         </div>

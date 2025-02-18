@@ -8,6 +8,7 @@ import ProductDescription from './description';
 import CustomerReviews from './review';
 import MoreCoupon from './moreCoupon';
 import GalleryComponent from './gallery';
+import ListRelated from '@/components/list-related';
 
 interface Product {
     id: string;
@@ -42,6 +43,65 @@ const Product: Product = {
     book_cover: 'Bìa mềm',
 
 }
+
+const products = [
+    {
+        id: "1",
+        image: "/9786044067162.webp",
+        name: "Trốn Lên Mái Nhà Để Khóc - Tặng Kèm Bookmark",
+        rating: 4.5,
+        priceNew: 78850,
+        priceOld: 95000,
+    },
+    {
+        id: "2",
+        image: "/9786044067162.webp",
+        name: "Thuật Thao Túng - Góc Tối Ẩn Sau Mỗi Câu Nói",
+        rating: 4,
+        priceNew: 97300,
+        priceOld: 139000,
+    },
+    {
+        id: "3",
+        image: "/books/sachlichsu.webp",
+        name: "Ôn Luyện Thi Tốt Nghiệp THPT Từ Năm 2025 - Môn Lịch Sử (Theo Chương Trình GDPT Mới)",
+        rating: 3,
+        priceNew: 97300,
+        priceOld: 139000,
+    },
+    {
+        id: "4",
+        image: "/books/sachngoaingu.jpeg",
+        name: "The Angel Next Door Spoils Me Rotten 2",
+        priceNew: 201600,
+        priceOld: 224000,
+        rating: 4.5,
+    },
+    {
+        id: "5",
+        image: "/books/sachngoaingu.png",
+        name: "The Things You Can See Only When You Slow Down",
+        priceNew: 502200,
+        priceOld: 558000,
+        rating: 4.5,
+    },
+    {
+        id: "6",
+        image: "/books/sachvanhoa.jpeg",
+        name: "The Things You Can See Only When You Slow Down",
+        priceNew: 502200,
+        priceOld: 558000,
+        rating: 4.5,
+    },
+    {
+        id: "7",
+        image: "/books/sachvanhoa.png",
+        name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
+        priceNew: 502200,
+        priceOld: 558000,
+    },
+
+];
 
 const Discount = (oldPrice: number, newPrice: number): number => {
     if (oldPrice <= 0) return 0;
@@ -213,6 +273,12 @@ const ProductDetailPage = () => {
             <div className="container">
                 <ProductDescription />
                 <CustomerReviews />
+            </div>
+            <div className='container mt-5 pb-[30px] bg-white rounded-lg'>
+                <div className='py-[15px] pl-[15px]'>
+                    <h2 className='font-semibold text-[17px]'>SẢN PHẨM LIÊN QUAN</h2>
+                </div>
+                <ListRelated products={products} />
             </div>
         </div>
     )

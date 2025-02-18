@@ -50,7 +50,7 @@ const BoxProductHome = (props: IProduct) => {
                     width: "100%",
                     height: "auto",
                   }}
-                  className="w-full"
+                  className="w-full h-auto"
                   priority
                 />
               </Link>
