@@ -8,7 +8,7 @@ import { FaBook } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
-import ListFlashSale from "../components/list-flashsale";
+import ListFlashSale from "@/components/list-flashsale";
 import CategoryPage from "@/components/list-category";
 
 
@@ -84,7 +84,9 @@ const products = [
     priceOld: 558000,
   },
 ];
+
 const Home = () => {
+  
   return (
     <main className="bg-bg-main">
       <div className="container pt-5 flex justify-between  ">
@@ -140,20 +142,6 @@ const Home = () => {
                 />
               </div>
             </Link>
-            <div className="mt-[2px] ml-4 text-body1">Kết thúc trong</div>
-            <div className="ml-2">
-              <span className="px-[6px] py-[4px] bg-black text-white text-body-bold rounded-lg ">
-                00
-              </span>
-              <span className="px-[2px] text-info-bold">:</span>
-              <span className="px-[6px] py-[4px] bg-black text-white text-body-bold rounded-lg ">
-                00
-              </span>
-              <span className="px-[2px] text-info-bold">:</span>
-              <span className="px-[6px] py-[4px] bg-black text-white text-body-bold rounded-lg ">
-                00
-              </span>
-            </div>
           </div>
           <div>
             <Link href={""}>

@@ -60,7 +60,13 @@ declare global {
         user: IUser
     }
 
-    
+    interface IGenre {
+        _id: string;
+        name: string;
+        image: string;
+    }
+
+
     interface IUserTable {
         _id: string;
         fullName: string;
@@ -80,24 +86,31 @@ declare global {
     }
 
     interface IBookTable {
-        _id: string;
-        thumbnail: string;
-        slider: string[];
-        mainText: string;
-        author: string;
-        price: number;
-        sold: number;
+        id_genre: string;
+        name: string;
+        image?: string;
+        slider?: string[];
+        price_old: number;
+        price_new: number;
         quantity: number;
-        category: string;
+        description?: string;
+        status?: number;
+        weight?: number;
+        size?: string;
+        publishers?: string;
+        authors?: string[];
+        year?: number;
+        page_count?: number;
+        book_cover?: string;
         createdAt: Date;
         updatedAt: Date;
     }
 
-    
+
     interface ICart {
         _id: string;
         quantity: number;
         detail: IBookTable;
     }
-   
+
 }

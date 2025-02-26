@@ -37,7 +37,7 @@ const OrderPage = () => {
                                     Chờ xác nhận
                                 </td>
                                 <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
-                                    <Link href={'/profile/order/1'} className="py-[6px] px-[16px] bg-price-special text-white rounded-lg">
+                                    <Link href={'/profile/order/1'} className="py-[6px] px-[16px] bg-price-special !text-white rounded-lg">
                                         Chi Tiết
                                     </Link>
                                 </td>
@@ -59,7 +59,7 @@ const OrderPage = () => {
                                     Chờ xác nhận
                                 </td>
                                 <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
-                                    <Link href={'/profile/order/1'} className="py-[6px] px-[16px] bg-price-special text-white rounded-lg">
+                                    <Link href={'/profile/order/1'} className="py-[6px] px-[16px] bg-price-special !text-white rounded-lg">
                                         Chi Tiết
                                     </Link>
                                 </td>
@@ -81,7 +81,7 @@ const OrderPage = () => {
                                     Chờ xác nhận
                                 </td>
                                 <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
-                                    <Link href={'/profile/order/1'} className="py-[6px] px-[16px] bg-price-special text-white rounded-lg">
+                                    <Link href={'/profile/order/1'} className="py-[6px] px-[16px] bg-price-special !text-white rounded-lg">
                                         Chi Tiết
                                     </Link>
                                 </td>

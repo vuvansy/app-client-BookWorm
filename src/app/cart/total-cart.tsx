@@ -15,22 +15,22 @@ type FieldType = {
 };
 
 const TotalCart = () => {
-       const [isModalOpen, setIsModalOpen] = useState(false);
-    
-        const showModal = () => {
-            setIsModalOpen(true);
-            document.body.classList.add("modal-open"); // Giữ cuộn trang
-        };
-    
-        const handleCancel = () => {
-            setIsModalOpen(false);
-            document.body.classList.remove("modal-open");
-        };
-    
-    
-        const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-            console.log(values)
-        };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+        document.body.classList.add("modal-open"); // Giữ cuộn trang
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        document.body.classList.remove("modal-open");
+    };
+
+
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        console.log(values)
+    };
     return (
         <div className="bg-white rounded-lg px-[15px]">
             <div className="h-[50px] flex justify-between items-center">
@@ -111,7 +111,7 @@ const TotalCart = () => {
                     <span>Tổng tiền:</span>
                     <span>321.510 đ</span>
                 </div>
-                <Link href={'/checkout'} className="flex justify-center items-center bg-red1 text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
+                <Link href={'/checkout'} className="flex justify-center items-center bg-red1 !text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
                     Thanh toán
                 </Link>
             </div>

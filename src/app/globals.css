@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 
+
 .ant-typography {
   @apply font-sans; /* Sử dụng font sans-serif từ Tailwind */
 }
@@ -31,6 +32,11 @@ body.modal-open {
   height: 100px;
   box-sizing: border-box;
   top: 0;
+}
+
+a {
+  color: inherit !important; /* Giữ màu theo parent */
+  text-decoration: none; /* Xóa gạch chân nếu cần */
 }
 
 /* :root {

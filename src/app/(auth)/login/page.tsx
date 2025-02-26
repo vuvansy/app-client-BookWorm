@@ -1,6 +1,7 @@
 import LoginForm from "./form-login";
 
 
+
 const LoginPage = () => {
     return (
         <div className="bg-bg-main pt-5">

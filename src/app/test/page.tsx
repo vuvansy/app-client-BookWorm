@@ -1,14 +1,10 @@
 import { sendRequest } from '@/utils/api'
 
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-}
+
 
 const TestPage = async () => {
-  const res = await sendRequest<IBackendRes<IUser[]>>({
-    url: "http://localhost:4000/v1/customers",
+  const res = await sendRequest<IBackendRes<IGenre[]>>({
+    url: "http://localhost:4000/api/v1/genre",
     method: "GET"
 
   })
@@ -54,9 +50,9 @@ const TestPage = async () => {
         res.data?.map(item => {
           return (
 
-            <div key={item._id} className='flex'>
+            <div key={item._id} className='flex'>z
               <p>{item.name} - </p>
-              <p>{item.email}</p>
+              <p>{item.image}</p>
             </div>
           )
         })

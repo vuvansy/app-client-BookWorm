@@ -65,7 +65,7 @@ const content = (
                 <span className='text-red1 !text-body-bold'>{(1430310).toLocaleString()} đ</span>
             </div>
             <Link href={'/cart'}
-                className='w-[186px] h-[40px] border-[2px] border-red1 rounded-lg bg-red1 text-white text-caption-bold flex justify-center items-center hover:text-white'>
+                className='w-[186px] h-[40px] border-[2px] border-red1 rounded-lg bg-red1 !text-white text-caption-bold flex justify-center items-center hover:text-white'>
                 Xem giỏ hàng
             </Link>
         </div>

@@ -8,7 +8,7 @@ export const sendRequest = async <T>(props: IRequest) => {
         queryParams = {},
         useCredentials = false,
         headers = {},
-        nextOption = {}
+        nextOption = {},
     } = props;
 
     const options: any = {

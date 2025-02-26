@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import StyledComponentsRegistry from "@/lib/antd.registry";
 import "./globals.css";
 import AppHeader from "@/components/header/app-header";
 import AppFooter from "@/components/footer/app-footer";
-
-const inter = Inter({ subsets: ["latin"] });
+import { App } from "antd";
 
 export const metadata: Metadata = {
   title: "BookWorm",
@@ -19,11 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="h-screen">
         <StyledComponentsRegistry>
-          <AppHeader />
-          {children}
-          <AppFooter />
+          <App>
+            <AppHeader />
+            {children}
+            <AppFooter />
+          </App>
         </StyledComponentsRegistry>
       </body>
     </html>
