@@ -113,4 +113,21 @@ declare global {
         detail: IBookTable;
     }
 
+    interface Ward {
+        Id: string;
+        Name: string;
+    }
+    
+    interface District {
+        Id: string;
+        Name: string;
+        Wards: Ward[];
+    }
+    
+    interface City {
+        Id: string;
+        Name: string;
+        Districts: District[];
+    }
+
 }

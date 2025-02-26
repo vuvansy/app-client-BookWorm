@@ -5,31 +5,88 @@ import { MdOutlinePayment } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
 import type { FormProps } from 'antd';
 import { Form, Input } from 'antd';
+import { useEffect, useState } from "react";
 const { TextArea } = Input;
 
 type FieldType = {
-    fullName?: string;
+    fullName: string;
     email?: string;
-    phone?: string;
-    city?: string;
-    district?: string;
-    ward?: string;
-    address?: string;
+    phone: string;
+    city: string;
+    district: string;
+    ward: string;
+    street: string;
     note?: string;
+    shippingMethod: number;
+    paymentMethod: number;
 };
 
+
+
 const InfoCheckout = () => {
+    const [cities, setCities] = useState<City[]>([]);
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [wards, setWards] = useState<Ward[]>([]);
+    const [form] = Form.useForm();
+
+    useEffect(() => {
+        fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json")
+            .then(response => response.json())
+            .then(data => setCities(data))
+            .catch(error => console.error("Lỗi khi fetch dữ liệu:", error));
+    }, []);
+
+    const handleCityChange = (cityId: string) => {
+        const selectedCity = cities.find(city => city.Id === cityId);
+        setDistricts(selectedCity ? selectedCity.Districts : []);
+        setWards([]);
+
+        form.setFieldsValue({
+            district: undefined,
+            ward: undefined
+        });
+    };
+
+    const handleDistrictChange = (districtId: string) => {
+        const selectedDistrict = districts.find(district => district.Id === districtId);
+        setWards(selectedDistrict ? selectedDistrict.Wards : []);
+        form.setFieldsValue({ ward: undefined });
+    };
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
+        const selectedCity = cities.find(city => city.Id === values.city);
+        const selectedDistrict = districts.find(district => district.Id === values.district);
+        const selectedWard = wards.find(ward => ward.Id === values.ward);
+
+        const formattedData = {
+            fullName: values.fullName,
+            email: values.email,
+            phone: values.phone,
+            address: {
+                city: selectedCity ? { key: selectedCity.Id, name: selectedCity.Name } : null,
+                district: selectedDistrict ? { key: selectedDistrict.Id, name: selectedDistrict.Name } : null,
+                ward: selectedWard ? { key: selectedWard.Id, name: selectedWard.Name } : null,
+                street: { key: values.street, name: values.street },
+            },
+            note: values.note,
+            shippingMethod: values.shippingMethod,
+            paymentMethod: values.paymentMethod,
+        };
+
+        console.log("Formatted Data:", formattedData);
     };
 
     return (
         <Form
+            form={form}
             name="basic"
             autoComplete="off"
             onFinish={onFinish}
             layout="vertical"
+            initialValues={{
+                shippingMethod: 0,
+                paymentMethod: 0,
+            }}
             className="flex justify-between pb-[20px]"
         >
             <div className="basis-8/12 ">
@@ -46,6 +103,7 @@ const InfoCheckout = () => {
                                         message: 'Vui lòng nhập họ và tên'
                                     }
                                 ]}
+                                style={{ minHeight: "70px" }}
                                 className="basis-6/12 !mb-3"
                             >
                                 <Input />
@@ -53,12 +111,7 @@ const InfoCheckout = () => {
                             <Form.Item<FieldType>
                                 label="Email"
                                 name="email"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Vui lòng nhập Email'
-                                    }, { type: "email", message: 'Email không đúng định dạng' },
-                                ]}
+                                style={{ minHeight: "70px" }}
                                 className="basis-6/12 !mb-3"
                             >
                                 <Input />
@@ -88,11 +141,8 @@ const InfoCheckout = () => {
                                     showSearch
                                     allowClear
                                     placeholder="Chọn Tỉnh/Thành Phố"
-                                    options={[
-                                        { value: "Arts", label: "Arts" },
-                                        { value: "Business", label: "Business" },
-                                        { value: "Comics", label: "Comics" },
-                                    ]}
+                                    options={cities.map(city => ({ value: city.Id, label: city.Name }))}
+                                    onChange={handleCityChange}
                                 />
                             </Form.Item>
                             <Form.Item<FieldType>
@@ -105,11 +155,9 @@ const InfoCheckout = () => {
                                     showSearch
                                     allowClear
                                     placeholder="Chọn Quận/Huyện"
-                                    options={[
-                                        { value: "Arts", label: "Arts" },
-                                        { value: "Business", label: "Business" },
-                                        { value: "Comics", label: "Comics" },
-                                    ]}
+                                    options={districts.map(district => ({ value: district.Id, label: district.Name }))}
+                                    onChange={handleDistrictChange}
+                                    disabled={!districts.length} // Vô hiệu hóa nếu chưa chọn tỉnh/thành phố
                                 />
                             </Form.Item>
                             <Form.Item<FieldType>
@@ -122,17 +170,14 @@ const InfoCheckout = () => {
                                     placeholder="Chọn Phường/Xã"
                                     showSearch
                                     allowClear
-                                    options={[
-                                        { value: "Arts", label: "Arts" },
-                                        { value: "Business", label: "Business" },
-                                        { value: "Comics", label: "Comics" },
-                                    ]}
+                                    options={wards.map(ward => ({ value: ward.Id, label: ward.Name }))}
+                                    disabled={!wards.length} // Vô hiệu hóa nếu chưa chọn quận/huyện
                                 />
                             </Form.Item>
                         </div>
                         <Form.Item<FieldType>
                             label="Nhập địa chỉ cụ thể"
-                            name="address"
+                            name="street"
                             rules={[
                                 {
                                     required: true,
@@ -147,52 +192,50 @@ const InfoCheckout = () => {
                             label="Ghi Chú Đơn Hàng"
                             name="note"
                             className="!mb-3"
-
                         >
                             <TextArea rows={2} />
                         </Form.Item>
                         <div className="flex justify-between items-center gap-x-4">
                             <Form.Item<FieldType>
-                                name="city"
+                                name="shippingMethod"
                                 rules={[{ required: true, message: 'Vui lòng chọn phương thức Vận chuyển!' }]}
                                 className="basis-6/12"
                             >
                                 <div>
                                     <div className="mb-2 font-medium flex items-center gap-x-1">
-                                        <MdOutlinePayment className="text-[18px]" />
+                                        <TbTruckDelivery className="text-[18px]" />
                                         <span>Phương thức Vận chuyển</span>
                                     </div>
                                     <Select
                                         showSearch
                                         allowClear
                                         placeholder="Chọn phương thức vận chuyển"
+                                        defaultValue={0}
                                         options={[
-                                            { value: "Arts", label: "Arts" },
-                                            { value: "Business", label: "Business" },
-                                            { value: "Comics", label: "Comics" },
+                                            { value: 0, label: "Giao hàng nhanh" },
+                                            { value: 1, label: "Giao hàng tiết kiệm" },
                                         ]}
                                     />
                                 </div>
                             </Form.Item>
-
                             <Form.Item<FieldType>
-                                name="city"
+                                name="paymentMethod"
                                 rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
                                 className="basis-6/12"
                             >
                                 <div>
                                     <div className="mb-2 font-medium flex items-center gap-x-1">
-                                        <TbTruckDelivery className="text-[18px]" />
+                                        <MdOutlinePayment className="text-[18px]" />
                                         <span>Phương thức thanh toán</span>
                                     </div>
                                     <Select
                                         placeholder="Chọn phương thức thanh toán"
                                         showSearch
                                         allowClear
+                                        defaultValue={0}
                                         options={[
-                                            { value: "Arts", label: "Arts" },
-                                            { value: "Business", label: "Business" },
-                                            { value: "Comics", label: "Comics" },
+                                            { value: 0, label: "Thanh toán tiền mặt khi nhận hàng(COD)" },
+                                            { value: 1, label: "Thanh toán qua VNPAY" },
                                         ]}
                                     />
                                 </div>
