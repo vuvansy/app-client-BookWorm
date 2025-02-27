@@ -184,7 +184,10 @@ const ProductDetailPage = () => {
                                             components: {
                                                 Rate: {
                                                     starSize: 14,
-                                                }
+                                                },
+                                            },
+                                            token: {
+                                                marginXS: 2,
                                             },
                                         }}
                                     >

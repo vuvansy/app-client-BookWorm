@@ -18,13 +18,13 @@ const QuantitySelector = () => {
 
     return (
         <div className="w-[80px] h-[30px] border border-gray-400 flex items-center justify-evenly rounded-md">
-            <div onClick={handleDecrease} className='text-gray-1'>
+            <div onClick={handleDecrease} className='text-gray-1 cursor-pointer'>
                 <FaMinus />
             </div>
             <div className=" font-semibold">
                 {quantity}
             </div>
-            <div onClick={handleIncrease} className='text-gray-1'>
+            <div onClick={handleIncrease} className='text-gray-1 cursor-pointer'>
                 <FaPlus />
             </div>
         </div>
