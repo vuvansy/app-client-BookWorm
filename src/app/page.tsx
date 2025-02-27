@@ -9,8 +9,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
 import ListFlashSale from "@/components/list-flashsale";
-import CategoryPage from "@/components/list-category";
-
+import CategoryPage from "@/components/list-Category";
 
 const products = [
   {
@@ -86,7 +85,6 @@ const products = [
 ];
 
 const Home = () => {
-  
   return (
     <main className="bg-bg-main">
       <div className="container pt-5 flex justify-between  ">
@@ -221,7 +219,7 @@ const Home = () => {
           <div className="w-[48%]">
             <Link href="">
               <Image
-                src="/17358167219431528_512.webp"
+                src="/lam-ra-lam-choi-ra-choi-diem-sach-1.jpg"
                 alt=""
                 width={0}
                 height={0}
@@ -233,19 +231,18 @@ const Home = () => {
                 className="w-full"
               />
               <p className="text-body-bold pl-[10px] pt-[15px]">
-                Mừng Giáng sinh - Mua Sắm Trúng Thưởng - Rinh Quà Miễn Phí
+                “Deep work” và “Shallow work”
               </p>
               <p className="text-caption pl-[10px]">
-                Giáng sinh gõ cửa - Siêu Game “Mua Sắm Trúng Thưởng – Rinh Quà
-                Miễn Phí” được chờ đón nhất chính thức bắt đầu. Duy nhất 17 –
-                25/12{" "}
+                Cuốn sách tập trung phân tích hai khái niệm đáng chú ý: “Deep
+                work” (những việc đòi hỏi sự tập trung cao độ) và “Shallow work”
+                (công việc mang tính lặp, không đòi hỏi nhiều suy nghĩ). Tác giả
+                ví “Deep work” như một anh chàng siêu nhân trong nền kinh tế
+                ngày càng cạnh tranh hiện nay.
               </p>
             </Link>
           </div>
           <div className="w-[48%] flex flex-wrap gap-2">
-            <NewsBox />
-            <NewsBox />
-            <NewsBox />
             <NewsBox />
           </div>
         </div>

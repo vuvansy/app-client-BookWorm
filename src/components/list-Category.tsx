@@ -54,7 +54,7 @@ const CategoryPage = () => {
       </div>
       <div className="flex flex-wrap  container rounded-b-[10px] flex-row justify-between p-4">
         {cate.map((item) => (
-          <Link href="" key={item.id}>
+          <Link href="product/category/1" key={item.id}>
             <div className="text-center w-[120px] flex flex-col items-center hover:text-[#C92127] cursor-pointer">
               <Image
                 className="mb-4"
