@@ -11,7 +11,7 @@ interface Review {
     date: string;
 }
 const reviews: Review[] = [
-    { name: "Tạ Văn Tuấn", rating: 5, comment: "Sách hay lắm ạ, cả nhà nên mua nhé.", date: "21:00 | 21/02/2025" },
+    { name: "Tạ Văn Tuấn", rating: 5, comment: "Sách hay lắm ạ, cả nhà nên mua nhé. Sách hay lắm ạ, cả nhà nên mua nhé. Sách hay lắm ạ, cả nhà nên mua nhé. Sách hay lắm ạ, cả nhà nên mua nhé. Sách hay lắm ạ, cả nhà nên mua nhé.", date: "21:00 | 21/02/2025" },
     { name: "Khang", rating: 3.5, comment: "Sách hay nên đọc 1 lần", date: "21:00 | 21/02/2025" },
 
 ];
@@ -46,6 +46,9 @@ const CustomerReviews = () => {
                                                     starSize: 14,
                                                 }
                                             },
+                                            token: {
+                                                marginXS: 2,
+                                            }
                                         }}
                                     >
                                         <Rate disabled allowHalf defaultValue={review.rating} />
@@ -53,8 +56,8 @@ const CustomerReviews = () => {
                                 </div>
                                 <div className="w-[90%] text-caption  ">
                                     <div className=" flex justify-between  ">
-                                        <div className="w-[80%]  ">{review.comment}</div>
-                                        <div className="w-[20%] text-right">{review.date}</div>
+                                        <div className="w-[87%]  ">{review.comment}</div>
+                                        <div className="w-[13%] text-right">{review.date}</div>
                                     </div>
 
                                 </div>
