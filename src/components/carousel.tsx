@@ -5,15 +5,15 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 const imageCarousel = [
   {
     id: 1,
-    image: "/trangct2_252_840x320.webp",
+    image: "/snapedit_1740666376597.jpg",
   },
   {
     id: 2,
-    image: "/MCBooks_Vangt2_840x320.webp",
+    image: "/snapedit_1740666483358.jpg",
   },
   {
     id: 3,
-    image: "/DinhTi_0225_840x320.webp",
+    image: "/snapedit_1740666529015.jpg",
   },
 ];
 
