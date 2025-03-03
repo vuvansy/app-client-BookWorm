@@ -1,4 +1,3 @@
-"use client";
 import CarouselPage from "@/components/carousel";
 import React from "react";
 import Image from "next/image";
@@ -10,81 +9,14 @@ import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
 import ListFlashSale from "@/components/list-flashsale";
 import CategoryPage from "@/components/list-Category";
+import { sendRequest } from "@/utils/api";
 
-const products = [
-  {
-    id: "1",
-    image: "/9786044067162.webp",
-    name: "Trốn Lên Mái Nhà Để Khóc - Tặng Kèm Bookmark",
-    priceNew: 78850,
-    priceOld: 95000,
-  },
-  {
-    id: "2",
-    image: "/9786044067162.webp",
-    name: "Thuật Thao Túng - Góc Tối Ẩn Sau Mỗi Câu Nói",
-    priceNew: 97300,
-    priceOld: 139000,
-  },
-  {
-    id: "3",
-    image: "/books/sachlichsu.webp",
-    name: "Ôn Luyện Thi Tốt Nghiệp THPT Từ Năm 2025 - Môn Lịch Sử (Theo Chương Trình GDPT Mới)",
-    priceNew: 97300,
-    priceOld: 139000,
-  },
-  {
-    id: "4",
-    image: "/books/sachngoaingu.jpeg",
-    name: "The Angel Next Door Spoils Me Rotten 2",
-    priceNew: 201600,
-    priceOld: 224000,
-  },
-  {
-    id: "5",
-    image: "/books/sachngoaingu.png",
-    name: "The Things You Can See Only When You Slow Down",
-    priceNew: 502200,
-    priceOld: 558000,
-  },
-  {
-    id: "6",
-    image: "/books/sachvanhoa.jpeg",
-    name: "The Things You Can See Only When You Slow Down",
-    priceNew: 502200,
-    priceOld: 558000,
-  },
-  {
-    id: "7",
-    image: "/books/sachvanhoa.png",
-    name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
-    priceNew: 502200,
-    priceOld: 558000,
-  },
-  {
-    id: "8",
-    image: "/books/SachYHoc1.png",
-    name: "The Things You Can See Only When You Slow Down",
-    priceNew: 502200,
-    priceOld: 558000,
-  },
-  {
-    id: "9",
-    image: "/9786044067162.webp",
-    name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
-    priceNew: 502200,
-    priceOld: 558000,
-  },
-  {
-    id: "10",
-    image: "/9786044067162.webp",
-    name: "The Things You Can See Only When You Slow Down",
-    priceNew: 502200,
-    priceOld: 558000,
-  },
-];
+const Home = async () => {
+  const dataFlasSale = await sendRequest<IBackendRes<IBookTable[]>>({
+    url: "http://localhost:4000/api/v1/book/flash-sale",
+    method: "GET",
+  });
 
-const Home = () => {
   return (
     <main className="bg-bg-main">
       <div className="container pt-5 flex justify-between  ">
@@ -155,7 +87,7 @@ const Home = () => {
           </div>
         </div>
         {/* <BoxFlashSale products={products} /> */}
-        <ListFlashSale products={products} />
+        <ListFlashSale products={dataFlasSale?.data} />
       </div>
       <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">

@@ -99,11 +99,33 @@ declare global {
         detail: any;
     }
 
+    interface IBook {
+        id: string;
+        id_genre?: string;
+        name: string;
+        image: string;
+        slider?: string[];
+        price_old: number;
+        price_new?: number;
+        quantity?: number;
+        description?: string;
+        status?: number;
+        weight?: number;
+        size?: string;
+        publishers?: string;
+        authors?: string[];
+        year?: number;
+        page_count?: number;
+        book_cover?: string;
+        createdAt?: Date;
+        updatedAt?: Date;
+      }
+      
     interface IBookTable {
         _id: string;
         id_genre: string;
         name: string;
-        image?: string;
+        image: string;
         slider?: string[];
         price_old: number;
         price_new: number;
