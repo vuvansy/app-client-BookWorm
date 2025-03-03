@@ -47,13 +47,27 @@ declare global {
         fullName: string;
     }
 
+    interface Address {
+        city: { key: string; name: string };
+        district: { key: string; name: string };
+        ward: { key: string; name: string };
+        street: { key: string; name: string };
+      }
+
     interface IUser {
-        email: string;
-        phone: string;
+        _id: ObjectId;
         fullName: string;
+        phone: string;
+        email: string;
+        image?: string;
+        address?: Address;
         role: string;
-        avatar: string;
-        id: string;
+        password: string;
+        isBlocked?: boolean;
+        isActive?: boolean;
+        reset_token?: string | null;
+        createdAt?: Date;
+        updatedAt?: Date;
     }
 
     interface IFetchAccount {
@@ -86,6 +100,7 @@ declare global {
     }
 
     interface IBookTable {
+        _id: string;
         id_genre: string;
         name: string;
         image?: string;
@@ -117,13 +132,13 @@ declare global {
         Id: string;
         Name: string;
     }
-    
+
     interface District {
         Id: string;
         Name: string;
         Wards: Ward[];
     }
-    
+
     interface City {
         Id: string;
         Name: string;

@@ -66,7 +66,7 @@ const InfoCheckout = () => {
                 city: selectedCity ? { key: selectedCity.Id, name: selectedCity.Name } : null,
                 district: selectedDistrict ? { key: selectedDistrict.Id, name: selectedDistrict.Name } : null,
                 ward: selectedWard ? { key: selectedWard.Id, name: selectedWard.Name } : null,
-                street: { key: values.street, name: values.street },
+                street: values.street,
             },
             note: values.note,
             shippingMethod: values.shippingMethod,
