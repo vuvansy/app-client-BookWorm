@@ -4,20 +4,12 @@ import { MdShoppingCart } from "react-icons/md";
 import { BsCartPlus } from "react-icons/bs";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 
-interface IProduct {
-  id: string;
-  image: string;
-  name: string;
-  priceNew?: number;
-  priceOld: number;
-}
-
-const BoxProductHome = (props: IProduct) => {
-  const { id, image, name, priceOld, priceNew } = props;
+const BoxProductHome = (props: IBook) => {
+  const { id, image, name, price_old, price_new } = props;
 
   const discount =
-    priceNew && priceNew < priceOld
-      ? Math.round(((priceOld - priceNew) / priceOld) * 100)
+    price_new && price_new < price_old
+      ? Math.round(((price_old - price_new) / price_old) * 100)
       : undefined;
 
   return (
@@ -41,7 +33,7 @@ const BoxProductHome = (props: IProduct) => {
             <div className="relative">
               <Link href={`/product/${id}`}>
                 <Image
-                  src={image}
+                  src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${image}`}
                   alt={name}
                   width={0}
                   height={0}
@@ -62,11 +54,12 @@ const BoxProductHome = (props: IProduct) => {
             </h2>
             <div className="text-body1 leading-5 flex justify-between mb-2">
               <span className="text-price-special font-bold">
-                {(priceNew || priceOld).toLocaleString()} đ
+                {new Intl.NumberFormat("vi-VN").format(price_new || price_old)}{" "}
+                đ
               </span>
-              {priceNew && (
+              {price_new && (
                 <span className="text-price-old line-through">
-                  {priceOld.toLocaleString()} đ
+                  {new Intl.NumberFormat("vi-VN").format(price_old)} đ
                 </span>
               )}
             </div>

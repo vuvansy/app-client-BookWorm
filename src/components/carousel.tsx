@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef } from "react";
 import { Carousel } from "antd";
 import Image from "next/image";
