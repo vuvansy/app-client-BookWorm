@@ -8,21 +8,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import BoxProduct from './list-product/box-product';
 
-interface IProduct {
-    id: string;
-    image: string;
-    name: string;
-    priceNew?: number;
-    priceOld: number;
-    rating?: number;
-}
-
 interface Props {
-    products: IProduct[];
+    booksByGenreAPI?: IBookTable[] | null;
 }
 
 const ListRelated = (props: Props) => {
-    const { products } = props
+    const { booksByGenreAPI } = props
     return (
         <div className='container'>
             <div className='relative'>
@@ -56,14 +47,14 @@ const ListRelated = (props: Props) => {
                         },
                     }}
                 >
-                    {products.map((product) => (
-                        <SwiperSlide key={product.id} className="">
+                    {booksByGenreAPI?.map((product) => (
+                        <SwiperSlide key={product._id} className="">
                             <BoxProduct
-                                id={product.id}
+                                id={product._id}
                                 image={product.image}
                                 name={product.name}
-                                priceNew={product.priceNew}
-                                priceOld={product.priceOld}
+                                price_new={product.price_new}
+                                price_old={product.price_old}
                                 rating={product.rating ?? 0}
                             />
                         </SwiperSlide>

@@ -2,22 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { ConfigProvider, Rate } from "antd";
 
-interface IProduct {
-  id: string;
-  image: string;
-  name: string;
-  priceNew?: number;
-  priceOld: number;
-  rating: number;
-}
 
-const BoxProduct = (props: IProduct) => {
-  const { id, image, name, priceOld, priceNew, rating } = props;
+
+const BoxProduct = (props: IBook) => {
+  const { id, image, name, price_new, price_old, rating=0 } = props;
+
 
   const discount =
-    priceNew && priceNew < priceOld
-      ? Math.round(((priceOld - priceNew) / priceOld) * 100)
+    price_new && price_new < price_old
+      ? Math.round(((price_old - price_new) / price_old) * 100)
       : undefined;
+
 
   return (
     <div className="group">
@@ -32,7 +27,7 @@ const BoxProduct = (props: IProduct) => {
             <div className="relative">
               <Link href={`/product/${id}`}>
                 <Image
-                  src={image}
+                   src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${image}`}
                   alt={name}
                   width={0}
                   height={0}
@@ -53,11 +48,12 @@ const BoxProduct = (props: IProduct) => {
             </h2>
             <div className="text-body1 leading-5 flex justify-between mb-2">
               <span className="text-price-special font-bold">
-                {(priceNew || priceOld).toLocaleString()} đ
+              {new Intl.NumberFormat("vi-VN").format(price_new || price_old)}{" "}
+              đ
               </span>
-              {priceNew && (
+              {price_new && (
                 <span className="text-price-old line-through">
-                  {priceOld.toLocaleString()} đ
+                  {new Intl.NumberFormat("vi-VN").format(price_old)} đ
                 </span>
               )}
             </div>

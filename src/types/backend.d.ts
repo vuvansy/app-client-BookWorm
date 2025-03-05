@@ -52,7 +52,7 @@ declare global {
         district: { key: string; name: string };
         ward: { key: string; name: string };
         street: { key: string; name: string };
-      }
+    }
 
     interface IUser {
         _id: ObjectId;
@@ -78,6 +78,14 @@ declare global {
         _id: string;
         name: string;
         image: string;
+    }
+
+    export interface IAuthor {
+        _id: string;
+        name: string;
+        deleted: boolean;
+        createdAt: string;
+        updatedAt: string;
     }
 
 
@@ -117,13 +125,14 @@ declare global {
         year?: number;
         page_count?: number;
         book_cover?: string;
+        rating?: number
         createdAt?: Date;
         updatedAt?: Date;
-      }
-      
+    }
+
     interface IBookTable {
         _id: string;
-        id_genre: string;
+        id_genre: IGenre;
         name: string;
         image: string;
         slider?: string[];
@@ -135,10 +144,11 @@ declare global {
         weight?: number;
         size?: string;
         publishers?: string;
-        authors?: string[];
+        authors?: IAuthor[];
         year?: number;
         page_count?: number;
         book_cover?: string;
+        rating?: number
         createdAt: Date;
         updatedAt: Date;
     }

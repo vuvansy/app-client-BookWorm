@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumb, ConfigProvider, Rate } from "antd";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
+import { HomeOutlined } from '@ant-design/icons';
 import QuantitySelector from './quantity';
 import ListCoupon from './listCoupon';
 import ProductDescription from './description';
@@ -9,6 +10,7 @@ import CustomerReviews from './review';
 import MoreCoupon from './moreCoupon';
 import GalleryComponent from './gallery';
 import ListRelated from '@/components/list-related';
+import { sendRequest } from '@/utils/api';
 
 interface Product {
     id: string;
@@ -47,58 +49,58 @@ const Product: Product = {
 const products = [
     {
         id: "1",
-        image: "/9786044067162.webp",
+        image: "1740465133117-375555400.jpg",
         name: "Trốn Lên Mái Nhà Để Khóc - Tặng Kèm Bookmark",
         rating: 4.5,
-        priceNew: 78850,
-        priceOld: 95000,
+        price_new: 78850,
+        price_old: 95000,
     },
     {
         id: "2",
-        image: "/9786044067162.webp",
+        image: "1740465133117-375555400.jpg",
         name: "Thuật Thao Túng - Góc Tối Ẩn Sau Mỗi Câu Nói",
         rating: 4,
-        priceNew: 97300,
-        priceOld: 139000,
+        price_new: 97300,
+        price_old: 139000,
     },
     {
         id: "3",
-        image: "/books/sachlichsu.webp",
+        image: "1740465133117-375555400.jpg",
         name: "Ôn Luyện Thi Tốt Nghiệp THPT Từ Năm 2025 - Môn Lịch Sử (Theo Chương Trình GDPT Mới)",
         rating: 3,
-        priceNew: 97300,
-        priceOld: 139000,
+        price_new: 97300,
+        price_old: 139000,
     },
     {
         id: "4",
-        image: "/books/sachngoaingu.jpeg",
+        image: "1740465133117-375555400.jpg",
         name: "The Angel Next Door Spoils Me Rotten 2",
-        priceNew: 201600,
-        priceOld: 224000,
+        price_new: 201600,
+        price_old: 224000,
         rating: 4.5,
     },
     {
         id: "5",
-        image: "/books/sachngoaingu.png",
+        image: "1740465133117-375555400.jpg",
         name: "The Things You Can See Only When You Slow Down",
-        priceNew: 502200,
-        priceOld: 558000,
+        price_new: 502200,
+        price_old: 558000,
         rating: 4.5,
     },
     {
         id: "6",
-        image: "/books/sachvanhoa.jpeg",
+        image: "1740465133117-375555400.jpg",
         name: "The Things You Can See Only When You Slow Down",
-        priceNew: 502200,
-        priceOld: 558000,
+        price_new: 502200,
+        price_old: 558000,
         rating: 4.5,
     },
     {
         id: "7",
-        image: "/books/sachvanhoa.png",
+        image: "1740465133117-375555400.jpg",
         name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
-        priceNew: 502200,
-        priceOld: 558000,
+        price_new: 502200,
+        price_old: 558000,
     },
 
 ];
@@ -116,9 +118,43 @@ const formatNumber = (num: number): string => {
     return num.toString();
 };
 
-const ProductDetailPage = () => {
+import type { Metadata, ResolvingMetadata } from 'next'
 
+type Props = {
+    params: { id: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+    { params, searchParams }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const id = params.id
+    const productById = await sendRequest<IBackendRes<IBookTable>>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${id}`,
+        method: "GET"
+    })
+    return {
+        title: productById?.data?.name,
+    }
+}
+
+
+const ProductDetailPage = async (props: Props) => {
+    const { params } = props;
     const discount = Discount(Product.price_old, Product.price_new);
+
+    const res = await sendRequest<IBackendRes<IBookTable>>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${params.id}`,
+        method: "GET"
+    })
+    const currentBook = res?.data || null;
+
+    const resBooksByGenreAPI = await sendRequest<IBackendRes<IBookTable[]>>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${currentBook?._id}/genre/${currentBook?.id_genre._id}`,
+        method: "GET"
+    })
+    const dataBooksByGenreAPI = resBooksByGenreAPI?.data || null;
 
     return (
         <div className="bg-bg-main">
@@ -126,10 +162,18 @@ const ProductDetailPage = () => {
                 <Breadcrumb
                     items={[
                         {
-                            title: 'Trang Chủ',
+                            title: "Trang Chủ"
+
                         },
                         {
-                            title: 'Sản Phẩm',
+                            title: (
+                                <div className='capitalize'>{currentBook?.id_genre.name}</div>
+                            ),
+                        },
+                        {
+                            title: (
+                                <div className='w-full max-w-[200px] truncate'>{currentBook?.name}</div>
+                            ),
                         },
                     ]}
                 />
@@ -137,7 +181,7 @@ const ProductDetailPage = () => {
             <div className="container pt-[8px] pb-5">
                 <div className=" flex justify-between gap-x-4">
                     <div className="w-[40%] max-h-[750px] bg-white sticky top-4 rounded-lg p-4">
-                        <GalleryComponent />
+                        <GalleryComponent currentBook={currentBook} />
                         <div>
                             <h3 className='text-body-bold my-[14px]'>Chính sách ưu đãi của BookWorm</h3>
                             <div className='flex items-center gap-x-1 mb-[14px]'>
@@ -224,7 +268,7 @@ const ProductDetailPage = () => {
                             <ListCoupon />
                             <div className=' flex items-center gap-x-8 my-4'>
                                 <div className='text-sub-heading'>Số lượng :</div>
-                                <QuantitySelector />
+                                <QuantitySelector currentBook={currentBook} />
                             </div>
                             <div className='pb-4 flex gap-x-2'>
                                 <button className='w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'><FaShoppingCart className='w-[25px] h-[25px]' />Mua ngay</button>
@@ -281,7 +325,7 @@ const ProductDetailPage = () => {
                 <div className='py-[15px] pl-[15px]'>
                     <h2 className='font-semibold text-[17px]'>SẢN PHẨM LIÊN QUAN</h2>
                 </div>
-                <ListRelated products={products} />
+                <ListRelated booksByGenreAPI={dataBooksByGenreAPI} />
             </div>
         </div>
     )
