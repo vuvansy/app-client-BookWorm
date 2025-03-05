@@ -142,19 +142,22 @@ export async function generateMetadata(
 
 const ProductDetailPage = async (props: Props) => {
     const { params } = props;
-    const discount = Discount(Product.price_old, Product.price_new);
+
 
     const res = await sendRequest<IBackendRes<IBookTable>>({
         url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${params.id}`,
         method: "GET"
     })
     const currentBook = res?.data || null;
-
+    const authorsNames = currentBook?.authors?.map(author => author.name).join(', ') || 'No authors';
     const resBooksByGenreAPI = await sendRequest<IBackendRes<IBookTable[]>>({
         url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${currentBook?._id}/genre/${currentBook?.id_genre._id}`,
         method: "GET"
     })
     const dataBooksByGenreAPI = resBooksByGenreAPI?.data || null;
+    const discount = currentBook
+        ? Discount(currentBook.price_old ?? 0, currentBook.price_new ?? 0)
+        : 0;
 
     return (
         <div className="bg-bg-main">
@@ -209,17 +212,18 @@ const ProductDetailPage = async (props: Props) => {
                     </div>
                     <div className="w-[60%] flex flex-wrap gap-y-4">
                         <div className="w-full px-4 pt-4 bg-white rounded-lg">
-                            <div className=" flex items-center text-heading4-bold leading-[30px]">{Product.name}</div>
+                            <div className=" flex items-center text-heading4-bold leading-[30px]">{currentBook?.name}</div>
                             <div className="flex justify-between my-1">
-                                <div className=" ">
-                                    <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Nhà cung cấp :<div className="text-caption-bold">{Product.supplier}</div></div>
-                                    <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Hình thức bìa :<div className="text-caption-bold">{Product.book_cover}</div></div>
-
-                                </div>
-                                <div className=" ">
-                                    <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Tác giả :<div className="text-caption-bold">{Product.author}</div></div>
+                                <div>
+                                    <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Tác giả :<div className="text-caption-bold">{authorsNames}</div></div>
                                     <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Nhà xuất bản :<div className="text-caption-bold">{Product.publisher}</div></div>
                                 </div>
+                                <div>
+                                    <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Hình thức bìa :<div className="text-caption-bold">{currentBook?.book_cover}</div></div>
+                                    <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Năm xuất bản :<div className="text-caption-bold">{currentBook?.year}</div></div>
+
+                                </div>
+
                             </div>
                             <div className="py-[5px] flex gap-x-3 items-center">
                                 <div className=" flex items-center">
@@ -249,10 +253,11 @@ const ProductDetailPage = async (props: Props) => {
                             </div>
                             <div className="py-1 flex items-center gap-x-3">
                                 <div className="text-price-special text-heading2-bold">
-                                    {Product.price_new}đ
+                                    {new Intl.NumberFormat('vi-VN').format(currentBook?.price_new ?? 0)} đ
                                 </div>
                                 <div className="text-caption-light text-price-old line-through">
-                                    {Product.price_old}đ
+
+                                    {new Intl.NumberFormat('vi-VN').format(currentBook?.price_old ?? 0)} đ
                                 </div>
                                 <div className="px-[2px] leading-[22px] rounded-md bg-red1 font-semibold text-info flex items-center justify-center text-white">
                                     -{discount}%
@@ -283,9 +288,7 @@ const ProductDetailPage = async (props: Props) => {
                                     <div className="grid grid-cols-2">
                                         <div className="divide-y divide-bg-main">
                                             <div className="text-price-old text-caption py-2">Mã hàng</div>
-                                            <div className="text-price-old text-caption py-2">Tên Nhà Cung Cấp</div>
                                             <div className="text-price-old text-caption py-2">Tác giả</div>
-                                            <div className="text-price-old text-caption py-2">Người Dịch</div>
                                             <div className="text-price-old text-caption py-2">NXB</div>
                                             <div className="text-price-old text-caption py-2">Năm XB</div>
                                             <div className="text-price-old text-caption py-2">Trọng lượng (gr)</div>
@@ -294,16 +297,14 @@ const ProductDetailPage = async (props: Props) => {
                                             <div className="text-price-old text-caption py-2">Hình thức</div>
                                         </div>
                                         <div className="divide-y divide-bg-main">
-                                            <div className="text-bg-text text-caption py-2">{Product.id}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.supplier}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.author}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.translator}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.publisher}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.year_publish}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.weight}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.size}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.page_number}</div>
-                                            <div className="text-bg-text text-caption py-2">{Product.book_cover}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?._id}</div>
+                                            <div className="text-bg-text text-caption py-2">{authorsNames}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?.publishers}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?.year}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?.weight}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?.size}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?.page_count}</div>
+                                            <div className="text-bg-text text-caption py-2">{currentBook?.book_cover}</div>
                                         </div>
 
                                     </div>
@@ -318,7 +319,7 @@ const ProductDetailPage = async (props: Props) => {
                 </div>
             </div>
             <div className="container">
-                <ProductDescription />
+                <ProductDescription currentBook={currentBook}/>
                 <CustomerReviews />
             </div>
             <div className='container mt-5 pb-[30px] bg-white rounded-lg'>

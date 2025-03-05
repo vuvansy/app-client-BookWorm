@@ -109,7 +109,7 @@ declare global {
 
     interface IBook {
         id: string;
-        id_genre?: string;
+        id_genre?: IGenre;
         name: string;
         image: string;
         slider?: string[];
@@ -121,7 +121,7 @@ declare global {
         weight?: number;
         size?: string;
         publishers?: string;
-        authors?: string[];
+        authors?: IAuthor[];
         year?: number;
         page_count?: number;
         book_cover?: string;

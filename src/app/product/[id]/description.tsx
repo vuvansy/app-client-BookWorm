@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 
-const product = {
-    title: "Bạn Là Ai Giữa Muôn Vàn Phong Cách Sống",
-    description:
-        "BẠN LÀ AI GIỮA MUÔN VÀN PHONG CÁCH SỐNG? - Chuyến hành trình khám phá nội tâm để tìm thấy phong cách sống của riêng mình...",
-};
+interface IProps {
+    currentBook: IBookTable | null;
+}
 
-const ProductDescription = () => {
+
+const ProductDescription = (props: IProps) => {
+    const { currentBook } = props;
     const [isOpen, setIsOpen] = useState(true);
 
     return (
@@ -26,8 +26,7 @@ const ProductDescription = () => {
             </div>
             {isOpen && (
                 <div className="pt-4">
-                    <div className="text-caption-bold">{product.title}</div>
-                    <div className="text-caption">{product.description}</div>
+                    <div className="text-caption">{currentBook?.description}</div>
                 </div>
             )}
         </div>
