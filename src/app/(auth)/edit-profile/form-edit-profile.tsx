@@ -1,164 +1,218 @@
 'use client'
-import React, { useState } from 'react';
-import { Button, Checkbox, Form, Input, Image, Select } from 'antd';
 
-// const onFinish = (values: any) => {
-//     console.log('Success:', values);
-//     // console.log('Image:', imageUrl);
-
-// };
-
-// const onFinishFailed = (errorInfo: any) => {
-//     console.log('Failed:', errorInfo);
-// };
-
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, Select, Image, Upload, FormProps } from 'antd';
+import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 
 type FieldType = {
-    fullname?: string;
-    email?: string;
-    phone?: number
+    fullName: string;
+    email: string;
+    phone: string;
     city?: string;
     district?: string;
     ward?: string;
-    imageUrl?: string;
-    remember?: string;
+    specific_address?: string;
+    image: string;
 };
 
 const EditProfileForm = () => {
-    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+    const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null);
+    const [file, setFile] = useState(null);
+    const [cities, setCities] = useState<City[]>([]);
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [wards, setWards] = useState<Ward[]>([]);
+    const [form] = Form.useForm();
     const defaultAvatarUrl = 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg'; // URL của ảnh avatar mặc định
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImageUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
+    useEffect(() => {
+        fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json")
+            .then(response => response.json())
+            .then(data => setCities(data))
+            .catch(error => console.error("Lỗi khi fetch dữ liệu:", error));
+    }, []);
 
+    const handleCityChange = (cityId: string) => {
+        const selectedCity = cities.find(city => city.Id === cityId);
+        setDistricts(selectedCity ? selectedCity.Districts : []);
+        setWards([]);
+
+        form.setFieldsValue({
+            district: undefined,
+            ward: undefined
+        });
     };
 
-    const onFinish = (values: any) => {
-        values.imageUrl = imageUrl; // Thêm imageUrl vào values
-        console.log('Success:', values);
+    const handleDistrictChange = (districtId: string) => {
+        const selectedDistrict = districts.find(district => district.Id === districtId);
+        setWards(selectedDistrict ? selectedDistrict.Wards : []);
+        form.setFieldsValue({ ward: undefined });
     };
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+    const handleUpload = (info: any) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImageUrl(reader.result);
+        };
+        setFile(info.file);
+        reader.readAsDataURL(info.file);
+    };
+
+    // const handleRemove = () => {
+    //     setImageUrl(defaultAvatarUrl);
+    //     setFile(null);
+    // };
+
+    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+        const selectedCity = cities.find(city => city.Id === values.city);
+        const selectedDistrict = districts.find(district => district.Id === values.district);
+        const selectedWard = wards.find(ward => ward.Id === values.ward);
+        const formattedData = {
+            fullName: values.fullName,
+            email: values.email,
+            phone: values.phone,
+            address: {
+                city: selectedCity ? { key: selectedCity.Id, name: selectedCity.Name } : null,
+                district: selectedDistrict ? { key: selectedDistrict.Id, name: selectedDistrict.Name } : null,
+                ward: selectedWard ? { key: selectedWard.Id, name: selectedWard.Name } : null,
+                specific_address: values.specific_address,
+            },
+            image: file,
+        };
+
+        console.log("Formatted Data:", formattedData);
     };
 
     return (
         <Form
             name="basic"
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 16 }}
-            // style={{ maxWidth: 600, marginTop: "50px" }}
-            className='max-w-[1190px]'
+            className='max-w-[1190px] !pt-5 mx-auto'
+            form={form}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
-            size='large'
+            layout="vertical"
         >
+            <div className='flex flex-col md:flex-row gap-x-5'>
+                <div className='basis-full md:basis-1/6 h-60 ml-5 rounded-[10px] border-2 flex align-center justify-center relative group mb-5 md:mb-0'>
+                    <Form.Item
+                        name="image"
+                    >
+                        <div>
+                            <Image src={typeof imageUrl === 'string' ? imageUrl : defaultAvatarUrl} alt="Uploaded" width={130} height={130} className=" mt-4 rounded-full "
 
-            <div className='flex justify-between'>
-                <div className='w-[190px] h-[230px] rounded-[10px] shadow-2xl drop-shadow-2xl flex align-center justify-center'>
-                    <Form.Item>
-                        <Image src={imageUrl || defaultAvatarUrl} alt="avatar" width={130} height={130} style={{ borderRadius: "50%" }} className='mt-[10px] rounded-full' preview={{
-                            maskClassName:
-                                " rounded-full w-[130px] h-[130px] mt-[10px]",
-                        }} />
-                        <div className='flex justify-center mt-[45px] '>
-                            <input type="file" onChange={handleFileChange} id="file-upload" accept="image/*"
-                                style={{ display: 'none' }}
+                                preview={{
+                                    maskClassName: "rounded-full w-[100%] h-[100%] mt-4 ",
+                                    // mask: (
+                                    //     <div className="flex justify-center items-center gap-x-10">
+                                    //         <EyeOutlined />
+                                    //         {imageUrl && imageUrl !== defaultAvatarUrl && <DeleteOutlined onClick={handleRemove} />}
+                                    //     </div>
+                                    // ),
+                                }}
                             />
-                            <label htmlFor="file-upload" className=" w-[96px] h-[35px] cursor-pointer bg-white text-black border border-black/100  rounded-[5px] flex items-center justify-center">
-                                Chọn Ảnh
-                            </label>
+
+                            <div className='flex justify-center mt-[45px] '>
+                                <Upload beforeUpload={() => false} showUploadList={false} onChange={handleUpload}>
+                                    <Button>Chọn Ảnh</Button>
+                                </Upload>
+                            </div>
                         </div>
                     </Form.Item>
                 </div>
 
-                <div className='w-[970px] flex flex-wrap justify-between'>
-                    <div className='mb-[10px]'>
-                        <div className='h-[30px] text-body1'>Họ Và Tên</div>
+                <div className='basis-full md:basis-4/5'>
+                    <div className='flex flex-col md:flex-row justify-between gap-x-5'>
                         <Form.Item<FieldType>
-                            name="fullname"
-                            rules={[{ required: true, message: 'Please input your fullname!' }]}
-                            className='w-[480px] h-[30px]'
+                            name="fullName"
+                            label="Tên Hiển Thị"
+                            rules={[{ required: true, message: 'Hãy nhập tên hiển thị!' }]}
+                            className='basis-full md:basis-1/2'
                         >
                             <Input />
                         </Form.Item>
-                    </div>
 
-                    <div className='mb-[10px]'>
-                        <div className='h-[30px] text-body1'>Email</div>
                         <Form.Item<FieldType>
                             name="email"
-                            rules={[{ required: true, message: 'Please input your email!' }]}
-                            className='w-[480px] h-[30px]'
+                            label="Email"
+                            className='basis-full md:basis-1/2'
                         >
                             <Input />
                         </Form.Item>
                     </div>
 
-                    <div className='mb-[10px]'>
-                        <div className='h-[30px] text-body1'>Số Điện Thoại</div>
+                    {/* <div className='flex flex-col md:flex-row'> */}
+                    <Form.Item<FieldType>
+                        name="phone"
+                        label="Số Điện Thoại"
+                        rules={[{ required: true, message: 'Hãy nhập số điện thoại!' }]}
+                        className='basis-full md:w-[49%]'
+                    >
+                        <Input />
+                    </Form.Item>
+                    {/* </div> */}
+
+                    <div className='flex flex-col md:flex-row justify-between gap-x-5'>
                         <Form.Item<FieldType>
-                            name="phone"
-                            rules={[{ required: true, message: 'Please input your phone number!' }]}
-                            className='w-[480px] h-[30px]'
+                            name='city'
+                            label="Chọn Tỉnh / Thành Phố"
+                            className='basis-full md:flex-1'
                         >
-                            <Input />
+                            <Select
+                                showSearch
+                                allowClear
+                                placeholder="Chọn Tỉnh/Thành Phố"
+                                options={cities.map(city => ({ value: city.Id, label: city.Name }))}
+                                onChange={handleCityChange}
+                            />
+                        </Form.Item>
+
+                        <Form.Item<FieldType>
+                            name='district'
+                            label="Chọn Quận / Huyện"
+                            className='basis-full md:flex-1'
+                        >
+                            <Select
+                                showSearch
+                                allowClear
+                                placeholder="Chọn Quận/Huyện"
+                                options={districts.map(district => ({ value: district.Id, label: district.Name }))}
+                                onChange={handleDistrictChange}
+                                disabled={!districts.length} // Vô hiệu hóa nếu chưa chọn tỉnh/thành phố
+                            />
+                        </Form.Item>
+
+                        <Form.Item<FieldType>
+                            name='ward'
+                            label="Chọn Phường / Xã"
+                            className='basis-full md:flex-1'
+                        >
+                            <Select
+                                placeholder="Chọn Phường/Xã"
+                                showSearch
+                                allowClear
+                                options={wards.map(ward => ({ value: ward.Id, label: ward.Name }))}
+                                disabled={!wards.length} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                            />
                         </Form.Item>
                     </div>
 
-                    <div className=' w-[970px] flex  justify-between'>
-                        <div className='w-[310px]'>
-                            <div className='h-[30px] text-body1'>Chọn tỉnh / thành phố</div>
-                            <Form.Item<FieldType>
-                                name="city"
-                                rules={[{ required: true, message: 'Please choose your city!' }]}
-                            >
-                                <Select placeholder="Chọn một tỉnh / thành phố" allowClear >
-                                    <Select.Option value="demo">Demo</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </div>
-                        <div className='w-[310px]'>
-                            <div className='h-[30px] text-body1'>Chọn quận / huyện</div>
-                            <Form.Item<FieldType>
-                                name="district"
-                                rules={[{ required: true, message: 'Please choose your district!' }]}
-                            >
-                                <Select placeholder="Chọn một quận / huyện" allowClear>
-                                    <Select.Option value="demo">Demo</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </div>
-                        <div className='w-[310px]'>
-                            <div className='h-[30px] text-body1'>Chọn phường / xã</div>
-                            <Form.Item<FieldType>
-                                name="ward"
-                                rules={[{ required: true, message: 'Please choose your ward!' }]}
-                            >
-                                <Select placeholder="Chọn một phường / xã" allowClear>
-                                    <Select.Option value="demo">Demo</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </div>
-                    </div>
-
-                    <button type='submit' className='w-[200px] h-10 rounded-lg bg-red1 text-white text-body-bold mx-auto'>Lưu Thay Đổi</button>
+                    <Form.Item<FieldType>
+                        name='specific_address'
+                        label="Nhập Địa Chỉ Cụ Thể"
+                    >
+                        <Input />
+                    </Form.Item>
                 </div>
             </div>
-
-
+            <div className='w-full flex justify-center'>
+                <Button type="primary" htmlType="submit" className='w-full md:w-[20%] !bg-red1 !text-body-bold'>Lưu Thay Đổi</Button>
+            </div>
         </Form>
     );
 };
 
 export default EditProfileForm;
+
+
+
 
 
