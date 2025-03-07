@@ -51,10 +51,10 @@ const ListCoupon = () => {
     }
 
     return (
-        <div className='w-full h-[45px] flex items-center gap-x-4'>
+        <div className='w-full hidden lg:flex lg:flex-wrap items-center gap-4'>
             {latestCoupons.map((coupon, index) => (
-                <div key={index}>
-                    <div className='h-[45px] border border-gray-300 rounded-lg flex items-center cursor-pointer' onClick={() => showModal(coupon)}>
+                <div key={index} className='flex-1 min-w-[150px]'>
+                    <div className='w-[160px] h-[45px] border border-gray-300 rounded-lg flex items-center cursor-pointer' onClick={() => showModal(coupon)}>
                         <div className='w-7 h-8 m-2 bg-yellow-1 flex items-center justify-center rounded-sm'>
                             <div className='w-5 h-5  bg-white rounded-full text-yellow-1'>
                                 <PiSealPercentLight className='w-5 h-5' />

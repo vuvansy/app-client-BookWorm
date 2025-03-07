@@ -11,8 +11,6 @@ import ListRelated from '@/components/list-related';
 import { sendRequest } from '@/utils/api';
 
 
-
-
 const Discount = (oldPrice: number, newPrice: number): number => {
     if (oldPrice <= 0) return 0;
     const discount = ((oldPrice - newPrice) / oldPrice) * 100;
@@ -68,7 +66,7 @@ const ProductDetailPage = async (props: Props) => {
         : 0;
 
     return (
-        <div className="bg-bg-main">
+        <div className="bg-bg-main px-2 xl:px-0">
             <div className="container pt-[8px]">
                 <Breadcrumb
                     items={[
@@ -90,10 +88,10 @@ const ProductDetailPage = async (props: Props) => {
                 />
             </div>
             <div className="container pt-[8px] pb-5">
-                <div className=" flex justify-between gap-x-4">
-                    <div className="w-[40%] max-h-[750px] bg-white sticky top-4 rounded-lg p-4">
+                <div className=" flex flex-col lg:flex-row justify-between gap-x-4">
+                    <div className="w-full lg:w-[40%] max-h-[750px] bg-white lg:sticky lg:top-4 rounded-lg p-4">
                         <GalleryComponent currentBook={currentBook} />
-                        <div>
+                        <div className='hidden lg:block'>
                             <h3 className='text-body-bold my-[14px]'>Chính sách ưu đãi của BookWorm</h3>
                             <div className='flex items-center gap-x-1 mb-[14px]'>
                                 <img src="/icon/ico_truck_v2.webp" alt="" className='w-[18px] h-[18px]' />
@@ -118,10 +116,10 @@ const ProductDetailPage = async (props: Props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="w-[60%] flex flex-wrap gap-y-4">
+                    <div className="w-full lg:w-[60%] flex flex-wrap gap-y-4">
                         <div className="w-full px-4 pt-4 bg-white rounded-lg">
                             <div className=" flex items-center text-heading4-bold leading-[30px]">{currentBook?.name}</div>
-                            <div className="flex justify-between my-1">
+                            <div className="hidden md:flex md:flex-row md:justify-between my-1">
                                 <div>
                                     <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Tác giả :<div className="text-caption-bold">{authorsNames}</div></div>
                                     <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Nhà xuất bản :<div className="text-caption-bold">{currentBook?.publishers}</div></div>
@@ -133,7 +131,7 @@ const ProductDetailPage = async (props: Props) => {
                                 </div>
 
                             </div>
-                            <div className="py-[5px] flex gap-x-3 items-center">
+                            <div className="py-[5px] flex flex-col gap-y-2 md:flex-row md:gap-x-3 md:items-center">
                                 <div className=" flex items-center">
                                     <ConfigProvider
                                         theme={{
@@ -185,28 +183,39 @@ const ProductDetailPage = async (props: Props) => {
                             <div className="flex items-center text-[18px] font-semibold leading-[24px]">Thông tin chi tiết</div>
                             <div className="py-4 flex items-center justify-center  ">
                                 <div className="w-full">
-                                    <div className="grid grid-cols-2">
-                                        <div className="divide-y divide-bg-main">
-                                            <div className="text-price-old text-caption py-2">Mã hàng</div>
-                                            <div className="text-price-old text-caption py-2">Tác giả</div>
-                                            <div className="text-price-old text-caption py-2">NXB</div>
-                                            <div className="text-price-old text-caption py-2">Năm XB</div>
-                                            <div className="text-price-old text-caption py-2">Trọng lượng (gr)</div>
-                                            <div className="text-price-old text-caption py-2">Kích Thước Bao Bì</div>
-                                            <div className="text-price-old text-caption py-2">Số trang</div>
-                                            <div className="text-price-old text-caption py-2">Hình thức</div>
+                                    <div className='divide-y divide-bg-main'>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Mã hàng</span>
+                                            <span className='text-bg-text text-caption truncate'>{currentBook?._id}</span>
                                         </div>
-                                        <div className="divide-y divide-bg-main">
-                                            <div className="text-bg-text text-caption py-2">{currentBook?._id}</div>
-                                            <div className="text-bg-text text-caption py-2">{authorsNames}</div>
-                                            <div className="text-bg-text text-caption py-2">{currentBook?.publishers}</div>
-                                            <div className="text-bg-text text-caption py-2">{currentBook?.year}</div>
-                                            <div className="text-bg-text text-caption py-2">{currentBook?.weight}</div>
-                                            <div className="text-bg-text text-caption py-2">{currentBook?.size}</div>
-                                            <div className="text-bg-text text-caption py-2">{currentBook?.page_count}</div>
-                                            <div className="text-bg-text text-caption py-2">{currentBook?.book_cover}</div>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Tác giả</span>
+                                            <span className='text-bg-text text-caption'>{authorsNames}</span>
                                         </div>
-
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>NXB</span>
+                                            <span className='text-bg-text text-caption'>{currentBook?.publishers}</span>
+                                        </div>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Năm XB</span>
+                                            <span className='text-bg-text text-caption'>{currentBook?.year}</span>
+                                        </div>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Trọng lượng (gr)</span>
+                                            <span className='text-bg-text text-caption'>{currentBook?.weight}</span>
+                                        </div>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Kích Thước Bao Bì</span>
+                                            <span className='text-bg-text text-caption'>{currentBook?.size}</span>
+                                        </div>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Số trang</span>
+                                            <span className='text-bg-text text-caption'>{currentBook?.page_count}</span>
+                                        </div>
+                                        <div className='grid grid-cols-2 py-2'>
+                                            <span className='text-price-old text-caption flex items-center'>Hình thức</span>
+                                            <span className='text-bg-text text-caption'>{currentBook?.book_cover}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
