@@ -4,6 +4,8 @@ import "./globals.css";
 import AppHeader from "@/components/header/app-header";
 import AppFooter from "@/components/footer/app-footer";
 import { App } from "antd";
+import Providers from "@/redux/Provider";
+
 
 export const metadata: Metadata = {
   title: "BookWorm",
@@ -19,11 +21,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="h-screen">
         <StyledComponentsRegistry>
-          <App>
-            <AppHeader />
-            {children}
-            <AppFooter />
-          </App>
+          <Providers>
+            <App>
+              <AppHeader />
+              {children}
+              <AppFooter />
+            </App>
+          </Providers>
         </StyledComponentsRegistry>
       </body>
     </html>

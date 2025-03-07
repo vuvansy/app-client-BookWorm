@@ -5,7 +5,7 @@ import { ConfigProvider, Rate } from "antd";
 
 
 const BoxProduct = (props: IBook) => {
-  const { id, image, name, price_new, price_old, rating = 0 } = props;
+  const { _id, image, name, price_new, price_old, rating = 0 } = props;
 
 
   const discount =
@@ -25,7 +25,7 @@ const BoxProduct = (props: IBook) => {
         <div className="p-3 flex flex-col justify-center items-center">
           <div className="w-[190px] h-[190px] mb-2">
             <div className="relative">
-              <Link href={`/product/${id}`}>
+              <Link href={`/product/${_id}`}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${image}`}
                   alt={name}
@@ -44,7 +44,7 @@ const BoxProduct = (props: IBook) => {
           </div>
           <div className="w-full">
             <h2 className="text-caption h-[40px] mb-2 line-clamp-2">
-              <Link href={`/product/${id}`}>{name}</Link>
+              <Link href={`/product/${_id}`}>{name}</Link>
             </h2>
             <div className="text-body1 leading-5 flex justify-between mb-2">
               <span className="text-price-special font-bold">

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Breadcrumb, ConfigProvider, Rate } from "antd";
-import { FaShoppingCart } from "react-icons/fa";
-import { FaCartPlus } from "react-icons/fa";
-import { HomeOutlined } from '@ant-design/icons';
+
 import QuantitySelector from './quantity';
 import ListCoupon from './listCoupon';
 import ProductDescription from './description';
@@ -179,19 +177,7 @@ const ProductDetailPage = async (props: Props) => {
                                 <MoreCoupon />
                             </div>
                             <ListCoupon />
-                            <div className=' flex items-center gap-x-8 my-4'>
-                                <div className='text-sub-heading'>Số lượng :</div>
-                                <QuantitySelector currentBook={currentBook} />
-                            </div>
-                            <div className='pb-4 flex flex-col md:flex-row gap-y-2 gap-x-2'>
-                                <button className='w-full md:w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'>
-                                    <FaShoppingCart className='w-[25px] h-[25px]' />Mua ngay
-                                </button>
-                                <button className='w-full md:w-[220px] h-[45px] rounded-md border border-red1 text-red1 text-body-bold flex items-center justify-center gap-x-2'>
-                                    <FaCartPlus className='w-[25px] h-[25px]' />Thêm vào giỏ hàng
-                                </button>
-                            </div>
-
+                            <QuantitySelector currentBook={currentBook} />
                         </div>
                         <div className="w-full pt-4 px-4 bg-white rounded-lg">
                             <div className="flex items-center text-[18px] font-semibold leading-[24px]">Thông tin chi tiết</div>

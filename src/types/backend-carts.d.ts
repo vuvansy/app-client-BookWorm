@@ -29,79 +29,6 @@ declare global {
         result: T[]
     }
 
-    interface ILogin {
-        access_token: string;
-        refresh_token: string;
-        user: {
-            email: string;
-            phone: string;
-            fullName: string;
-            role: string;
-            avatar: string;
-            id: string;
-        }
-    }
-
-    interface IRegister {
-        _id: string;
-        fullName: string;
-        email: string;
-        password: string;
-    }
-
-    interface Address {
-        city: { key: string; name: string };
-        district: { key: string; name: string };
-        ward: { key: string; name: string };
-        street: { key: string; name: string };
-    }
-
-    interface IUser {
-        _id: ObjectId;
-        fullName: string;
-        phone: string;
-        email: string;
-        image?: string;
-        address?: Address;
-        role: string;
-        password: string;
-        isBlocked?: boolean;
-        isActive?: boolean;
-        reset_token?: string | null;
-        createdAt?: Date;
-        updatedAt?: Date;
-    }
-
-    interface IFetchAccount {
-        user: IUser
-    }
-
-    interface IGenre {
-        _id: string;
-        name: string;
-        image: string;
-    }
-
-    interface IAuthor {
-        _id: string;
-        name: string;
-        deleted: boolean;
-        createdAt: string;
-        updatedAt: string;
-    }
-
-
-    interface IUserTable {
-        _id: string;
-        fullName: string;
-        email: string;
-        phone: string;
-        role: string;
-        avatar: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-    }
 
     interface IResponseImport {
         countSuccess: number;
@@ -159,24 +86,8 @@ declare global {
     interface ICart {
         _id: string;
         quantity: number;
-        detail: IBookTable;
+        detail: IBook;
     }
 
-    interface Ward {
-        Id: string;
-        Name: string;
-    }
-
-    interface District {
-        Id: string;
-        Name: string;
-        Wards: Ward[];
-    }
-
-    interface City {
-        Id: string;
-        Name: string;
-        Districts: District[];
-    }
 
 }

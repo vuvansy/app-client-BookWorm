@@ -50,7 +50,7 @@ const ListFlashSale = (props: Props) => {
           {products?.map((product) => (
             <SwiperSlide key={product._id} className="">
               <BoxProductHome
-                id={product._id}
+                _id={product._id}
                 image={product.image}
                 name={product.name}
                 price_new={product.price_new}
