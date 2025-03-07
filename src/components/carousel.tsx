@@ -3,74 +3,64 @@ import React, { useRef } from "react";
 import { Carousel } from "antd";
 import Image from "next/image";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+
 const imageCarousel = [
-  {
-    id: 1,
-    image: "/snapedit_1740666376597.jpg",
-  },
-  {
-    id: 2,
-    image: "/snapedit_1740666483358.jpg",
-  },
-  {
-    id: 3,
-    image: "/snapedit_1740666529015.jpg",
-  },
+  { id: 1, image: "/snapedit_1740666376597.jpg" },
+  { id: 2, image: "/snapedit_1740666483358.jpg" },
+  { id: 3, image: "/snapedit_1740666529015.jpg" },
 ];
 
-const CarouselPage: React.FC = () => {
+const CarouselHome: React.FC = () => {
   const carouselRef = useRef<any>(null);
-  const nextSlide = () => {
-    carouselRef.current?.next();
-  };
 
-  const prevSlide = () => {
-    carouselRef.current?.prev();
-  };
   return (
-    <div className="w-[67%] h-[320px] relative">
-      <button
-        onClick={prevSlide}
-        className="absolute left-[-16px] top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md w-[30px] h-[30px] flex items-center justify-center rounded-full hover:bg-gray-200"
-      >
-        <LeftOutlined className="text-xl" />
-      </button>
-      <Carousel ref={carouselRef} className="custom-carousel" autoplay>
-        {imageCarousel.map((item) => (
-          <div
-            key={item.id}
-            className="relative h-[320px] w-full overflow-hidden rounded-lg"
-          >
-            <div className="absolute inset-0 overflow-hidden rounded-lg">
+    <div className="w-full lg:w-[67%] max-w-[840px] px-4 md:px-0">
+      <div className="relative">
+        <button
+          onClick={() => carouselRef.current?.prev()}
+          className="absolute left-[-12px] top-1/2 -translate-y-1/2 z-10 bg-white shadow-md w-[30px] h-[30px] 
+          lg:flex hidden items-center justify-center rounded-full hover:bg-gray-200"
+        >
+          <LeftOutlined className="text-xl" />
+        </button>
+        <Carousel ref={carouselRef} className="custom-carousel">
+          {imageCarousel.map((item) => (
+            <div
+              key={item.id}
+              className="relative w-full h-[200px] md:h-[280px] lg:h-[320px]"
+            >
               <Image
                 src={item.image}
-                alt="Example image"
+                alt="Slide image"
                 fill
-                style={{
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
+                className="object-contain lg:rounded-lg rounded"
                 priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 830px"
               />
             </div>
-          </div>
-        ))}
-      </Carousel>
-      <button
-        onClick={nextSlide}
-        className="absolute right-[-16px] top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-md w-[30px] h-[30px] flex items-center justify-center rounded-full hover:bg-gray-200"
-      >
-        <RightOutlined className="text-xl" />
-      </button>
-      <style jsx global>{`
-        .custom-carousel .slick-list {
-          border-radius: 8px !important;
-          overflow: hidden !important;
-        }
-      `}</style>
+          ))}
+        </Carousel>
+
+        <button
+          onClick={() => carouselRef.current?.next()}
+          className="absolute right-[-12px] top-1/2 -translate-y-1/2 z-10 bg-white shadow-md w-[30px] h-[30px] 
+          lg:flex hidden items-center justify-center rounded-full hover:bg-gray-200"
+        >
+          <RightOutlined className="text-xl" />
+        </button>
+        <style jsx global>{`
+          .custom-carousel .slick-list {
+            border-radius: 8px !important;
+            overflow: hidden !important;
+          }
+          @media (max-width: 1024px) {
+            .custom-carousel .slick-list {
+              border-radius: 4px !important;
+            }
+          }
+        `}</style>
+      </div>
     </div>
   );
 };
 
-export default CarouselPage;
+export default CarouselHome;

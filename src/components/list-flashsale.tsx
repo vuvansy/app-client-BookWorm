@@ -15,13 +15,13 @@ interface Props {
 const ListFlashSale = (props: Props) => {
   const { products } = props;
   return (
-    <div className="container">
+    <div className="container px-4 lg:px-0">
       <div className="relative">
-        <button className="absolute shadow-custom left-[-20px] top-1/2 -translate-y-1/2 z-10 w-[40px] h-[40px] bg-white flex items-center justify-center rounded-[50%] button-prev-slide">
-          <GrFormPrevious className="text-gray-1 text-[26px]" />
+        <button className="hidden lg:flex absolute shadow-custom left-[-10px] lg:left-[-20px] top-1/2 -translate-y-1/2 z-10 w-[30px] md:w-[40px] h-[30px] md:h-[40px] bg-white items-center justify-center rounded-full button-prev-slide">
+          <GrFormPrevious className="text-gray-1 text-[20px] md:text-[26px]" />
         </button>
         <Swiper
-          spaceBetween={18}
+          spaceBetween={10}
           slidesPerView={1}
           navigation={{
             nextEl: ".button-next-slide",
@@ -33,7 +33,7 @@ const ListFlashSale = (props: Props) => {
           autoplay={{ delay: 6000, disableOnInteraction: false }}
           autoHeight={true}
           breakpoints={{
-            640: {
+            0: {
               slidesPerView: 2,
               spaceBetween: 10,
             },
@@ -59,8 +59,8 @@ const ListFlashSale = (props: Props) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <button className="absolute shadow-custom right-[-20px] top-1/2 -translate-y-1/2 z-10 w-[40px] h-[40px]  bg-white flex items-center justify-center rounded-[50%] button-next-slide">
-          <MdOutlineNavigateNext className="text-gray-1 text-[26px]" />
+        <button className="hidden lg:flex absolute shadow-custom right-[-10px] lg:right-[-20px] top-1/2 -translate-y-1/2 z-10 w-[30px] md:w-[40px] h-[30px] md:h-[40px] bg-white items-center justify-center rounded-full button-next-slide">
+          <MdOutlineNavigateNext className="text-gray-1 text-[20px] md:text-[26px]" />
         </button>
       </div>
     </div>
