@@ -1,8 +1,6 @@
 import React from 'react';
 import { Breadcrumb, ConfigProvider, Rate } from "antd";
-import { FaShoppingCart } from "react-icons/fa";
-import { FaCartPlus } from "react-icons/fa";
-import { HomeOutlined } from '@ant-design/icons';
+
 import QuantitySelector from './quantity';
 import ListCoupon from './listCoupon';
 import ProductDescription from './description';
@@ -12,98 +10,8 @@ import GalleryComponent from './gallery';
 import ListRelated from '@/components/list-related';
 import { sendRequest } from '@/utils/api';
 
-interface Product {
-    id: string;
-    name: string;
-    price_old: number;
-    price_new: number;
-    supplier: string;//Nhà cung cấp
-    author: string;// Tác giả
-    translator: string;//Người dịch
-    publisher: string;//Nhà xuất bản
-    year_publish: number;//Năm xuất bản
-    weight: number;//Trọng lượng
-    size: string;//Kích thước
-    page_number: number;//Số trang
-    book_cover: string;//Hình thức bìa
 
-}
 
-const Product: Product = {
-    id: '8935086856000',
-    name: 'Bạn Là Ai Giữa Muôn Vàn Phong Cách Sống',
-    price_old: 124000,
-    price_new: 62000,
-    supplier: 'FRIST NEW',
-    author: 'J Krishnamurti',
-    translator: 'Huỳnh Hiếu Thuận',
-    publisher: 'Hồng Đức',
-    year_publish: 2022,
-    weight: 339,
-    size: '20.5 x 14.5 x 1.4',
-    page_number: 304,
-    book_cover: 'Bìa mềm',
-
-}
-
-const products = [
-    {
-        id: "1",
-        image: "1740465133117-375555400.jpg",
-        name: "Trốn Lên Mái Nhà Để Khóc - Tặng Kèm Bookmark",
-        rating: 4.5,
-        price_new: 78850,
-        price_old: 95000,
-    },
-    {
-        id: "2",
-        image: "1740465133117-375555400.jpg",
-        name: "Thuật Thao Túng - Góc Tối Ẩn Sau Mỗi Câu Nói",
-        rating: 4,
-        price_new: 97300,
-        price_old: 139000,
-    },
-    {
-        id: "3",
-        image: "1740465133117-375555400.jpg",
-        name: "Ôn Luyện Thi Tốt Nghiệp THPT Từ Năm 2025 - Môn Lịch Sử (Theo Chương Trình GDPT Mới)",
-        rating: 3,
-        price_new: 97300,
-        price_old: 139000,
-    },
-    {
-        id: "4",
-        image: "1740465133117-375555400.jpg",
-        name: "The Angel Next Door Spoils Me Rotten 2",
-        price_new: 201600,
-        price_old: 224000,
-        rating: 4.5,
-    },
-    {
-        id: "5",
-        image: "1740465133117-375555400.jpg",
-        name: "The Things You Can See Only When You Slow Down",
-        price_new: 502200,
-        price_old: 558000,
-        rating: 4.5,
-    },
-    {
-        id: "6",
-        image: "1740465133117-375555400.jpg",
-        name: "The Things You Can See Only When You Slow Down",
-        price_new: 502200,
-        price_old: 558000,
-        rating: 4.5,
-    },
-    {
-        id: "7",
-        image: "1740465133117-375555400.jpg",
-        name: "Hoa Học Trò - Số 1451 - Năm 2025 Gọi Tên Những Ngành Học Nào Lên Xu Hướng?",
-        price_new: 502200,
-        price_old: 558000,
-    },
-
-];
 
 const Discount = (oldPrice: number, newPrice: number): number => {
     if (oldPrice <= 0) return 0;
@@ -216,7 +124,7 @@ const ProductDetailPage = async (props: Props) => {
                             <div className="flex justify-between my-1">
                                 <div>
                                     <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Tác giả :<div className="text-caption-bold">{authorsNames}</div></div>
-                                    <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Nhà xuất bản :<div className="text-caption-bold">{Product.publisher}</div></div>
+                                    <div className="leading-[30px] items-center flex gap-x-1 text-caption-light">Nhà xuất bản :<div className="text-caption-bold">{currentBook?.publishers}</div></div>
                                 </div>
                                 <div>
                                     <div className="leading-[30px] flex items-center gap-x-1 text-caption-light">Hình thức bìa :<div className="text-caption-bold">{currentBook?.book_cover}</div></div>
@@ -271,15 +179,7 @@ const ProductDetailPage = async (props: Props) => {
                                 <MoreCoupon />
                             </div>
                             <ListCoupon />
-                            <div className=' flex items-center gap-x-8 my-4'>
-                                <div className='text-sub-heading'>Số lượng :</div>
-                                <QuantitySelector currentBook={currentBook} />
-                            </div>
-                            <div className='pb-4 flex gap-x-2'>
-                                <button className='w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'><FaShoppingCart className='w-[25px] h-[25px]' />Mua ngay</button>
-                                <button className='w-[220px] h-[45px] rounded-md border border-red1 text-red1 text-body-bold flex items-center justify-center gap-x-2'><FaCartPlus className='w-[25px] h-[25px]' />Thêm vào giỏ hàng</button>
-                            </div>
-
+                            <QuantitySelector currentBook={currentBook} />
                         </div>
                         <div className="w-full pt-4 px-4 bg-white rounded-lg">
                             <div className="flex items-center text-[18px] font-semibold leading-[24px]">Thông tin chi tiết</div>
@@ -319,7 +219,7 @@ const ProductDetailPage = async (props: Props) => {
                 </div>
             </div>
             <div className="container">
-                <ProductDescription currentBook={currentBook}/>
+                <ProductDescription currentBook={currentBook} />
                 <CustomerReviews />
             </div>
             <div className='container mt-5 pb-[30px] bg-white rounded-lg'>

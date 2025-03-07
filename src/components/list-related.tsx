@@ -50,7 +50,7 @@ const ListRelated = (props: Props) => {
                     {booksByGenreAPI?.map((product) => (
                         <SwiperSlide key={product._id} className="">
                             <BoxProduct
-                                id={product._id}
+                                _id={product._id}
                                 image={product.image}
                                 name={product.name}
                                 price_new={product.price_new}
