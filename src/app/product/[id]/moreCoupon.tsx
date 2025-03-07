@@ -66,8 +66,8 @@ const MoreCoupon = () => {
                                 <div className="bg-yellow-1 h-[100px] w-[100px] rounded-lg flex justify-center items-center">
                                     <PiSealPercentBold className="text-[40px] text-white" />
                                 </div>
-                                <div>
-                                    <h3 className="uppercase font-semibold">{coupon.name}</h3>
+                                <div className='py-1 md:py-0'>
+                                    <h3 className="uppercase font-semibold truncate w-[200px] md:w-[300px]">{coupon.name}</h3>
                                     <div className='text-caption text-price-old pt-1 pb-4'>
                                         Tối đa {formatNumber(coupon.max)} cho đơn hàng từ {formatNumber(coupon.min)}
                                     </div>

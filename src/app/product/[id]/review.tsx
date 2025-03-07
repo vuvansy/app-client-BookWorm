@@ -36,8 +36,8 @@ const CustomerReviews = () => {
                 <div className="bg-white rounded-b-lg">
                     {reviews.length > 0 ? (
                         reviews.map((review, index) => (
-                            <div key={index} className="bg-white rounded-lg flex  px-4 py-1">
-                                <div className="w-[10%] ">
+                            <div key={index} className="bg-white rounded-lg flex flex-col lg:flex-row px-4 py-1">
+                                <div className="w-full lg:w-[10%] ">
                                     <div className="text-caption ">{review.name}</div>
                                     <ConfigProvider
                                         theme={{
@@ -54,10 +54,10 @@ const CustomerReviews = () => {
                                         <Rate disabled allowHalf defaultValue={review.rating} />
                                     </ConfigProvider>
                                 </div>
-                                <div className="w-[90%] text-caption  ">
-                                    <div className=" flex justify-between  ">
-                                        <div className="w-[87%]  ">{review.comment}</div>
-                                        <div className="w-[13%] text-right">{review.date}</div>
+                                <div className="w-full lg:w-[90%] text-caption  ">
+                                    <div className=" flex flex-col lg:flex-row lg:justify-between  ">
+                                        <div className="w-full my-2 lg:w-[85%] lg:my-0  ">{review.comment}</div>
+                                        <div className="w-full lg:w-[15%] lg:text-right">{review.date}</div>
                                     </div>
 
                                 </div>

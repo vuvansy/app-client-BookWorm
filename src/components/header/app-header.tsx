@@ -11,6 +11,7 @@ import { FaCaretDown } from "react-icons/fa";
 import Image from 'next/image';
 import SearchForm from './form-search';
 import DropDowAccount from './dropdow-account';
+import HeaderNav from './header_nav';
 
 
 const categories = [
@@ -89,7 +90,7 @@ const AppHeader = () => {
 
     return (
         <header>
-            <div className='bg-red1 h-[36px] flex justify-between items-center'>
+            <div className='bg-red1 h-[36px] px-2 xl:px-0 flex justify-between items-center'>
                 <div className='container flex justify-between text-white'>
                     <div className='flex items-center gap-x-[4px] cursor-pointer'>
                         <MdOutlineMail />
@@ -103,16 +104,16 @@ const AppHeader = () => {
                 </div>
             </div>
             <div className='header-center'>
-                <div className='bg-[#F4EDD3] h-[60px] flex items-center'>
+                <div className='bg-[#F4EDD3] h-[80px] md:h-[60px] flex flex-col py-2 md:py-0 md:items-center md:flex-row px-2 xl:px-0'>
                     <div className='container flex justify-between items-center'>
                         <div className='basis-3/12'>
                             <Link href={"/"}>BookWorm</Link>
                         </div>
-                        <div className='basis-6/12'>
+                        <div className='hidden md:block basis-6/12'>
                             <SearchForm />
                         </div>
-                        <div className='basis-3/12 flex justify-end'>
-                            <ul className='flex items-center gap-x-[26px]'>
+                        <div className='basis-3/12 flex justify-center lg:justify-end'>
+                            <ul className='flex items-center gap-x-[40px]'>
                                 <li className='cursor-pointer'>
                                     <Popover
                                         placement="bottom"
@@ -137,17 +138,25 @@ const AppHeader = () => {
                                         </Badge>
                                     </Popover>
                                 </li>
-                                <li className='cursor-pointer'>
+                                {/* <li className='cursor-pointer'>
                                     <LuPackageSearch className='icon-cart' />
-                                </li>
-                                <li className="flex items-center cursor-pointer">
+                                </li> */}
+                                <li className="hidden lg:flex lg:items-center cursor-pointer">
                                     <DropDowAccount />
+                                </li>
+                                <li className='flex items-center cursor-pointer lg:hidden'>
+                                    <HeaderNav />
                                 </li>
                             </ul>
                         </div>
                     </div>
+                    <div className='container flex justify-center md:hidden'>
+                        <div className='basis-8/12 md:hidden'>
+                            <SearchForm />
+                        </div>
+                    </div>
                 </div >
-                <div className='h-[40px] flex items-centers shadow-xl'>
+                <div className='h-[40px] hidden lg:flex lg:items-centers shadow-xl'>
                     <div className='container'>
                         <ul className='flex justify-center items-center gap-x-8 text-caption'>
                             <li>

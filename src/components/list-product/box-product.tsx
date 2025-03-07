@@ -5,7 +5,7 @@ import { ConfigProvider, Rate } from "antd";
 
 
 const BoxProduct = (props: IBook) => {
-  const { id, image, name, price_new, price_old, rating=0 } = props;
+  const { id, image, name, price_new, price_old, rating = 0 } = props;
 
 
   const discount =
@@ -15,8 +15,8 @@ const BoxProduct = (props: IBook) => {
 
 
   return (
-    <div className="group">
-      <div className="w-[220px] relative bg-white border group-hover:shadow-custom">
+    <div className="group  w-full sm:max-w-[200px] md:max-w-[232px]">
+      <div className="relative bg-white group-hover:shadow-custom  overflow-hidden">
         {discount && (
           <div className="w-[44px] h-[44px] absolute z-10 top-[6px] right-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
             <span className="text-white text-body-bold">-{discount}%</span>
@@ -27,7 +27,7 @@ const BoxProduct = (props: IBook) => {
             <div className="relative">
               <Link href={`/product/${id}`}>
                 <Image
-                   src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${image}`}
+                  src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${image}`}
                   alt={name}
                   width={0}
                   height={0}
@@ -48,8 +48,8 @@ const BoxProduct = (props: IBook) => {
             </h2>
             <div className="text-body1 leading-5 flex justify-between mb-2">
               <span className="text-price-special font-bold">
-              {new Intl.NumberFormat("vi-VN").format(price_new || price_old)}{" "}
-              đ
+                {new Intl.NumberFormat("vi-VN").format(price_new || price_old)}{" "}
+                đ
               </span>
               {price_new && (
                 <span className="text-price-old line-through">

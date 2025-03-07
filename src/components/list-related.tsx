@@ -33,8 +33,16 @@ const ListRelated = (props: Props) => {
                     autoplay={{ delay: 6000, disableOnInteraction: false }}
                     autoHeight={true}
                     breakpoints={{
-                        640: {
+                        0: {
+                            slidesPerView: 1,
+                            spaceBetween: 10
+                        },
+                        400: {
                             slidesPerView: 2,
+                            spaceBetween: 10
+                        },
+                        640: {
+                            slidesPerView: 3,
                             spaceBetween: 10
                         },
                         768: {
@@ -43,7 +51,7 @@ const ListRelated = (props: Props) => {
                         },
                         1024: {
                             slidesPerView: 5,
-                            spaceBetween: 30
+                            spaceBetween: 18
                         },
                     }}
                 >
