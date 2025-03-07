@@ -42,20 +42,24 @@ const promotions = [
 ];
 const NewsBox = () => {
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1  gap-4">
       {promotions.map((item) => (
         <Link key={item.id} href={item.link}>
-          <div className="w-full h-[105px] flex gap-x-[16px] border cursor-pointer hover:bg-gray-100 transition">
+          <div className="w-full  flex gap-x-[16px] border cursor-pointer hover:bg-gray-100 transition">
             <Image
               src={item.image}
               alt={item.title}
               width={160}
               height={105}
-              className="object-cover"
+              className="object-cover w-[120px] h-[80px] md:w-[140px] md:h-[90px] lg:w-[160px] lg:h-[105px]"
             />
             <div>
-              <p className="text-sub-heading-bold">{item.title}</p>
-              <p className="text-caption">{item.description}</p>
+              <p className="lg:text-sub-heading-bold text-caption-bold line-clamp-1">
+                {item.title}
+              </p>
+              <p className="lg:text-caption text-info line-clamp-3">
+                {item.description}
+              </p>
             </div>
           </div>
         </Link>
