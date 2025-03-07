@@ -28,34 +28,34 @@ const ChangePasswordForm = () => (
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        size='large'
+        layout='vertical'
     >
 
-        <div className='h-[30px] text-body1'>Mật khẩu cũ</div>
         <Form.Item<FieldType>
+            label="Mật khẩu cũ"
             name="password_old"
-            rules={[{ required: true, message: 'Please input your old password!' }]}
+            rules={[{ required: true, message: 'Hãy Nhập Mật Khẩu Cũ!' }]}
         >
             <Input.Password />
         </Form.Item>
 
-        <div className='h-[30px] text-body1'>Mật khẩu mới</div>
         <Form.Item<FieldType>
+            label="Mật khẩu mới"
             name="password_new"
-            rules={[{ required: true, message: 'Please input your new password!' }]}
+            rules={[{ required: true, message: 'Hãy Nhập Mật Khẩu Mới!' }]}
         >
             <Input.Password />
         </Form.Item>
 
-        <div className='h-[30px] text-body1'>Nhập lại mật khẩu</div>
         <Form.Item<FieldType>
+            label="Xác nhận mật khẩu"
             name="confirmPassword"
-            rules={[{ required: true, message: 'Please input your confirmPassword!' }]}
+            rules={[{ required: true, message: 'Hãy Nhập Xác Nhận Mật Khẩu!' }]}
         >
             <Input.Password />
         </Form.Item>
 
-        <button type='submit' className='w-full h-10 rounded-lg bg-red1 text-white text-body-bold '>Lưu Thay Đổi</button>
+        <Button type="primary" htmlType="submit" className='w-full !bg-red1 !text-body-bold'>Lưu Thay Đổi</Button>
 
 
     </Form>

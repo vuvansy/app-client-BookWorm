@@ -26,17 +26,17 @@ const ForgotPasswordForm = () => (
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        size='large'
+        layout='vertical'
     >
-        <div className='h-[30px] text-body1'>Email</div>
         <Form.Item<FieldType>
+            label="Email"
             name="email"
-            rules={[{ required: true, message: 'Please input your email!' }]}
+            rules={[{ required: true, message: 'Hãy Nhập Email!' }]}
         >
             <Input />
         </Form.Item>
 
-        <button type='submit' className='w-full h-10 rounded-lg bg-red1 text-white text-body-bold '>Gửi Yêu Cầu</button>
+        <Button type="primary" htmlType="submit" className='w-full !bg-red1 !text-body-bold'>Gửi Yêu Cầu</Button>
 
     </Form>
 
