@@ -48,10 +48,10 @@ const Home = async () => {
   ];
   return (
     <main className="bg-bg-main">
-      <div className="container py-5 flex lg:justify-between justify-center  ">
+      <div className="container py-5 gap-[10px] px-[15px] lg:px-0 flex lg:justify-between justify-center  ">
         <CarouselHome></CarouselHome>
-        <div className="hidden lg:flex lg:flex-col lg:w-[32%] lg:gap-y-[7px]">
-          <div className="w-full max-h-[150px] rounded-lg overflow-hidden">
+        <div className="hidden lg:flex lg:flex-col lg:w-[32%] lg:gap-y-[10px]">
+          <div className="w-full min-h-[155px] rounded-lg overflow-hidden">
             <Link href="">
               <Image
                 className="rounded-lg"
@@ -68,7 +68,7 @@ const Home = async () => {
               />
             </Link>
           </div>
-          <div className="w-full max-h-[150px] rounded-lg overflow-hidden">
+          <div className="w-full min-h-[155px] rounded-lg overflow-hidden">
             <Link href="">
               <Image
                 className="rounded-lg"
