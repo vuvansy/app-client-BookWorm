@@ -16,7 +16,7 @@ const SearchForm = () => {
     return (
         <Form
             name="form-search"
-            className='!relative h-[36px]'
+            className='!w-full !relative h-[36px]'
             onFinish={onFinish}
             autoComplete="off"
         >

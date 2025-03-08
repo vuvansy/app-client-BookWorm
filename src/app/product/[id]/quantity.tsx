@@ -93,16 +93,16 @@ const QuantitySelector = (props: IProps) => {
                     </div>
                 </div>
             </div>
-            <div className='pb-4 flex gap-x-2'>
+            <div className='pb-4 flex flex-col md:flex-row gap-y-2 gap-x-2'>
                 <button
                     onClick={() => currentBook && handleBuyNow(currentBook, currentQuantity)}
-                    className='w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'>
+                    className='w-full md:w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'>
                     <FaShoppingCart className='w-[25px] h-[25px]' />
                     Mua ngay
                 </button>
                 <button
                     onClick={() => currentBook && handleAddToCart(currentBook, currentQuantity)}
-                    className='w-[220px] h-[45px] rounded-md border border-red1 text-red1 text-body-bold flex items-center justify-center gap-x-2'>
+                    className='w-full md:w-[220px] h-[45px] rounded-md border border-red1 text-red1 text-body-bold flex items-center justify-center gap-x-2'>
                     <FaCartPlus className='w-[25px] h-[25px]' />
                     Thêm vào giỏ hàng
                 </button>
