@@ -104,16 +104,16 @@ const AppHeader = () => {
                 </div>
             </div>
             <div className='header-center'>
-                <div className='bg-[#F4EDD3] h-[80px] md:h-[60px] flex flex-col py-2 md:py-0 md:items-center md:flex-row px-2 xl:px-0'>
-                    <div className='container flex justify-between items-center'>
-                        <div className='basis-3/12'>
+                <div className='bg-[#F4EDD3] h-[80px] lg:h-[60px] flex py-2 md:py-0 md:items-center px-2 xl:px-0'>
+                    <div className='container flex justify-between items-center flex-wrap'>
+                        <div className='order-1 basis-2/6 lg:order-1 lg:basis-3/12'>
                             <Link href={"/"}>BookWorm</Link>
                         </div>
-                        <div className='hidden md:block basis-6/12'>
+                        <div className='order-4 basis-10/12 lg:order-2 lg:basis-6/12'>
                             <SearchForm />
                         </div>
-                        <div className='basis-3/12 flex justify-center lg:justify-end'>
-                            <ul className='flex items-center gap-x-[40px]'>
+                        <div className='order-2 basis-4/6 lg:order-3 lg:basis-3/12 flex justify-end'>
+                            <ul className='flex items-center gap-x-[20px]'>
                                 <li className='cursor-pointer'>
                                     <Popover
                                         placement="bottom"
@@ -138,21 +138,16 @@ const AppHeader = () => {
                                         </Badge>
                                     </Popover>
                                 </li>
-                                {/* <li className='cursor-pointer'>
+                                <li className='cursor-pointer'>
                                     <LuPackageSearch className='icon-cart' />
-                                </li> */}
-                                <li className="hidden lg:flex lg:items-center cursor-pointer">
-                                    <DropDowAccount />
                                 </li>
-                                <li className='flex items-center cursor-pointer lg:hidden'>
-                                    <HeaderNav />
+                                <li className="flex items-center cursor-pointer">
+                                    <DropDowAccount />
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                    <div className='container flex justify-center md:hidden'>
-                        <div className='basis-8/12 md:hidden'>
-                            <SearchForm />
+                        <div className='order-3 basis-1/12 cursor-pointer lg:hidden'>
+                            <HeaderNav />
                         </div>
                     </div>
                 </div >

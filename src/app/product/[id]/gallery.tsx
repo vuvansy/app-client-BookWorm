@@ -85,7 +85,7 @@ const GalleryComponent = (props: IProps) => {
 
             <button
                 onClick={handleToggleFavorite}
-                className="absolute top-[180px] md:top-[140px] lg:top-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-red-100 transition"
+                className="absolute top-[180px] md:top-[160px] lg:top-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-red-100 transition"
             >
                 {isFavorite ? (
                     <FaHeart className="text-red-500 text-[20px]" />

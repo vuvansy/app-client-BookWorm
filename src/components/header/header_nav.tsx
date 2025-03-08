@@ -59,13 +59,8 @@ const HeaderNav = () => {
                     },
                 }}
             >
-                <Drawer onClose={onClose} open={openMenu} headerStyle={{ display: 'none' }} width={260}>
+                <Drawer onClose={onClose} open={openMenu} width={260} placement="left" closable={false}>
                     <ul className='w-full flex flex-col justify-center items-center' onClick={handleDrawerClick}>
-                        <li className="w-full flex justify-start items-center bg-[#F4EDD3]">
-                            <div className="px-[10px] py-[8px] capitalize flex items-center">
-                                <DropDowAccount />
-                            </div>
-                        </li>
                         <li className="w-full flex justify-start items-center">
                             <Link href={'/'} className='px-[10px] py-[8px] capitalize'>Trang chủ</Link>
                         </li>
@@ -74,18 +69,6 @@ const HeaderNav = () => {
                         </li>
                         <li className="w-full flex flex-wrap justify-start items-center">
                             <Link href={''} className="flex items-center px-[10px] py-[8px] capitalize">
-                                {/* <Dropdown
-                                    menu={{ items }}
-                                    trigger={['click']}
-                                    placement="bottom"
-                                    overlayStyle={{ paddingTop: 6 }} // Đẩy xuống dưới
-                                >
-                                    <Space>
-                                        <span>Sản phẩm</span>
-                                        <FaCaretDown />
-                                    </Space>
-                                </Dropdown> */}
-
                                 <Space onClick={toggleSubMenu}>
                                     <span>Sản phẩm</span>
                                     <FaCaretDown />
