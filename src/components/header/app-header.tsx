@@ -107,7 +107,22 @@ const AppHeader = () => {
                 <div className='bg-[#F4EDD3] h-[80px] lg:h-[60px] flex py-2 md:py-0 md:items-center px-2 xl:px-0'>
                     <div className='container flex justify-between items-center flex-wrap'>
                         <div className='order-1 basis-2/6 lg:order-1 lg:basis-3/12'>
-                            <Link href={"/"}>BookWorm</Link>
+                            <Link href={"/"} className='w-[200px]'>
+                                <div className="relative w-[200px]">
+                                    <Image
+                                        src={"/icon/logobookworm.png"}
+                                        alt={'logo BookWorm'}
+                                        width={0}
+                                        height={0}
+                                        sizes="100vw"
+                                        style={{
+                                            width: "100%",
+                                            height: "auto",
+                                        }}
+                                        className="w-full object-cover"
+                                    />
+                                </div>
+                            </Link>
                         </div>
                         <div className='order-4 basis-10/12 lg:order-2 lg:basis-6/12'>
                             <SearchForm />

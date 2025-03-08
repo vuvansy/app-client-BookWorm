@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { AiFillInstagram } from "react-icons/ai";
 
@@ -16,7 +18,22 @@ const AppFooter = () => {
       <div className=" container bg-white flex flex-col lg:flex-row pt-[16px] rounded-lg">
         <div className="relative basis-2/6 text-info ">
           <div className="w-[389px] h-[69px] mb-[8px] py-2.5 px-[15px]">
-            BookWorm
+            <Link href={"/"} className='w-[200px]'>
+              <div className="relative w-[200px]">
+                <Image
+                  src={"/icon/logobookworm.png"}
+                  alt={'logo BookWorm'}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                  className="w-full object-cover"
+                />
+              </div>
+            </Link>
           </div>
           <div className="ml-[10px] mt-[10px] ">
             <p className="pr-[15px] pl-[10px]">
