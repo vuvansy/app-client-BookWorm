@@ -51,7 +51,7 @@ const Home = async () => {
       <div className="container py-5 flex lg:justify-between justify-center  ">
         <CarouselHome></CarouselHome>
         <div className="hidden lg:flex lg:flex-col lg:w-[32%] lg:gap-y-[7px]">
-          <div className="w-full min-h-[155px] rounded-lg overflow-hidden">
+          <div className="w-full max-h-[150px] rounded-lg overflow-hidden">
             <Link href="">
               <Image
                 className="rounded-lg"
@@ -68,7 +68,7 @@ const Home = async () => {
               />
             </Link>
           </div>
-          <div className="w-full min-h-[155px] rounded-lg overflow-hidden">
+          <div className="w-full max-h-[150px] rounded-lg overflow-hidden">
             <Link href="">
               <Image
                 className="rounded-lg"
@@ -211,14 +211,14 @@ const Home = async () => {
           </div>
         </div>
       </div>
-      <div className="container bg-bg-main mt-5 px-2 sm:px-4">
+      <div className="container bg-bg-main mt-5 px-2 lg:px-0 sm:px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {shipper.map((item, index) => (
             <div
               key={index}
               className="rounded bg-white text-center px-4 py-4 sm:px-6 sm:py-5 shadow-md"
             >
-              <div className="w-10 h-10 sm:w-[50px] sm:h-[50px] mx-auto">
+              <div className="md:w-10 w-8 md:h-10 h-8 sm:w-[50px] sm:h-[50px] mx-auto">
                 <Image
                   src={item.img}
                   alt={item.title}
@@ -227,8 +227,8 @@ const Home = async () => {
                   className="w-full h-full object-contain"
                 />
               </div>
-              <p className="text-sm sm:text-caption-bold pt-2">{item.title}</p>
-              <p className="text-xs sm:text-caption">{item.desc}</p>
+              <p className=" sm:text-caption-bold pt-2">{item.title}</p>
+              <p className="text-info sm:text-caption">{item.desc}</p>
             </div>
           ))}
         </div>
