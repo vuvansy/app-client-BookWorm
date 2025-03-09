@@ -1,98 +1,39 @@
+"use client";
 import BoxProduct from "@/components/list-product/box-product";
-import React from "react";
+import { Pagination } from "antd";
+import React, { useState } from "react";
 
-const products = [
-  {
-    id: "1",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12 - Tặng Kèm Set Postcard Polaroid",
-    price_old: 50_000,
-    price_new: 38_000,
-    rating: 4.5,
-  },
-  {
-    id: "2",
-    image: "/9786044067162.webp",
-    name: "38 Bức Thư Rockefeller Viết Cho Con Trai",
-    price_old: 120_000,
-    price_new: 92_460,
-    rating: 4.5,
-  },
-  {
-    id: "3",
-    image: "/9786044067162.webp",
-    name: "Mặt Dày Tâm Đen (Tái Bản)",
-    price_old: 150_000,
-    price_new: 118_300,
-    rating: 4.5,
-  },
-  {
-    id: "4",
-    image: "/9786044067162.webp",
-    name: "Văn Minh Vật Chất Của Người Việt",
-    price_old: 300_000,
-    price_new: 273_000,
-    rating: 4.5,
-  },
-  {
-    id: "5",
-    image: "/9786044067162.webp",
-    name: "Tuyệt Kỹ Tiếng Anh Thương Mại",
-    price_old: 110_000,
-    price_new: 91_200,
-    rating: 4.5,
-  },
-  {
-    id: "6",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12 - Tặng Kèm Set Postcard Polaroid",
-    price_old: 50_000,
-    price_new: 38_000,
-    rating: 4.5,
-  },
-  {
-    id: "7",
-    image: "/9786044067162.webp",
-    name: "38 Bức Thư Rockefeller Viết Cho Con Trai",
-    price_old: 120_000,
-    price_new: 92_460,
-    rating: 4.5,
-  },
-  {
-    id: "8",
-    image: "/9786044067162.webp",
-    name: "Mặt Dày Tâm Đen (Tái Bản)",
-    price_old: 150_000,
-    price_new: 118_300,
-    rating: 4.5,
-  },
-  {
-    id: "9",
-    image: "/9786044067162.webp",
-    name: "Văn Minh Vật Chất Của Người Việt",
-    price_old: 300_000,
-    price_new: 273_000,
-    rating: 4.5,
-  },
-  {
-    id: "10",
-    image: "/9786044067162.webp",
-    name: "Tuyệt Kỹ Tiếng Anh Thương Mại",
-    price_old: 110_000,
-    price_new: 91_200,
-    rating: 4.5,
-  },
-];
-export default function ProductFavorite() {
+interface Props {
+  dataBookNew?: IBook[];
+}
+
+const ProductFavorite = ({ dataBookNew = [] }: Props) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentData = dataBookNew.slice(startIndex, endIndex);
+
   return (
-    <div>
-      <div className="bg-white overflow-hidden pb-[10px] flex flex-wrap justify-center items-center">
-        <div className="flex justify-between flex-wrap gap-y-[10px] px-[15px] mt-[10px]  mb-[20px]  ">
-          {products.map((product) => (
-            <BoxProduct key={product.id} {...product} />
-          ))}
-        </div>
+    <div className="bg-white overflow-hidden pb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 px-4 mt-4 mb-6">
+        {currentData.map((book, index) => (
+          <BoxProduct key={index} {...book} />
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={dataBookNew.length}
+          onChange={(page) => setCurrentPage(page)}
+          showSizeChanger={false}
+        />
       </div>
     </div>
   );
-}
+};
+
+export default ProductFavorite;
