@@ -62,10 +62,10 @@ const ListProduct = ({ products, filters }: ListProductProps) => {
     }
 
     setFilteredProducts(newFilteredProducts);
-    setCurrentPage(1); // Reset trang về 1 khi thay đổi bộ lọc
+    setCurrentPage(1); 
   }, [products, arrange, filters]);
 
-  // Lấy danh sách sản phẩm cho trang hiện tại
+
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * arrange.pageSize,
     currentPage * arrange.pageSize
