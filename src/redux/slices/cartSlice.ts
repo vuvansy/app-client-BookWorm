@@ -22,33 +22,26 @@ const cartSlice = createSlice({
     loadCart: (state, action: PayloadAction<CartItem[]>) => {
       state.items = action.payload;
     },
+  
     addToCart: (state, action: PayloadAction<{ item: IBook; quantity: number }>) => {
-      const existingItem = state.items.find(
-        (item) => item._id === action.payload.item._id
-      );
-
-      const maxQuantity = action.payload.item.quantity ?? 0;
+      const { item, quantity } = action.payload;
+      const existingItem = state.items.find((cartItem) => cartItem._id === item._id);
+      const maxQuantity = item.quantity ?? Infinity; // Lấy số lượng tồn kho
 
       if (existingItem) {
-        const newQuantity = existingItem.quantity + action.payload.quantity;
+        const newQuantity = existingItem.quantity + quantity;
+
+       
         existingItem.quantity = newQuantity > maxQuantity ? maxQuantity : newQuantity;
-
+      } else {
+        
+        const addQuantity = quantity > maxQuantity ? maxQuantity : quantity;
+        state.items.push({ _id: item._id, quantity: addQuantity, detail: item });
       }
-      else {
-        const addQuantity =
-          action.payload.quantity > maxQuantity
-            ? maxQuantity
-            : action.payload.quantity;
 
-        state.items.push({
-          _id: action.payload.item._id,
-          quantity: addQuantity,
-          detail: action.payload.item,
-        });
-      }
-      const carts = JSON.stringify(state.items)
-      localStorage.setItem("carts", carts);
+      localStorage.setItem("carts", JSON.stringify(state.items));
     },
+
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
         (item) => item._id !== action.payload

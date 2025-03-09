@@ -2,16 +2,12 @@ import { Badge, Dropdown, Popover, Space } from 'antd';
 import React from 'react'
 import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
-import { BsCart3 } from "react-icons/bs";
-import { LuPackageSearch } from "react-icons/lu";
-import { PiShoppingCartBold } from "react-icons/pi";
 import Link from 'next/link';
-
 import { FaCaretDown } from "react-icons/fa";
 import Image from 'next/image';
 import SearchForm from './form-search';
-import DropDowAccount from './dropdow-account';
 import HeaderNav from './header_nav';
+import DropDowCart from './dropdow-cart';
 
 
 const categories = [
@@ -22,57 +18,7 @@ const categories = [
     { id: 5, name: 'Sách Văn Hóa - Nghệ Thuật' },
 ];
 
-const content = (
-    <>
-        <div>
-            <div className='flex pb-2'>
-                <Link href={"/"} className='block relative aspect-square w-[68px] h-[68px]'>
-                    <Image src={"/books/sachlichsu.webp"}
-                        alt=""
-                        fill
-                        sizes="100"
-                        className="w-full aspect-[3/4] object-contain" />
-                </Link>
-                <div className='ml-2 w-[252px]'>
-                    <Link href={'/'} className='text-bg-text hover:text-bg-text'>Nhóc Miko! Cô Bé Nhí Nhảnh - Tập 38</Link>
-                    <div className='flex items-center gap-x-2 mt-1'>
-                        <span className='text-body-bold'>36000</span>
-                        <span className='text-gray-1 text-body1'>x2</span>
-                    </div>
-                </div>
-            </div>
-            <div className='flex pb-2'>
-                <Link href={"/"} className='block relative aspect-square w-[68px] h-[68px]'>
-                    <Image src={"/books/tet-oi-tet-dau-roi.webp"}
-                        alt=""
-                        fill
-                        sizes="100"
-                        className="w-full aspect-[3/4] object-contain" />
-                </Link>
-                <div className='ml-2 w-[252px]'>
-                    <Link href={'/'} className='text-bg-text hover:text-bg-text'>
-                        Quiet: The Power of Introverts in a World That Can't Stop Talking
-                    </Link>
-                    <div className='flex items-center gap-x-2 mt-1'>
-                        <span className='text-body-bold'>36000</span>
-                        <span className='text-gray-1 text-body1'>x2</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className='flex justify-between items-center pt-[16px] pb-[4px]'>
-            <div>
-                <p>Tổng cộng</p>
-                <span className='text-red1 !text-body-bold'>{(1430310).toLocaleString()} đ</span>
-            </div>
-            <Link href={'/cart'}
-                className='w-[186px] h-[40px] border-[2px] border-red1 rounded-lg bg-red1 !text-white text-caption-bold flex justify-center items-center hover:text-white'>
-                Xem giỏ hàng
-            </Link>
-        </div>
-    </>
 
-);
 
 const AppHeader = () => {
 
@@ -128,38 +74,7 @@ const AppHeader = () => {
                             <SearchForm />
                         </div>
                         <div className='order-2 basis-4/6 lg:order-3 lg:basis-3/12 flex justify-end'>
-                            <ul className='flex items-center gap-x-[20px]'>
-                                <li className='cursor-pointer'>
-                                    <Popover
-                                        placement="bottom"
-                                        rootClassName="popover-carts"
-                                        title={
-                                            <div className="flex items-center gap-x-2 py-[10px] border-b-[1px] !text-body-bold">
-                                                <BsCart3 className='w-[18px] h-[18px]' />
-                                                <span>Giỏ hàng (10)</span>
-                                            </div>
-                                        }
-                                        content={content}
-                                        arrow={true}>
-                                        <Badge
-                                            // count={carts?.length ?? 0}
-                                            count={10}
-                                            size={"small"}
-                                            showZero
-                                            style={{ backgroundColor: '#C92127' }}
-
-                                        >
-                                            <PiShoppingCartBold className='icon-cart top-[4px]' />
-                                        </Badge>
-                                    </Popover>
-                                </li>
-                                <li className='cursor-pointer'>
-                                    <LuPackageSearch className='icon-cart' />
-                                </li>
-                                <li className="flex items-center cursor-pointer">
-                                    <DropDowAccount />
-                                </li>
-                            </ul>
+                           <DropDowCart/>
                         </div>
                         <div className='order-3 basis-1/12 cursor-pointer lg:hidden'>
                             <HeaderNav />

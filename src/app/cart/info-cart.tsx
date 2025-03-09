@@ -8,14 +8,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-interface CartItem {
-    _id: string;
-    quantity: number;
-    detail: IBook;
-}
 
 const InfoCart = () => {
-    const cartItems = useSelector((state: RootState) => state.cart.items) as CartItem[];
+    const cartItems = useSelector((state: RootState) => state.cart.items) as ICart[];
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {

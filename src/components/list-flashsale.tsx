@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 interface Props {
-  products?: IBookTable[];
+  products?: IBook[];
 }
 
 const ListFlashSale = (props: Props) => {
@@ -49,13 +49,7 @@ const ListFlashSale = (props: Props) => {
         >
           {products?.map((product) => (
             <SwiperSlide key={product._id} className="">
-              <BoxProductHome
-                _id={product._id}
-                image={product.image}
-                name={product.name}
-                price_new={product.price_new}
-                price_old={product.price_old}
-              />
+              <BoxProductHome {...product} />
             </SwiperSlide>
           ))}
         </Swiper>

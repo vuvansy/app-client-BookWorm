@@ -75,7 +75,7 @@ const TableCart = () => {
                                     </div>
                                     <div>
                                         <span className="text-bg-text font-semibold text-body1">
-                                            {new Intl.NumberFormat("vi-VN").format(item.detail.price_new)} đ
+                                            {new Intl.NumberFormat("vi-VN").format(item.detail.price_new ?? 0)} đ
                                         </span>
                                         <span className="text-info text-gray-1 line-through ml-3">
                                             {new Intl.NumberFormat("vi-VN").format(item.detail.price_old)} đ

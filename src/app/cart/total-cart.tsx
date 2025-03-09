@@ -22,10 +22,10 @@ const TotalCart = () => {
     const cartItems = useSelector((state: RootState) => state.cart.items || []) as ICart[];
     const total = useMemo(
         () =>
-            cartItems.reduce((total, item) => {
-                const price = item.detail.price_new;
-                return total + price * item.quantity;
-            }, 0),
+            cartItems.reduce(
+                (total, item) => total + (item.detail.price_new ?? 0) * item.quantity,
+                0
+            ),
         [cartItems]
     );
 
