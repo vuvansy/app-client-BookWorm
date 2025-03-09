@@ -10,6 +10,7 @@ import { FaCartPlus } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import type { RootState } from '@/redux/store';
+import Swal from "sweetalert2";
 
 type UserAction = "MINUS" | "PLUS"
 
@@ -70,8 +71,30 @@ const QuantitySelector = (props: IProps) => {
     };
 
     const handleAddToCart = (currentBook: IBook, currentQuantity: number) => {
+        const cartItem = cart.items.find((item) => item._id === currentBook._id);
+        const maxQuantity = currentBook.quantity ?? 0;
+        const currentCartQuantity = cartItem?.quantity ?? 0;
+
+        if (currentCartQuantity + currentQuantity > maxQuantity) {
+            notification.warning({
+                message: 'Lỗi Số Lượng',
+                description: `Số lượng yêu cầu cho ${currentQuantity + currentCartQuantity} sản phẩm không có sẵn.`,
+                placement: 'topRight',
+            });
+            return;
+        }
+
         dispatch(addToCart({ item: currentBook, quantity: currentQuantity }));
-        message.success("Thêm sản phẩm vào giỏ hàng thành công.")
+
+        Swal.fire({
+            icon: "success",
+            title: "Sản phẩm đã được thêm vào giỏ hàng!",
+            showConfirmButton: false,
+            timer: 2000,
+            background: "rgba(0, 0, 0, 0.7)",
+            color: "#ffffff",
+            customClass: { title: "swal-title" },
+        });
     };
 
     return (

@@ -1,17 +1,61 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { MdShoppingCart } from "react-icons/md";
 import { BsCartPlus } from "react-icons/bs";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart } from "@/redux/slices/cartSlice";
+import Swal from "sweetalert2";
+import type { RootState } from '@/redux/store';
+import { App } from "antd";
+import { useRouter } from "next/navigation";
+
+
 
 const BoxProductHome = (props: IBook) => {
   const { _id, image, name, price_old, price_new } = props;
+  const dispatch = useDispatch();
+  const { message, notification } = App.useApp();
+  const router = useRouter();
+  const cart = useSelector((state: RootState) => state.cart);
 
   const discount =
     price_new && price_new < price_old
       ? Math.round(((price_old - price_new) / price_old) * 100)
       : undefined;
 
+  const handleAddToCart = (currentBook: IBook) => {
+    const cartItem = cart.items.find((item) => item._id === currentBook._id);
+    const maxQuantity = typeof currentBook.quantity === "number" ? currentBook.quantity : 0;
+    const currentCartQuantity = cartItem?.quantity ?? 0; 
+    if (currentCartQuantity + 1 > maxQuantity) {
+      notification.warning({
+        message: 'Lỗi Số Lượng',
+        description: `Số lượng yêu cầu cho ${1 + currentCartQuantity} sản phẩm không có sẵn.`,
+        placement: 'topRight',
+      });
+      return;
+    }
+
+    dispatch(addToCart({ item: currentBook, quantity: 1 }));
+
+    Swal.fire({
+      icon: "success",
+      title: "Sản phẩm đã được thêm vào giỏ hàng!",
+      showConfirmButton: false,
+      timer: 2000,
+      background: "rgba(0, 0, 0, 0.7)",
+      color: "#ffffff",
+      customClass: { title: "swal-title" },
+    });
+  };
+
+  const handleBuyNow = (currentBook: IBook) => {
+    dispatch(addToCart({ item: currentBook, quantity: 1 }));
+    message.success("Thêm sản phẩm vào giỏ hàng thành công.");
+    router.push('/cart');
+  };
   return (
     <div className="group w-full sm:max-w-[200px] md:max-w-[232px] ">
       <div className="relative bg-white group-hover:shadow-custom  overflow-hidden">
@@ -23,7 +67,9 @@ const BoxProductHome = (props: IBook) => {
           </div>
         )}
         <div className="absolute z-10 top-[6px] right-[6px] opacity-0 transition-all ease-in-out duration-1000 group-hover:opacity-100 flex flex-col gap-[4px]">
-          <div className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer">
+          <div className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
+            onClick={() => handleAddToCart(props)}
+          >
             <BsCartPlus className="text-[22px] text-red1" />
           </div>
           <div className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer">
@@ -67,7 +113,9 @@ const BoxProductHome = (props: IBook) => {
             </div>
           </div>
           <div className="pb-[4px]">
-            <button className="xl:px-[25px] px-[30px] py-[5px] flex justify-center items-center gap-x-2 text-red1 lg:text-body-bold text-caption-bold bg-white border border-red1 rounded-lg hover:text-white hover:bg-red1">
+            <button
+              onClick={() => handleBuyNow(props)}
+              className="xl:px-[25px] px-[30px] py-[5px] flex justify-center items-center gap-x-2 text-red1 lg:text-body-bold text-caption-bold bg-white border border-red1 rounded-lg hover:text-white hover:bg-red1">
               <MdShoppingCart className="text-[22px] hidden md:block" />
               <span>Mua ngay</span>
             </button>
