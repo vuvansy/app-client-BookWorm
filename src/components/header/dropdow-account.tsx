@@ -1,19 +1,52 @@
 'use client'
 
 import { FaRegCircleUser } from "react-icons/fa6";
-import { FaCaretDown } from "react-icons/fa";
+import { FaCaretDown, FaUsersCog } from "react-icons/fa";
 import { Dropdown, Space } from "antd";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbLogout } from "react-icons/tb";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { MdOutlineBookmarks } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { RiUserSettingsLine } from "react-icons/ri";
+import { login, logout } from "@/redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const DropDowAccount = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-    const [user, setUser] = useState<{ fullName: string } | null>({ fullName: "Vũ Văn Sỹ" }); // Thông tin người dùng
+    const dispatch = useDispatch();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [user, setUser] = useState<{ fullName: string, role: string } | null>(null);
+
+    useEffect(() => {
+        const storeUser = localStorage.getItem('user');
+        if (storeUser) {
+            const dataUser = JSON.parse(storeUser);
+            setUser(dataUser);
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+                setIsAuthenticated(true);
+            } else {
+                setUser(null);
+                setIsAuthenticated(false);
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
+
 
     const handleLogout = async () => {
         //todo
@@ -21,11 +54,15 @@ const DropDowAccount = () => {
         alert("Bạn đã đăng xuất!");
         setIsAuthenticated(false); // Cập nhật trạng thái khi đăng xuất
         setUser(null); // Xóa thông tin người dùng
+        dispatch(logout());
     }
+    const saveRedirectUrl = () => {
+        localStorage.setItem('redirectUrl', window.location.href);
+    };
 
     const guestItems = [
         {
-            label: <Link href="/login" className='font-medium text-caption text-center'>Đăng nhập</Link>,
+            label: <Link href="/login" className='font-medium text-caption text-center' onClick={saveRedirectUrl}>Đăng nhập</Link>,
             key: 'login',
         },
         {
@@ -82,15 +119,15 @@ const DropDowAccount = () => {
     ];
 
     //Logic thêm khi user có role === 'ADMIN'
-    // if (user?.role === 'ADMIN') {
-    //     userItems.unshift({
-    //         label: (<Link href="/history" className="flex items-center gap-x-2">
-    //             <FaUsersCog className="text-[18px]" />
-    //             <span>Trang quản trị</span>
-    //         </Link>),
-    //         key: 'admin',
-    //     })
-    // }
+    if (user?.role === 'ADMIN') {
+        userItems.unshift({
+            label: (<Link href="/history" className="flex items-center gap-x-2">
+                <FaUsersCog className="text-[18px]" />
+                <span>Trang quản trị</span>
+            </Link>),
+            key: 'admin',
+        })
+    }
 
     const menuItems = isAuthenticated ? userItems : guestItems;
 
@@ -106,7 +143,7 @@ const DropDowAccount = () => {
                     {isAuthenticated && user ? (
                         <>
                             <FaRegCircleUser className="icon-cart" />
-                            {user.fullName}
+                            <span>{user.fullName}</span>
                             <FaCaretDown />
                         </>
                     ) : (

@@ -4,7 +4,10 @@ import { App, Button, Checkbox, Form, Input } from 'antd';
 import Link from 'next/link';
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '@/redux/slices/authSlice';
+import { RootState, AppDispatch } from '@/redux/store';
 
 
 type FieldType = {
@@ -16,35 +19,26 @@ type FieldType = {
 const LoginForm = () => {
     const { message, modal, notification } = App.useApp();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const dispatch: AppDispatch = useDispatch();
+    const { loading, error, token } = useSelector((state: RootState) => state.auth);
 
     const onFinish = async (values: any) => {
         console.log('Success:', values);
         try {
             const { email, password } = values;
-            const data = { email, password };
-            console.log('data:', data);
-
-
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/login`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data)
-                }
-            )
-            const d = await res.json();
-            if (d.data) {
-                //success
+            const resultAction = await dispatch(login({ email, password }));
+            if (login.fulfilled.match(resultAction)) {
                 message.success("Đăng nhập thành công.");
-                router.push('/');
+                const redirectUrl = localStorage.getItem('redirectUrl') || '/';
+                localStorage.removeItem('redirectUrl');
+                router.push(redirectUrl);
             } else {
-                message.error(d.message);
+                message.error(resultAction.payload as string);
             }
         } catch (error) {
             console.error('Error:', error);
+            message.error("Đăng nhập thất bại, vui lòng thử lại.");
         }
     };
 
