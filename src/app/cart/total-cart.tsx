@@ -2,22 +2,36 @@
 
 import { BsGift } from "react-icons/bs";
 import { GrFormNext } from "react-icons/gr";
-import { Modal } from 'antd';
+import { App, Modal } from 'antd';
 import { Button, Form, Input } from 'antd';
 import { PiSealPercentBold } from "react-icons/pi";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { FormProps } from 'antd';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import { RootState } from "@/redux/store";
+import { RiCoupon3Fill } from "react-icons/ri";
+
 
 type FieldType = {
     code?: string;
 
 };
+interface IProps {
+    dataCoupon: ICoupon[];
+}
 
-const TotalCart = () => {
+const TotalCart = (props: IProps) => {
+    const { dataCoupon } = props
+
+    const [form] = Form.useForm();
+    const { message } = App.useApp();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [discount, setDiscount] = useState<number>(0);
+    const [couponCode, setCouponCode] = useState<string>("");
+    const [minTotalRequired, setMinTotalRequired] = useState<number>(0);
+    const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(null);
 
     const cartItems = useSelector((state: RootState) => state.cart.items || []) as ICart[];
     const total = useMemo(
@@ -29,28 +43,104 @@ const TotalCart = () => {
         [cartItems]
     );
 
+    useEffect(() => {
+        const savedCoupon = localStorage.getItem("appliedCoupon");
+        if (savedCoupon) {
+            const coupon = JSON.parse(savedCoupon);
+            if (total < coupon.min_total) {
+                localStorage.removeItem("appliedCoupon");
+                setAppliedCouponCode(null);
+                setCouponCode("");
+                setDiscount(0);
+                setMinTotalRequired(0);
+            } else {
+                setAppliedCouponCode(coupon.code);
+                setCouponCode(coupon.code);
+                setDiscount(coupon.discount);
+                setMinTotalRequired(coupon.min_total);
+            }
+        }
+    }, [total]);
+
+    useEffect(() => {
+        if (couponCode && total < minTotalRequired) {
+            message.warning("Tổng đơn hàng không còn đủ điều kiện áp dụng mã giảm giá.");
+            setAppliedCouponCode(null);
+            setCouponCode("");
+            setDiscount(0);
+            setMinTotalRequired(0);
+            localStorage.removeItem("appliedCoupon");
+        }
+    }, [total, minTotalRequired]); 
+
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        console.log(values)
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/coupon/apply`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ code: values.code })
+                })
+            const data = await res.json();
+            if (res.ok) {
+                const { code, max_value, min_total, value } = data.data;
+
+                if (total < min_total) {
+                    message.warning(
+                        `Mã giảm giá chỉ áp dụng cho đơn hàng từ ${new Intl.NumberFormat(
+                            "vi-VN"
+                        ).format(min_total)} đ trở lên.`
+                    );
+                    return;
+                }
+                const discountPercent = (value / 100) * total;
+                const discountValue = Math.min(discountPercent, max_value);
+
+                message.success("Mã đã được áp dụng");
+                setDiscount(discountValue);
+                setCouponCode(values.code ?? "");
+                setMinTotalRequired(min_total);
+                setAppliedCouponCode(values.code ?? "");
+
+                // localStorage
+                localStorage.setItem("appliedCoupon", JSON.stringify({
+                    code,
+                    discount: discountValue,
+                    min_total: min_total
+                }));
+
+            } else {
+                message.error(data.message);
+                setDiscount(0);
+                setCouponCode("");
+                setMinTotalRequired(0);
+            }
+
+        } catch (error) {
+            console.error("Lỗi khi áp dụng mã:", error);
+        }
     };
 
     const showModal = () => {
         setIsModalOpen(true);
-        document.body.classList.add("modal-open"); // Giữ cuộn trang
+        document.body.classList.add("modal-open");
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
+        form.resetFields();
         document.body.classList.remove("modal-open");
     };
-
-
 
     return (
         <div className="basis-4/12 pl-[15px]">
             <div className="bg-white rounded-lg px-[15px]">
                 <div className="h-[50px] flex justify-between items-center">
                     <div className="flex items-center gap-x-2 text-blue-text">
-                        <BsGift />
+                        <RiCoupon3Fill className="text-[18px]" />
                         <span className="text-caption">KHUYẾN MÃI</span>
                     </div>
 
@@ -59,12 +149,10 @@ const TotalCart = () => {
                         <GrFormNext className="text-[18px]" />
                     </div>
                     <Modal
-
                         open={isModalOpen}
                         onCancel={handleCancel}
                         maskClosable={true}
-                        footer={null}  // Ẩn phần footer
-
+                        footer={null}
                     >
                         <div className="text-red1 uppercase flex items-center gap-x-2">
                             <BsGift className="text-[18px]" />
@@ -72,6 +160,7 @@ const TotalCart = () => {
                         </div>
                         <div className="py-[10px]">
                             <Form
+                                form={form}
                                 name="form-code"
                                 className='!relative h-[36px]'
                                 onFinish={onFinish}
@@ -93,38 +182,74 @@ const TotalCart = () => {
                                 <p className="text-info-bold">Mã giảm giá</p>
                                 <p className="text-info-light text-gray-1">Áp dụng tối đa: 1</p>
                             </div>
-                            <div className="mt-3">
-                                <div className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
-                                    <div className="bg-yellow-1 h-[100px] w-[100px] rounded-lg flex justify-center items-center">
-                                        <PiSealPercentBold className="text-[40px] text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="uppercase font-semibold">MÃ GIẢM 10K - toàn sàn</h3>
-                                        <span className="font-semibold">#ABCSD33</span>
-                                        <p>Mua thêm 130.000 đ để nhận mã</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
-                                    <div className="bg-yellow-1 h-[100px] w-[100px] rounded-lg flex justify-center items-center">
-                                        <PiSealPercentBold className="text-[40px] text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="uppercase font-semibold">MÃ GIẢM 10K - toàn sàn</h3>
-                                        <span className="font-semibold">#ABCSD33</span>
-                                        <p>Mua thêm 130.000 đ để nhận mã</p>
-                                    </div>
-                                </div>
+                            <div className="mt-3 max-h-[320px] overflow-y-auto">
+                                {
+                                    dataCoupon.map((coupon) => (
+                                        <div key={coupon._id} className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
+                                            <div className="relative flex flex-col items-center justify-center min-w-[100px] h-[100px] bg-yellow-400 rounded-lg">
+                                                <PiSealPercentBold className="text-[40px] text-white" />
+                                                <span className="text-sm font-semibold text-white">Mã giảm</span>
+                                            </div>
+                                            <div className="w-full">
+                                                <h3 className="font-semibold">Mã Giảm {coupon.value}% - Toàn Sàn</h3>
+                                                <div>
+                                                    <p className="font-semibold">CODE: <span>{coupon.code}</span></p>
+                                                </div>
+                                                <p>{coupon.description}</p>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">HSD: {new Date(coupon.end_date).toLocaleDateString("vi-VN")}</span>
+                                                    <button
+                                                        className={`py-[2px] px-2 rounded mr-3 ${appliedCouponCode === coupon.code
+                                                            ? "border border-blue-500 text-blue-500"
+                                                            : "bg-blue-500 text-white"
+                                                            }`}
+                                                        onClick={() => {
+                                                            if (appliedCouponCode === coupon.code) {
+                                                                setAppliedCouponCode(null);
+                                                                setCouponCode("");
+                                                                setDiscount(0);
+                                                                setMinTotalRequired(0);
+                                                                message.info("Mã giảm giá đã được gỡ bỏ");
+                                                                localStorage.removeItem("appliedCoupon");
+                                                            } else {
+                                                                form.setFieldsValue({ code: coupon.code });
+                                                                form.submit();
+                                                            }
+                                                        }}
+                                                    >
+                                                        {appliedCouponCode === coupon.code ? "Đã áp dụng" : "Áp dụng"}
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </Modal>
                 </div>
                 <div className="pb-[16px]">
                     <div className="font-semibold">ĐƠN HÀNG</div>
-                    <p className="text-caption-bold py-[10px]">Đừng quên nhập mã giảm giá</p>
-                    <hr className="border-dashed border border-bg-text" />
+                    <p className=" pt-[8px] text-info-bold">Đừng quên nhập mã giảm giá</p>
+                    <div className="flex justify-between text-body1 py-[10px] text-[#333333]">
+                        <p className="basis-4/6">Thành tiền</p>
+                        <span className="basis-2/6 flex justify-end items-center">{new Intl.NumberFormat("vi-VN").format(total) + " đ"}</span>
+                    </div>
+                    {couponCode && (
+                        <div className="flex justify-between text-body1 pb-[10px] text-[#333333]">
+                            <p className="basis-4/6">
+                                Giảm giá (Nhập mã thành công - Mã {couponCode} - Giảm tối đa {discount.toLocaleString("vi-VN")}đ)
+                            </p>
+                            <span className="basis-2/6 flex justify-end items-center">
+                                - {discount.toLocaleString("vi-VN")} đ
+                            </span>
+                        </div>
+                    )}
+                    <div className="border border-[#ededed]"></div>
                     <div className="flex justify-between items-center text-red1 text-sub-heading-bold py-[10px]">
-                        <span>Tổng tiền:</span>
-                        <span>{new Intl.NumberFormat("vi-VN").format(total) + " đ"}</span>
+                        <span>Tổng Số Tiền:</span>
+                        <span>{new Intl.NumberFormat("vi-VN").format(total - discount) + " đ"}</span>
                     </div>
                     <Link href={'/checkout'} className="flex justify-center items-center bg-red1 !text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
                         Thanh toán

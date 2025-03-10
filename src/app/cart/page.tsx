@@ -3,9 +3,15 @@ import { FaCartArrowDown } from "react-icons/fa";
 import { BsCartCheckFill } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa6";
 import InfoCart from "./info-cart";
+import { sendRequest } from "@/utils/api";
 
-const CartPage = () => {
+const CartPage = async () => {
+    const res = await sendRequest<IBackendRes<ICoupon[]>>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/coupon`,
+        method: "GET"
 
+    })
+    const dataCoupon = res.data ?? []
     return (
         <main className="bg-bg-main">
             <div className="py-[20px]">
@@ -26,7 +32,7 @@ const CartPage = () => {
                     </div>
                 </div>
             </div>
-            <InfoCart />
+            <InfoCart dataCoupon={dataCoupon} />
         </main>
     )
 }

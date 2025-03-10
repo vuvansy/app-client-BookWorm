@@ -5,8 +5,10 @@ import { MdOutlinePayment } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
 import type { FormProps } from 'antd';
 import { Form, Input } from 'antd';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 const { TextArea } = Input;
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 type FieldType = {
     fullName: string;
@@ -21,13 +23,50 @@ type FieldType = {
     paymentMethod: number;
 };
 
-
-
 const InfoCheckout = () => {
     const [cities, setCities] = useState<City[]>([]);
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
+    const [clientTotal, setClientTotal] = useState(0);
+    const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
     const [form] = Form.useForm();
+
+    const cartItems = useSelector((state: RootState) => state.cart.items || []) as ICart[];
+    const total = useMemo(
+        () =>
+            cartItems.reduce(
+                (total, item) => total + (item.detail.price_new ?? 0) * item.quantity,
+                0
+            ),
+        [cartItems]
+    );
+
+    useEffect(() => {
+        setClientTotal(total);
+    }, [total]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const savedCoupon = localStorage.getItem("appliedCoupon");
+            if (savedCoupon) {
+                const couponData = JSON.parse(savedCoupon);
+                setAppliedCoupon({
+                    code: couponData.code,
+                    discount: couponData.discount,
+                });
+
+                setClientTotal((prevTotal) => Math.max(0, prevTotal - couponData.discount));
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        const storedCoupon = localStorage.getItem("appliedCoupon");
+        if (storedCoupon) {
+            setAppliedCoupon(JSON.parse(storedCoupon));
+        }
+    }, []);
+
 
     useEffect(() => {
         fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json")
@@ -249,11 +288,13 @@ const InfoCheckout = () => {
                     <h2 className="text-body-bold uppercase pt-2">Đơn hàng</h2>
                     <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
                         <p>Tạm tính</p>
-                        <span>1,792,000 đ</span>
+                        <span>{new Intl.NumberFormat("vi-VN").format(clientTotal) + " đ"}</span>
                     </div>
                     <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
                         <p>Giảm giá</p>
-                        <span>89,000 đ</span>
+                        <span>
+                            - {new Intl.NumberFormat("vi-VN").format(appliedCoupon?.discount || 0)} đ
+                        </span>
                     </div>
                     <div className="flex justify-between items-center mt-[8px] mb-[16px] text-caption font-semibold">
                         <p>Phí vận chuyển</p>
@@ -263,7 +304,11 @@ const InfoCheckout = () => {
                         <hr className="border-dashed border border-bg-text" />
                         <div className="flex justify-between items-center py-[8px] text-red1 text-sub-heading-bold">
                             <h3>Tổng Tiền</h3>
-                            <span>1,720,555 đ</span>
+                            <span>
+                                {new Intl.NumberFormat("vi-VN").format(
+                                    clientTotal - (appliedCoupon?.discount || 0)
+                                )} đ
+                            </span>
                         </div>
                         <hr className="border-dashed border border-bg-text" />
                         <button type="submit" className="flex justify-center items-center mt-[20px] bg-red1 text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">Hoàn thành đơn hàng</button>

@@ -32,7 +32,7 @@ const SearchForm = () => {
         setLoading(true);
         try {
             const res = await sendRequest<IBackendRes<IBookTable[]>>({
-                url: `http://localhost:4000/api/v1/book/search?search=${searchQuery}`,
+                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/search?search=${searchQuery}`,
                 method: "GET"
 
             })

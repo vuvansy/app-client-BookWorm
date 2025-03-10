@@ -30,6 +30,7 @@ const AppFooter = () => {
                     width: "100%",
                     height: "auto",
                   }}
+                  priority
                   className="w-full object-cover"
                 />
               </div>

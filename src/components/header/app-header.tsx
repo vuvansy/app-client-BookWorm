@@ -65,6 +65,7 @@ const AppHeader = () => {
                                             width: "100%",
                                             height: "auto",
                                         }}
+                                        priority
                                         className="w-full object-cover"
                                     />
                                 </div>
@@ -74,7 +75,7 @@ const AppHeader = () => {
                             <SearchForm />
                         </div>
                         <div className='order-2 basis-4/6 lg:order-3 lg:basis-3/12 flex justify-end'>
-                           <DropDowCart/>
+                            <DropDowCart />
                         </div>
                         <div className='order-3 basis-1/12 cursor-pointer lg:hidden'>
                             <HeaderNav />

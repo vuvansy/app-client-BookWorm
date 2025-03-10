@@ -81,9 +81,15 @@ const DropDowCart = () => {
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${book.detail.image}`}
                                     alt={book.detail.name}
-                                    fill
-                                    sizes="100"
-                                    className="w-full object-contain"
+                                    width={0}
+                                    height={0}
+                                    sizes="100vw"
+                                    style={{
+                                        width: "100%",
+                                        height: "auto",
+                                    }}
+                                    priority
+                                    className="w-full object-cover"
                                 />
                             </Link>
                             <div className="ml-2 w-[252px]">

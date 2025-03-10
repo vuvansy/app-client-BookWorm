@@ -89,5 +89,36 @@ declare global {
         detail: IBook;
     }
 
+    // interface ICoupon {
+    //     _id: string;
+    //     code: string;
+    //     value: number;
+    //     max_value: number; 
+    //     min_total: number; 
+    //     description?: string; 
+    //     quantity: number; 
+    //     status: "active" | "inactive"; 
+    //     start_date?: Date; 
+    //     end_date?: Date; 
+    //     createdAt?: Date;
+    //     updatedAt?: Date;
+    // }
+
+    interface ICoupon {
+        _id: string;
+        code: string;
+        value: number;
+        max_value: number;
+        min_total: number;
+        description?: string;
+        quantity: number;
+        status: "active" | "inactive";
+        start_date: string;
+        end_date: string;
+        deleted: boolean;
+        createdAt: string;
+        updatedAt: string;
+        __v: number;
+    }
 
 }

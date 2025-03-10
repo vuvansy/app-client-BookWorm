@@ -42,6 +42,8 @@ const TableCart = () => {
 
     const handleClearCart = () => {
         dispatch(clearCart());
+        localStorage.removeItem("carts");
+        localStorage.removeItem("appliedCoupon");
     };
 
     return (
@@ -64,7 +66,19 @@ const TableCart = () => {
                             <td className="border-b border-solid border-[#ddd]">
                                 <div className="relative w-[119px] h-[119px] mx-auto">
                                     <Link href={`/product/${item._id}`} className="">
-                                        <Image src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${item.detail.image}`} alt="" className="object-cover" fill />
+                                        <Image
+                                            src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${item.detail.image}`}
+                                            alt={item.detail.name}
+                                            width={0}
+                                            height={0}
+                                            sizes="100vw"
+                                            style={{
+                                                width: "100%",
+                                                height: "auto",
+                                            }}
+                                            priority
+                                            className="w-full object-cover"
+                                        />
                                     </Link>
                                 </div>
                             </td>
