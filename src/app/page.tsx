@@ -24,6 +24,7 @@ const Home = async () => {
     url: "http://localhost:4000/api/v1/book/new?limit=10",
     method: "GET",
   });
+
   const shipper = [
     {
       img: "/Frame139.png",

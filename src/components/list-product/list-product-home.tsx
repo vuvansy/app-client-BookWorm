@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BoxProductHome from "./box-product-home";
 
 interface Props {
@@ -13,9 +14,12 @@ const ListProductHome = (props: Props) => {
         ))}
       </div>
       <div className="flex justify-center lg:mb-6 mb-4">
-        <button className="h-9 w-48 flex justify-center items-center gap-x-2 text-red-500 text-body-bold bg-white border border-red-500 rounded-lg hover:text-white hover:bg-red-500 transition">
+        <Link
+          href={`/product/trendding`}
+          className="h-9 w-48 flex justify-center items-center gap-x-2 text-red-500 text-body-bold bg-white border border-red-500 rounded-lg hover:text-white hover:bg-red-500 transition"
+        >
           <span>Xem thêm</span>
-        </button>
+        </Link>
       </div>
     </div>
   );
