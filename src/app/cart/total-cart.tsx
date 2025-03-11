@@ -8,9 +8,11 @@ import { PiSealPercentBold } from "react-icons/pi";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { FormProps } from 'antd';
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { RiCoupon3Fill } from "react-icons/ri";
+import { useRouter } from "next/navigation";
+import { useCurrentApp } from "@/context/app.context";
 
 
 type FieldType = {
@@ -22,11 +24,12 @@ interface IProps {
 }
 
 const TotalCart = (props: IProps) => {
+    const { user } = useCurrentApp();
     const { dataCoupon } = props
 
     const [form] = Form.useForm();
     const { message } = App.useApp();
-
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [discount, setDiscount] = useState<number>(0);
     const [couponCode, setCouponCode] = useState<string>("");
@@ -71,7 +74,7 @@ const TotalCart = (props: IProps) => {
             setMinTotalRequired(0);
             localStorage.removeItem("appliedCoupon");
         }
-    }, [total, minTotalRequired]); 
+    }, [total, minTotalRequired]);
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
@@ -122,6 +125,15 @@ const TotalCart = (props: IProps) => {
         } catch (error) {
             console.error("Lỗi khi áp dụng mã:", error);
         }
+    };
+
+    const handleCheckout = () => {
+        if (!user) {
+            message.warning("Bạn cần đăng nhập để tiếp tục thanh toán!");
+            router.push(`/login?redirect=/checkout`);
+            return;
+        }
+        router.push("/checkout");
     };
 
     const showModal = () => {
@@ -251,9 +263,11 @@ const TotalCart = (props: IProps) => {
                         <span>Tổng Số Tiền:</span>
                         <span>{new Intl.NumberFormat("vi-VN").format(total - discount) + " đ"}</span>
                     </div>
-                    <Link href={'/checkout'} className="flex justify-center items-center bg-red1 !text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
+                    <button
+                        onClick={handleCheckout}
+                        className="flex justify-center items-center bg-red1 !text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
                         Thanh toán
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>

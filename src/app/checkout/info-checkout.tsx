@@ -9,6 +9,8 @@ import { useEffect, useMemo, useState } from "react";
 const { TextArea } = Input;
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useCurrentApp } from "@/context/app.context";
+import { useRouter } from "next/navigation";
 
 type FieldType = {
     fullName: string;
@@ -24,12 +26,15 @@ type FieldType = {
 };
 
 const InfoCheckout = () => {
+    const [form] = Form.useForm();
+    const { user } = useCurrentApp();
+    const router = useRouter();
+
     const [cities, setCities] = useState<City[]>([]);
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
     const [clientTotal, setClientTotal] = useState(0);
     const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
-    const [form] = Form.useForm();
 
     const cartItems = useSelector((state: RootState) => state.cart.items || []) as ICart[];
     const total = useMemo(
@@ -69,17 +74,60 @@ const InfoCheckout = () => {
 
 
     useEffect(() => {
-        fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json")
-            .then(response => response.json())
-            .then(data => setCities(data))
-            .catch(error => console.error("Lỗi khi fetch dữ liệu:", error));
+        const fetchCities = async () => {
+            const response = await fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+            const data = await response.json();
+            setCities(data);
+        };
+        fetchCities();
     }, []);
 
-    const handleCityChange = (cityId: string) => {
-        const selectedCity = cities.find(city => city.Id === cityId);
-        setDistricts(selectedCity ? selectedCity.Districts : []);
-        setWards([]);
+    console.log(user);
 
+    useEffect(() => {
+        if (!user) {
+            router.replace("/login");
+        }
+    }, [user, router]);
+
+    useEffect(() => {
+        if (user && cities.length > 0) {
+            form.setFieldsValue({
+                fullName: user.fullName || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                city: user.address?.city?.key || undefined,
+                district: user.address?.district?.key || undefined,
+                ward: user.address?.ward?.key || undefined,
+                street: user.address?.street || "",
+                note: "",
+                shippingMethod: 0,
+                paymentMethod: 0
+            });
+
+            if (user.address?.city?.key) {
+                handleCityChange(user.address.city.key);
+            }
+        }
+    }, [user, cities, form]);
+
+
+    const handleCityChange = (cityId: string) => {
+        if (!cities.length) {
+            return;
+        }
+        const selectedCity = cities.find(city => String(city.Id) === String(cityId));
+        if (!selectedCity) {
+            setDistricts([]);
+            setWards([]);
+            form.setFieldsValue({
+                district: undefined,
+                ward: undefined
+            });
+            return;
+        }
+        setDistricts(selectedCity.Districts); 
+        setWards([]);
         form.setFieldsValue({
             district: undefined,
             ward: undefined
@@ -87,10 +135,49 @@ const InfoCheckout = () => {
     };
 
     const handleDistrictChange = (districtId: string) => {
-        const selectedDistrict = districts.find(district => district.Id === districtId);
-        setWards(selectedDistrict ? selectedDistrict.Wards : []);
+        if (!districtId) {
+            setWards([]);
+            form.setFieldsValue({ ward: undefined });
+            return;
+        }
+        const selectedDistrict = districts.find(d => String(d.Id) === String(districtId));
+        if (!selectedDistrict) {
+            setWards([]);
+            form.setFieldsValue({ ward: undefined });
+            return;
+        }
+        setWards(selectedDistrict.Wards || []);
         form.setFieldsValue({ ward: undefined });
     };
+
+    useEffect(() => {
+        if (districts.length > 0 && user?.address?.district?.key) {
+            console.log("📌 Cập nhật Quận/Huyện:", user.address.district.key);
+            if (districts.some(d => String(d.Id) === String(user?.address?.district?.key))) {
+                form.setFieldsValue({ district: user.address.district.key });
+                handleDistrictChange(user.address.district.key);
+            } else {
+                form.setFieldsValue({ district: undefined }); 
+            }
+        } else {
+            form.setFieldsValue({ district: undefined }); 
+        }
+    }, [districts]);
+
+    useEffect(() => {
+        if (wards.length > 0) {
+            const currentDistrict = form.getFieldValue("district");
+
+            if (!currentDistrict) {
+                form.setFieldsValue({ ward: undefined });
+            } else if (user?.address?.district?.key === currentDistrict) {
+                form.setFieldsValue({ ward: user?.address?.ward?.key || undefined });
+            } else {
+                form.setFieldsValue({ ward: undefined }); 
+            }
+        }
+    }, [wards]);
+
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         const selectedCity = cities.find(city => city.Id === values.city);
@@ -118,7 +205,6 @@ const InfoCheckout = () => {
     return (
         <Form
             form={form}
-            name="basic"
             autoComplete="off"
             onFinish={onFinish}
             layout="vertical"
@@ -197,7 +283,9 @@ const InfoCheckout = () => {
                                     options={districts.map(district => ({ value: district.Id, label: district.Name }))}
                                     onChange={handleDistrictChange}
                                     disabled={!districts.length} // Vô hiệu hóa nếu chưa chọn tỉnh/thành phố
+
                                 />
+
                             </Form.Item>
                             <Form.Item<FieldType>
                                 label="Chọn Phường/Xã"
@@ -210,6 +298,7 @@ const InfoCheckout = () => {
                                     showSearch
                                     allowClear
                                     options={wards.map(ward => ({ value: ward.Id, label: ward.Name }))}
+                                    onChange={(value) => form.setFieldsValue({ ward: value })}
                                     disabled={!wards.length} // Vô hiệu hóa nếu chưa chọn quận/huyện
                                 />
                             </Form.Item>
@@ -283,6 +372,7 @@ const InfoCheckout = () => {
                     </div>
                 </div>
             </div>
+
             <div className="basis-4/12 pl-[15px]">
                 <div className="bg-white rounded-lg px-[16px] py-[8px]">
                     <h2 className="text-body-bold uppercase pt-2">Đơn hàng</h2>
@@ -311,7 +401,11 @@ const InfoCheckout = () => {
                             </span>
                         </div>
                         <hr className="border-dashed border border-bg-text" />
-                        <button type="submit" className="flex justify-center items-center mt-[20px] bg-red1 text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">Hoàn thành đơn hàng</button>
+                        <button
+                            type="submit"
+                            className="flex justify-center items-center mt-[20px] bg-red1 text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
+                            Xác Nhận Thanh Toán
+                        </button>
                     </div>
                 </div>
             </div>

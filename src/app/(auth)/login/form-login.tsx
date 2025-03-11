@@ -1,26 +1,31 @@
 'use client'
-import React from 'react';
-import { App, Button, Checkbox, Form, Input } from 'antd';
+import React, { useEffect } from 'react';
+import { App, Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCurrentApp } from '@/context/app.context';
 
 
 type FieldType = {
     email: string;
     password: string;
-    remember?: string;
 };
 
 const LoginForm = () => {
-    const { setIsAuthenticated, setUser } = useCurrentApp();
+    const { setIsAuthenticated, setUser, user } = useCurrentApp();
     const { message, notification } = App.useApp();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    useEffect(() => {
+        const redirectTo = searchParams.get("redirect");
+        if (user && redirectTo) {
+            router.push(redirectTo);
+        }
+    }, [user]);
 
     const onFinish = async (values: any) => {
-        console.log('Success:', values);
         try {
             const { email, password } = values;
             const data = { email, password };
@@ -35,7 +40,6 @@ const LoginForm = () => {
                 }
             )
             const dataRes: IBackendRes<ILogin> = await res.json();
-            console.log(dataRes);
             if (dataRes.data) {
                 //success
                 setIsAuthenticated(true);
@@ -75,7 +79,7 @@ const LoginForm = () => {
                     { type: "email", message: "Email không đúng định dạng!" }
                 ]}
             >
-                <Input />
+                <Input autoComplete="email"/>
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -83,7 +87,7 @@ const LoginForm = () => {
                 name="password"
                 rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
             >
-                <Input.Password />
+                <Input.Password autoComplete="current-password" />
             </Form.Item>
             <Button type="primary" htmlType="submit" className='w-full !bg-red1 !text-body-bold'>Đăng Nhập</Button>
             <div className=' my-[10px] text-body1 items-center flex justify-between'>
