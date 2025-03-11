@@ -26,7 +26,7 @@ declare global {
             pages: number;
             total: number;
         },
-        result: T[]
+        data: T[]
     }
 
 

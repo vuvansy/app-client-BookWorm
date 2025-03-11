@@ -1,95 +1,54 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { Breadcrumb, Divider } from "antd";
 import { FaBook } from "react-icons/fa";
-import CategoryFilter from "./category-filter";
-import SortFilter from "./filter-sort";
 import { sendRequest } from "@/utils/api";
 import ListProductByType from "./list-productbytype";
+import CategoryFilter from "./category-filter";
+import SortFilter from "./filter-sort";
 
 interface Props {
-  dataBookNew: IBook[];
+  initialData: IBook[];
+  totalItems: number;
+  limit: number;
+  genres: IGenre[];
 }
 
-const BoxProductByType = ({ dataBookNew }: Props) => {
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả");
-  const [selectedSort, setSelectedSort] = useState("Mới Nhất");
-  const [genres, setGenres] = useState<IGenre[]>([]);
-  const [books, setBooks] = useState<IBook[]>(dataBookNew);
-  const [loading, setLoading] = useState(false);
+const BoxProductByType = ({
+  initialData,
+  totalItems,
+  limit,
+  genres,
+}: Props) => {
+  const [books, setBooks] = useState<IBook[]>(initialData);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Lấy danh mục thể loại
+  const totalPages = Math.ceil(totalItems / limit);
+  const initialBooksRef = useRef<IBook[]>(initialData);
+
   useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const response = await sendRequest<IBackendRes<IGenre[]>>({
-          url: "http://localhost:4000/api/v1/genre",
-          method: "GET",
-        });
-        setGenres(response.data || []);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh mục", error);
-      }
-    };
-
-    fetchGenres();
-  }, []);
-
-  // Lấy danh sách sản phẩm theo danh mục
-  useEffect(() => {
-    const fetchBooksByCategory = async () => {
-      if (selectedCategory === "Tất cả") {
-        setBooks(dataBookNew);
+    const fetchBooks = async () => {
+      if (currentPage === 1) {
+        setBooks(initialBooksRef.current);
         return;
       }
 
-      const selectedGenre = genres.find(
-        (genre) => genre.name === selectedCategory
-      );
-      if (!selectedGenre) return;
-
-      setLoading(true);
       try {
-        const response = await sendRequest<IBackendRes<IBook[]>>({
-          url: `http://localhost:4000/api/v1/book/67c17c1946946595bbea523a/genre/${selectedGenre._id}`,
+        const res = await sendRequest<IModelPaginate<IBook>>({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/new`,
           method: "GET",
+          queryParams: { all: true, page: currentPage, limit },
         });
 
-        setBooks(response.data || []);
+        setBooks(res?.data || []);
       } catch (error) {
-        console.error("Lỗi khi lấy sản phẩm theo danh mục", error);
-      } finally {
-        setLoading(false);
+        console.error("Lỗi khi lấy sản phẩm", error);
       }
     };
 
-    fetchBooksByCategory();
-  }, [selectedCategory, genres, dataBookNew]);
-
-  // Sắp xếp danh sách sản phẩm bằng
-  const sortedBooks = useMemo(() => {
-    let sorted = [...books];
-
-    switch (selectedSort) {
-      case "Giá Tăng Dần":
-        sorted.sort((a, b) => (a.price_new ?? 0) - (b.price_new ?? 0));
-        break;
-      case "Giá Giảm Dần":
-        sorted.sort((a, b) => (b.price_new ?? 0) - (a.price_new ?? 0));
-        break;
-      case "Mới Nhất":
-        sorted.sort(
-          (a, b) =>
-            (b.createdAt ? new Date(b.createdAt).getTime() : 0) -
-            (a.createdAt ? new Date(a.createdAt).getTime() : 0)
-        );
-        break;
-      default:
-        break;
-    }
-
-    return sorted;
-  }, [books, selectedSort]);
+    fetchBooks();
+  }, [currentPage, limit]);
 
   return (
     <div className="bg-bg-main px-2 pb-[1px] xl:px-0">
@@ -109,23 +68,17 @@ const BoxProductByType = ({ dataBookNew }: Props) => {
             Sản Phẩm Mới Ra Mắt
           </p>
         </div>
-
-        <CategoryFilter
-          Genge={genres}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
         <Divider className="!my-0" />
-        <SortFilter
-          selectedSort={selectedSort}
-          onSelectSort={setSelectedSort}
+        <CategoryFilter genres={genres} />
+        <SortFilter  />
+        <ListProductByType
+          books={books}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          limit={limit}
+          onPageChange={setCurrentPage}
         />
-
-        {loading ? (
-          <p className="text-center text-gray-500">Đang tải...</p>
-        ) : (
-          <ListProductByType dataBookNew={sortedBooks} />
-        )}
       </div>
     </div>
   );
