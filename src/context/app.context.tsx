@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react";
 interface IAppContext {
     isAuthenticated: boolean;
     setIsAuthenticated: (v: boolean) => void;
-    setUser: (v: IUser) => void;
+    setUser: (v: IUser | null) => void;
     user: IUser | null;
 }
 

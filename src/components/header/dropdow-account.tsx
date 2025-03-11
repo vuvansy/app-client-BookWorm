@@ -27,6 +27,7 @@ const DropDowAccount = () => {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
+                // useCredentials: true,
             })
             if (res.data) {
                 setUser(res.data.user)
@@ -38,11 +39,18 @@ const DropDowAccount = () => {
 
 
     const handleLogout = async () => {
-        //todo
-        // Logic xử lý đăng xuất
-        alert("Bạn đã đăng xuất!");
-        setIsAuthenticated(false); // Cập nhật trạng thái khi đăng xuất
-        // setUser(null); // Xóa thông tin người dùng
+        const res = await sendRequest<IBackendRes<IFetchAccount>>({
+            url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/logout`,
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+        });
+        if (res.data) {
+            setUser(null);
+            setIsAuthenticated(false);
+            localStorage.removeItem("access_token");
+        }
     }
 
     const guestItems = [
