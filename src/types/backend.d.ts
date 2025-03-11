@@ -33,12 +33,13 @@ declare global {
         access_token: string;
         refresh_token: string;
         user: {
+            id: string;
             email: string;
             phone: string;
             fullName: string;
             role: string;
-            avatar: string;
-            id: string;
+            image: string;
+            address: Address;
         }
     }
 
@@ -53,24 +54,35 @@ declare global {
         city: { key: string; name: string };
         district: { key: string; name: string };
         ward: { key: string; name: string };
-        street: { key: string; name: string };
+        street?: string;
     }
 
     interface IUser {
-        _id: ObjectId;
+        id: string;
+        email: string;
+        phone: string;
+        fullName: string;
+        role: string;
+        image: string;
+        address?: Address;
+    }
+
+    interface IUserTable {
+        _id: string;
         fullName: string;
         phone: string;
-        email: string;
+        email?: string;
         image?: string;
         address?: Address;
-        role: string;
-        password: string;
+        role: "USER" | "ADMIN";
         isBlocked?: boolean;
+        password: string;
         isActive?: boolean;
         reset_token?: string | null;
         createdAt?: Date;
         updatedAt?: Date;
     }
+
 
     interface IFetchAccount {
         user: IUser

@@ -21,7 +21,7 @@ const AppFooter = () => {
             <Link href={"/"} className='w-[200px]'>
               <div className="relative w-[200px]">
                 <Image
-                  src={"/icon/logobookworm.png"}
+                  src={"/icon/logo.png"}
                   alt={'logo BookWorm'}
                   width={0}
                   height={0}

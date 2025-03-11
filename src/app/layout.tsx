@@ -5,6 +5,7 @@ import AppHeader from "@/components/header/app-header";
 import AppFooter from "@/components/footer/app-footer";
 import { App } from "antd";
 import Providers from "@/redux/Provider";
+import { AppProvider } from "@/context/app.context";
 
 
 export const metadata: Metadata = {
@@ -21,13 +22,15 @@ export default function RootLayout({
     <html lang="en">
       <body className="h-screen">
         <StyledComponentsRegistry>
-          <Providers>
-            <App>
-              <AppHeader />
-              {children}
-              <AppFooter />
-            </App>
-          </Providers>
+          <AppProvider>
+            <Providers>
+              <App>
+                <AppHeader />
+                {children}
+                <AppFooter />
+              </App>
+            </Providers>
+          </AppProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

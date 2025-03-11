@@ -1,4 +1,4 @@
-import { Badge, Dropdown, Popover, Space } from 'antd';
+import { Dropdown, Space } from 'antd';
 import React from 'react'
 import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
@@ -8,30 +8,28 @@ import Image from 'next/image';
 import SearchForm from './form-search';
 import HeaderNav from './header_nav';
 import DropDowCart from './dropdow-cart';
-
-
-const categories = [
-    { id: 1, name: 'Sách Tư Duy - Kỹ Năng' },
-    { id: 2, name: 'Sách Kinh Tế - Tài Chính' },
-    { id: 3, name: 'Sách Văn Học' },
-    { id: 4, name: 'Sách Khoa Học - Giáo dục' },
-    { id: 5, name: 'Sách Văn Hóa - Nghệ Thuật' },
-];
+import { sendRequest } from '@/utils/api'
 
 
 
-const AppHeader = () => {
+const AppHeader = async () => {
 
+    const res = await sendRequest<IBackendRes<IGenre[]>>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/genre`,
+        method: "GET"
+
+    })
+    const categories = res.data ?? []
     const items = categories.map((category) => ({
         label: (
             <Link
-                href={`category/${category.id}`}
-                className="font-medium text-caption text-center"
+                href={`category/${category._id}`}
+                className="font-medium text-caption text-center capitalize"
             >
                 {category.name}
             </Link>
         ),
-        key: `category/${category.id}`,
+        key: `category/${category._id}`,
     }));
 
     return (
@@ -56,7 +54,7 @@ const AppHeader = () => {
                             <Link href={"/"} className='w-[200px]'>
                                 <div className="relative w-[200px]">
                                     <Image
-                                        src={"/icon/logobookworm.png"}
+                                        src={"/icon/logo.png"}
                                         alt={'logo BookWorm'}
                                         width={0}
                                         height={0}

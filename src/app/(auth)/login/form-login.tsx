@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
+import { useCurrentApp } from '@/context/app.context';
 
 
 type FieldType = {
@@ -14,7 +15,8 @@ type FieldType = {
 };
 
 const LoginForm = () => {
-    const { message, modal, notification } = App.useApp();
+    const { setIsAuthenticated, setUser } = useCurrentApp();
+    const { message, notification } = App.useApp();
     const router = useRouter();
 
     const onFinish = async (values: any) => {
@@ -22,9 +24,6 @@ const LoginForm = () => {
         try {
             const { email, password } = values;
             const data = { email, password };
-            console.log('data:', data);
-
-
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/login`,
                 {
@@ -35,21 +34,25 @@ const LoginForm = () => {
                     body: JSON.stringify(data)
                 }
             )
-            const d = await res.json();
-            if (d.data) {
+            const dataRes: IBackendRes<ILogin> = await res.json();
+            console.log(dataRes);
+            if (dataRes.data) {
                 //success
-                message.success("Đăng nhập thành công.");
+                setIsAuthenticated(true);
+                setUser(dataRes.data.user)
+                localStorage.setItem('access_token', dataRes.data.access_token);
+                message.success('Đăng nhập tài khoản thành công!');
                 router.push('/');
             } else {
-                message.error(d.message);
+                notification.error({
+                    message: 'Lỗi Đăng Nhập',
+                    description: (dataRes.message),
+                });
+
             }
         } catch (error) {
             console.error('Error:', error);
         }
-    };
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
     };
 
     return (
@@ -61,14 +64,16 @@ const LoginForm = () => {
             // style={{ maxWidth: 600, marginTop: "50px" }}
             className='max-w-[800px] '
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             layout="vertical"
             autoComplete="off"
         >
             <Form.Item<FieldType>
                 label="Email"
                 name="email"
-                rules={[{ required: true, message: 'Hãy Nhập Email!' }]}
+                rules={[
+                    { required: true, message: 'Email không được để trống!' },
+                    { type: "email", message: "Email không đúng định dạng!" }
+                ]}
             >
                 <Input />
             </Form.Item>
@@ -76,7 +81,7 @@ const LoginForm = () => {
             <Form.Item<FieldType>
                 label="Mật khẩu"
                 name="password"
-                rules={[{ required: true, message: 'Hãy Nhập Mật Khẩu!' }]}
+                rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
             >
                 <Input.Password />
             </Form.Item>

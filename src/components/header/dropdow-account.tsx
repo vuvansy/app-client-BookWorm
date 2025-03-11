@@ -4,23 +4,45 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { FaCaretDown } from "react-icons/fa";
 import { Dropdown, Space } from "antd";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbLogout } from "react-icons/tb";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { MdOutlineBookmarks } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { RiUserSettingsLine } from "react-icons/ri";
+import { useCurrentApp } from "@/context/app.context";
+import { sendRequest } from "@/utils/api";
 
 const DropDowAccount = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-    const [user, setUser] = useState<{ fullName: string } | null>({ fullName: "Vũ Văn Sỹ" }); // Thông tin người dùng
+    const { isAuthenticated, user, setUser, setIsAuthenticated } = useCurrentApp();
+
+    useEffect(() => {
+        const fetchAccount = async () => {
+            const accessToken = localStorage.getItem("access_token");
+            if (!accessToken) return;
+
+            const res = await sendRequest<IBackendRes<IFetchAccount>>({
+                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/account`,
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            if (res.data) {
+                setUser(res.data.user)
+                setIsAuthenticated(true);
+            }
+        }
+        fetchAccount();
+    }, [])
+
 
     const handleLogout = async () => {
         //todo
         // Logic xử lý đăng xuất
         alert("Bạn đã đăng xuất!");
         setIsAuthenticated(false); // Cập nhật trạng thái khi đăng xuất
-        setUser(null); // Xóa thông tin người dùng
+        // setUser(null); // Xóa thông tin người dùng
     }
 
     const guestItems = [
@@ -81,17 +103,6 @@ const DropDowAccount = () => {
         },
     ];
 
-    //Logic thêm khi user có role === 'ADMIN'
-    // if (user?.role === 'ADMIN') {
-    //     userItems.unshift({
-    //         label: (<Link href="/history" className="flex items-center gap-x-2">
-    //             <FaUsersCog className="text-[18px]" />
-    //             <span>Trang quản trị</span>
-    //         </Link>),
-    //         key: 'admin',
-    //     })
-    // }
-
     const menuItems = isAuthenticated ? userItems : guestItems;
 
     return (
@@ -100,22 +111,16 @@ const DropDowAccount = () => {
                 menu={{ items: menuItems }}
                 trigger={['click']}
                 placement="bottomRight"
-                overlayStyle={{ paddingTop: 8 }} // Đẩy xuống dưới
+                overlayStyle={{ paddingTop: 8 }}
             >
                 <Space className='!gap-x-[4px]'>
-                    {isAuthenticated && user ? (
-                        <>
-                            <FaRegCircleUser className="icon-cart" />
-                            {user.fullName}
-                            <FaCaretDown />
-                        </>
+                    <FaRegCircleUser className="icon-cart" />
+                    {isAuthenticated && user?.fullName ? (
+                        <span>{user.fullName}</span>
                     ) : (
-                        <>
-                            <FaRegCircleUser className="icon-cart" />
-                            <span>Tài Khoản</span>
-                            <FaCaretDown />
-                        </>
+                        <span>Tài Khoản</span>
                     )}
+                    <FaCaretDown />
                 </Space>
             </Dropdown>
         </>
