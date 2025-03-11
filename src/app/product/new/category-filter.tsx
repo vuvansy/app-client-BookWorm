@@ -1,23 +1,17 @@
 "use client";
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState } from "react";
 
 interface CategoryFilterProps {
-  Genge: IGenre[];
-  selectedCategory: string;
-  onSelectCategory: (category: string) => void;
+  genres: IGenre[]; 
 }
 
-const CategoryFilter: React.FC<CategoryFilterProps> = ({
-  Genge,
-  selectedCategory,
-  onSelectCategory,
-}) => {
+const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("Tất cả"); 
 
-  // Xử lý kéo chuột
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     setIsDragging(true);
@@ -54,7 +48,6 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           `}
         </style>
 
-        
         <button
           className={`px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap
             ${
@@ -62,22 +55,14 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 ? "border-orange-500 text-orange-500 font-semibold bg-white"
                 : "border-transparent text-black hover:text-orange-500 hover:font-semibold hover:border-orange-500"
             }`}
-          onClick={() => onSelectCategory("Tất cả")}
         >
           Tất cả
         </button>
 
-
-        {Genge.map((genre) => (
+        {genres.map((genre) => (
           <button
-            key={genre._id}
-            className={`px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap
-              ${
-                selectedCategory === genre.name
-                  ? "border-orange-500 text-orange-500 font-semibold bg-white"
-                  : "border-transparent text-black hover:text-orange-500 hover:font-semibold hover:border-orange-500"
-              }`}
-            onClick={() => onSelectCategory(genre.name)}
+            key={genre._id} 
+            className="px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap border-transparent text-black hover:text-orange-500 hover:font-semibold hover:border-orange-500"
           >
             {genre.name}
           </button>
