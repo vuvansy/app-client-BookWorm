@@ -202,6 +202,9 @@ declare global {
     interface IPayment {
         _id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt?: Date | null;
     }
 
 }

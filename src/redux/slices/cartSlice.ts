@@ -16,7 +16,7 @@ const cartSlice = createSlice({
     loadCart: (state, action: PayloadAction<ICart[]>) => {
       state.items = action.payload;
     },
-  
+
     addToCart: (state, action: PayloadAction<{ item: IBook; quantity: number }>) => {
       const { item, quantity } = action.payload;
       const existingItem = state.items.find((cartItem) => cartItem._id === item._id);
@@ -25,10 +25,10 @@ const cartSlice = createSlice({
       if (existingItem) {
         const newQuantity = existingItem.quantity + quantity;
 
-       
+
         existingItem.quantity = newQuantity > maxQuantity ? maxQuantity : newQuantity;
       } else {
-        
+
         const addQuantity = quantity > maxQuantity ? maxQuantity : quantity;
         state.items.push({ _id: item._id, quantity: addQuantity, detail: item });
       }
@@ -73,6 +73,7 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
       localStorage.removeItem("carts");
+      localStorage.removeItem("appliedCoupon");
     },
 
 

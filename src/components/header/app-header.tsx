@@ -23,7 +23,7 @@ const AppHeader = async () => {
     const items = categories.map((category) => ({
         label: (
             <Link
-                href={`category/${category._id}`}
+                href={`/product/category/${category._id}`}
                 className="font-medium text-caption text-center capitalize"
             >
                 {category.name}

@@ -145,11 +145,11 @@ const InfoCheckout = () => {
         fetchCities();
     }, []);
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         router.replace("/login");
-    //     }
-    // }, [user, router]);
+    useEffect(() => {
+        if (!user) {
+            router.replace("/login");
+        }
+    }, [user, router]);
 
     useEffect(() => {
         if (user && cities.length > 0) {
@@ -268,7 +268,6 @@ const InfoCheckout = () => {
             id_coupons: appliedCoupon?._id ?? null,
         };
 
-        console.log("Formatted Data:", formattedData);
         try {
             const order = await createOrder(formattedData);
             const orderDetails = cartItems.map((item) => ({
@@ -298,7 +297,6 @@ const InfoCheckout = () => {
             });
 
             if (res.data) {
-                console.log("Tạo đơn hàng thành công:", res.data._id);
                 return res;
             } else {
                 console.error("Lỗi khi tạo đơn hàng:", res);

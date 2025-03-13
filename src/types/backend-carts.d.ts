@@ -137,8 +137,8 @@ declare global {
         isPaid: boolean;
         paidAt?: string;
         id_user: string;
-        id_payment: string;
-        id_delivery: string;
+        id_payment: IPayment;
+        id_delivery: IDelivery;
         id_coupons?: string;
         deleted: boolean;
         createdAt: string;
