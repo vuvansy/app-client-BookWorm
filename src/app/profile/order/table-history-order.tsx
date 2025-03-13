@@ -57,7 +57,7 @@ const TableHistoryOrder = () => {
                                     {new Date(order.createdAt).toLocaleString()}
                                 </td>
                                 <td className="p-[10px] text-center text-price-special font-semibold border-b border-solid border-[#ddd]">
-                                    {order.order_total.toLocaleString()} đ
+                                    {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice)} đ
                                 </td>
                                 <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
                                     {order.id_payment?.name || "Không xác định"}
