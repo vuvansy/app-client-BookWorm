@@ -19,7 +19,7 @@ const ListCategoryHome = ({ genre }: Props) => {
                    gap-4 p-4"
       >
         {genre?.map((item) => (
-          <Link href="product/category/1" key={item._id}>
+          <Link href={`/product/category/${item._id}`} key={item._id}>
             <div className="text-center flex flex-col items-center hover:text-[#C92127] cursor-pointer">
               <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] mb-4">
                 <div className="relative">

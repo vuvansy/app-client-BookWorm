@@ -1,111 +1,45 @@
-"use client";
-import { useState, useEffect } from "react";
-import { Pagination } from "antd";
+import { Pagination, Divider } from "antd";
 import BoxProduct from "./box-product";
 import FilterBar from "./filter-bar";
-import { Divider } from "antd";
-
-interface Product {
-  id: string;
-  image: string;
-  name: string;
-  priceOld: number;
-  priceNew: number;
-  rating: number;
-  category: string;
-}
-
-interface Arrange {
-  category: string | null;
-  minPrice: number | null;
-  maxPrice: number | null;
-  sortBy: string;
-  pageSize: number;
-}
 
 interface ListProductProps {
-  products: Product[];
-  filters: {
-    priceFrom: number | null;
-    priceTo: number | null;
-  };
+  products: IBook[];
+  totalPages: number;
+  currentPage: number;
+  itemsPerPage: number; 
+  onPageChange: (page: number) => void;
+  onItemsPerPageChange: (size: number) => void; 
+  onSortChange: (sort: string) => void;
 }
 
-const ListProduct = ({ products, filters }: ListProductProps) => {
-  const [arrange, setArrange] = useState<Arrange>({
-    category: null,
-    minPrice: null,
-    maxPrice: null,
-    sortBy: "moinhat",
-    pageSize: 12,
-  });
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
-
-  useEffect(() => {
-    let newFilteredProducts = products.filter((product) => {
-      if (arrange.category && product.category !== arrange.category)
-        return false;
-      const minPrice = filters.priceFrom ?? arrange.minPrice;
-      const maxPrice = filters.priceTo ?? arrange.maxPrice;
-
-      if (minPrice !== null && product.priceNew < minPrice) return false;
-      if (maxPrice !== null && product.priceNew > maxPrice) return false;
-      return true;
-    });
-
-    if (arrange.sortBy === "giatang") {
-      newFilteredProducts.sort((a, b) => a.priceNew - b.priceNew);
-    } else if (arrange.sortBy === "giagiam") {
-      newFilteredProducts.sort((a, b) => b.priceNew - a.priceNew);
-    }
-
-    setFilteredProducts(newFilteredProducts);
-    setCurrentPage(1); 
-  }, [products, arrange, filters]);
-
-
-  const paginatedProducts = filteredProducts.slice(
-    (currentPage - 1) * arrange.pageSize,
-    currentPage * arrange.pageSize
-  );
-
+const ListProduct = ({
+  products,
+  totalPages,
+  currentPage,
+  itemsPerPage, 
+  onPageChange,
+  onItemsPerPageChange, 
+  onSortChange,
+}: ListProductProps) => {
   return (
-    <div className="w-[75%] bg-white rounded-lg ">
-      <div className="flex justify-center flex-wrap">
-        <FilterBar
-          onFilterChange={(newarrange) =>
-            setArrange((prev) =>
-              JSON.stringify(prev) ===
-              JSON.stringify({ ...prev, ...newarrange })
-                ? prev
-                : { ...prev, ...newarrange }
-            )
-          }
-          onPageSizeChange={(size) =>
-            setArrange((prev) =>
-              prev.pageSize === size ? prev : { ...prev, pageSize: size }
-            )
-          }
-        />
-        <Divider className="!my-0" />
-        <div className="pb-[20px]  flex flex-col">
-          <div className="w-full ml-[3px] flex flex-wrap gap-y-[10px] gap-x-[10px] mt-[10px] mb-[25px] px-[2px]">
-            {paginatedProducts.length > 0 &&
-              paginatedProducts.map((product) => (
-                <BoxProduct key={product.id} {...product} />
-              ))}
-          </div>
+    <div className="bg-white rounded-lg">
+      <FilterBar onPageSizeChange={onItemsPerPageChange} onSortChange={onSortChange} />
+      <Divider className="!my-0" />
 
-          <Pagination
-            className="text-center text-caption"
-            current={currentPage}
-            total={filteredProducts.length}
-            pageSize={arrange.pageSize}
-            onChange={setCurrentPage}
-          />
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 px-4 py-6">
+        {products.map((product) => (
+          <BoxProduct key={product._id} {...product} />
+        ))}
+      </div>
+
+      <div className="flex justify-center pb-6">
+        <Pagination
+          className="text-caption"
+          current={currentPage}
+          total={totalPages * itemsPerPage}
+          pageSize={itemsPerPage} 
+          onChange={onPageChange}
+        />
       </div>
     </div>
   );

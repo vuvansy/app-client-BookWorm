@@ -1,78 +1,143 @@
 "use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import FilterBarLeft from "@/components/list-product/filter-bar-left";
 import ListProduct from "@/components/list-product/list-product";
-import { useState } from "react";
+import { sendRequest } from "@/utils/api";
 
-const products = [
-  {
-    id: "1",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12Bocchi The Rock! - Tập 6 - Tặng Kèm Kẹp File",
-    priceOld: 50000,
-    priceNew: 38000,
-    rating: 5,
-    category: "comic",
-  },
-  {
-    id: "2",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12Bocchi The Rock! - Tập 6 - Tặng Kèm Kẹp File",
-    priceOld: 120000,
-    priceNew: 92460,
-    rating: 4.5,
-    category: "business",
-  },
-  {
-    id: "3",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12Bocchi The Rock! - Tập 6 - Tặng Kèm Kẹp File",
-    priceOld: 150000,
-    priceNew: 118300,
-    rating: 4.5,
-    category: "selfhelp",
-  },
-  {
-    id: "4",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12Bocchi The Rock! - Tập 6 - Tặng Kèm Kẹp File",
-    priceOld: 300000,
-    priceNew: 273000,
-    rating: 3.5,
-    category: "history",
-  },
-  {
-    id: "5",
-    image: "/9786044067162.webp",
-    name: "Nhóc Maruko - Tập 12Bocchi The Rock! - Tặng Kèm Kẹp File",
-    priceOld: 110000,
-    priceNew: 91200,
-    rating: 3.5,
-    category: "education",
-  },
-];
+const DEFAULT_ITEMS_PER_PAGE = 12;
 
-export default function CategoryById() {
+const CategoryById = () => {
+  const params = useParams();
+  const idGenre = params?.id || params?.idGenre;
+
+  const [products, setProducts] = useState<IBook[]>([]);
+  const [genres, setGenres] = useState<IGenre[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
+  const [sort, setSort] = useState("-createdAt");
   const [filters, setFilters] = useState<{
-    priceFrom: number | null;
-    priceTo: number | null;
-  }>({
-    priceFrom: null,
-    priceTo: null,
-  });
-  const handleFilterChange = (newFilters: {
-    priceFrom: number | null;
-    priceTo: number | null;
+    price_min?: number;
+    price_max?: number;
+  }>({});
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(() =>
+    idGenre ? (Array.isArray(idGenre) ? idGenre : [idGenre]) : []
+  );
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const genreRes = await sendRequest<{ data: IGenre[] }>({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/genre`,
+          method: "GET",
+        });
+
+        if (genreRes?.data) {
+          setGenres(genreRes.data);
+        }
+      } catch (error) {
+        console.error("Lỗi khi fetch thể loại:", error);
+      }
+    };
+
+    fetchGenres();
+  }, []);
+
+  const fetchBooks = async (
+    selected: string[],
+    page: number,
+    limit: number,
+    sort: string,
+    filterParams: { price_min?: number; price_max?: number }
+  ) => {
+    try {
+      const queryParams: Record<string, any> = {
+        page,
+        limit,
+        sort,
+        ...filterParams,
+      };
+
+      if (selected.length > 0) {
+        queryParams.id_genre = selected.join(",");
+      }
+
+      const resBookByIdGenre = await sendRequest<{
+        data: IModelPaginate<IBook>;
+      }>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book`,
+        method: "GET",
+        queryParams,
+      });
+
+      if (resBookByIdGenre?.data?.result) {
+        setProducts(resBookByIdGenre.data.result);
+        setTotalPages(Math.ceil(resBookByIdGenre.data.meta.total / limit) || 1);
+      }
+    } catch (error) {
+      console.error("Lỗi khi fetch dữ liệu:", error);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedGenres, itemsPerPage]);
+
+  useEffect(() => {
+    fetchBooks(selectedGenres, currentPage, itemsPerPage, sort, filters);
+  }, [selectedGenres, currentPage, itemsPerPage, sort, filters]);
+
+  useEffect(() => {
+    if (idGenre) {
+      setSelectedGenres(Array.isArray(idGenre) ? idGenre : [idGenre]);
+      setCurrentPage(1);
+    }
+  }, [idGenre]);
+
+  const handleGenreChange = (newSelectedGenres: string[]) => {
+    setSelectedGenres(newSelectedGenres);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedGenres([]);
+    setCurrentPage(1);
+    setFilters({});
+  };
+  const handleApplyFilters = (newFilters: {
+    price_min?: number;
+    price_max?: number;
   }) => {
     setFilters(newFilters);
+    setCurrentPage(1);
   };
+
   return (
     <main className="bg-bg-main">
-      <div className="container pt-[20px] flex gap-4">
-        <div className="w-[24%]">
-          <FilterBarLeft onFilterChange={setFilters} />
+      <div className="container pt-[20px] flex flex-col lg:flex-row gap-4">
+        <div className="w-full lg:w-[24%]">
+          <FilterBarLeft
+            genres={genres}
+            selectedGenres={selectedGenres}
+            onGenreChange={handleGenreChange}
+            onResetFilters={handleResetFilters}
+            onApplyFilters={handleApplyFilters}
+          />
         </div>
-        <ListProduct products={products} filters={filters} />
+        <div className="w-full lg:w-[76%]">
+          <ListProduct
+            products={products}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            onSortChange={setSort}
+          />
+        </div>
       </div>
     </main>
   );
-}
+};
+
+export default CategoryById;
