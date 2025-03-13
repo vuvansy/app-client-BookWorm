@@ -28,7 +28,7 @@ const BoxProductHome = (props: IBook) => {
   const handleAddToCart = (currentBook: IBook) => {
     const cartItem = cart.items.find((item) => item._id === currentBook._id);
     const maxQuantity = typeof currentBook.quantity === "number" ? currentBook.quantity : 0;
-    const currentCartQuantity = cartItem?.quantity ?? 0; 
+    const currentCartQuantity = cartItem?.quantity ?? 0;
     if (currentCartQuantity + 1 > maxQuantity) {
       notification.warning({
         message: 'Lỗi Số Lượng',
@@ -39,7 +39,7 @@ const BoxProductHome = (props: IBook) => {
     }
 
     dispatch(addToCart({ item: currentBook, quantity: 1 }));
-
+    // message.success('Sản phẩm đã được thêm vào giỏ hàng!')
     Swal.fire({
       icon: "success",
       title: "Sản phẩm đã được thêm vào giỏ hàng!",
@@ -48,6 +48,8 @@ const BoxProductHome = (props: IBook) => {
       background: "rgba(0, 0, 0, 0.7)",
       color: "#ffffff",
       customClass: { title: "swal-title" },
+      allowOutsideClick: true,
+      allowEscapeKey: true,
     });
   };
 

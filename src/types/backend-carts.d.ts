@@ -122,7 +122,7 @@ declare global {
         id_coupons?: string | null;
     }
 
-    export interface IHistory {
+    interface IHistory {
         _id: string;
         fullname: string;
         phone: string;
@@ -143,6 +143,15 @@ declare global {
         deleted: boolean;
         createdAt: string;
         updatedAt: string;
+    }
+
+
+    export interface IOrderDetail {
+        _id?: string;
+        quantity: number;
+        price: string;
+        id_book: string;
+        id_order: string;
     }
 
 

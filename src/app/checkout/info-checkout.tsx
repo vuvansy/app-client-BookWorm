@@ -269,14 +269,22 @@ const InfoCheckout = () => {
         };
 
         console.log("Formatted Data:", formattedData);
-
-        const response = await createOrder(formattedData);
-        if (response?.data) {
+        try {
+            const order = await createOrder(formattedData);
+            const orderDetails = cartItems.map((item) => ({
+                quantity: item.quantity,
+                price: item.detail.price_new,
+                id_book: item._id,
+                id_order: order?.data?._id
+            }));
+            console.log("Sending order details:", orderDetails);
+            await createOrderDetail(orderDetails);
             message.success("Đặt hàng thành công!");
             dispatch(clearCart());
             router.push("/order");
-        } else {
-            message.error("Có lỗi xảy ra khi tạo đơn hàng!");
+        } catch (error) {
+            console.error(error);
+            alert("Đã có lỗi xảy ra.");
         }
     };
 
@@ -302,6 +310,26 @@ const InfoCheckout = () => {
         }
     }
     // Create order details
+    async function createOrderDetail(orderDetails: any) {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order-detail`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderDetails),
+            });
+            if (!res.ok) {
+                console.error("Lỗi khi tạo đơn hàng chi tiết:", res.status, res.statusText);
+                return null;
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error("Lỗi hệ thống:", error);
+            return null;
+        }
+    }
 
     return (
         <Form
