@@ -87,10 +87,9 @@ const TotalCart = (props: IProps) => {
                     },
                     body: JSON.stringify({ code: values.code })
                 })
-            const data = await res.json();
+            const data: IBackendRes<ICoupon> = await res.json();
             if (res.ok) {
-                const { code, max_value, min_total, value } = data.data;
-
+                const { code, max_value, min_total, value, _id } = data.data as ICoupon;
                 if (total < min_total) {
                     message.warning(
                         `Mã giảm giá chỉ áp dụng cho đơn hàng từ ${new Intl.NumberFormat(
@@ -110,6 +109,7 @@ const TotalCart = (props: IProps) => {
 
                 // localStorage
                 localStorage.setItem("appliedCoupon", JSON.stringify({
+                    _id,
                     code,
                     discount: discountValue,
                     min_total: min_total

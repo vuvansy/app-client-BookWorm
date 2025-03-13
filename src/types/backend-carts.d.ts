@@ -89,20 +89,6 @@ declare global {
         detail: IBook;
     }
 
-    // interface ICoupon {
-    //     _id: string;
-    //     code: string;
-    //     value: number;
-    //     max_value: number; 
-    //     min_total: number; 
-    //     description?: string; 
-    //     quantity: number; 
-    //     status: "active" | "inactive"; 
-    //     start_date?: Date; 
-    //     end_date?: Date; 
-    //     createdAt?: Date;
-    //     updatedAt?: Date;
-    // }
 
     interface ICoupon {
         _id: string;
@@ -118,7 +104,46 @@ declare global {
         deleted: boolean;
         createdAt: string;
         updatedAt: string;
-        __v: number;
     }
+
+    interface IOrder {
+        fullName: string;
+        phone: string;
+        email?: string;
+        address: Address;
+        note?: string;
+        products: ICart[];
+        shippingPrice: number;
+        discountAmount: number;
+        isPaid: boolean;
+        id_user?: string;
+        id_delivery?: string;
+        id_payment?: string;
+        id_coupons?: string | null;
+    }
+
+    export interface IHistory {
+        _id: string;
+        fullname: string;
+        phone: string;
+        email: string;
+        address: string;
+        note?: string;
+        quantity: number;
+        status: number;
+        shippingPrice: number;
+        discountAmount: number;
+        order_total: number;
+        isPaid: boolean;
+        paidAt?: string;
+        id_user: string;
+        id_payment: string;
+        id_delivery: string;
+        id_coupons?: string;
+        deleted: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }
+
 
 }

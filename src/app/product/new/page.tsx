@@ -1,7 +1,7 @@
 import { sendRequest } from "@/utils/api";
 import BoxProductByType from "./box-productbytype";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 15;
 
 const Page = async () => {
   const res = await sendRequest<IModelPaginate<IBook>>({
@@ -13,7 +13,7 @@ const Page = async () => {
     url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/genre`,
     method: "GET",
   });
-  
+
   return (
     <BoxProductByType
       initialData={res?.data || []}

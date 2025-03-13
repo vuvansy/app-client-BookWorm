@@ -1,16 +1,19 @@
 "use client"
 
-import { Select } from "antd";
+import { App, Select } from "antd";
 import { MdOutlinePayment } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
 import type { FormProps } from 'antd';
 import { Form, Input } from 'antd';
 import { useEffect, useMemo, useState } from "react";
 const { TextArea } = Input;
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useCurrentApp } from "@/context/app.context";
 import { useRouter } from "next/navigation";
+import { sendRequest } from "@/utils/api";
+import { clearCart } from "@/redux/slices/cartSlice";
+import Swal from "sweetalert2";
 
 type FieldType = {
     fullName: string;
@@ -28,13 +31,21 @@ type FieldType = {
 const InfoCheckout = () => {
     const [form] = Form.useForm();
     const { user } = useCurrentApp();
+    const dispatch = useDispatch();
     const router = useRouter();
-
+    const { message } = App.useApp();
     const [cities, setCities] = useState<City[]>([]);
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
     const [clientTotal, setClientTotal] = useState(0);
-    const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
+    const [appliedCoupon, setAppliedCoupon] = useState<{ _id: string; code: string; discount: number } | null>(null);
+
+    const [listDelivery, setListDelivery] = useState<{ label: string, value: string, price: number }[]>([]);
+    const [selectedDelivery, setSelectedDelivery] = useState<string | undefined>(undefined);
+    const [shippingPrice, setShippingPrice] = useState<number>(0);
+
+    const [listPayment, setListPayment] = useState<{ label: string, value: string }[]>([]);
+    const [selectedPayment, setSelectedPayment] = useState<string | undefined>(undefined);
 
     const cartItems = useSelector((state: RootState) => state.cart.items || []) as ICart[];
     const total = useMemo(
@@ -46,6 +57,58 @@ const InfoCheckout = () => {
         [cartItems]
     );
 
+    //fetchDelivery
+    useEffect(() => {
+        const fetchDelivery = async () => {
+            const res = await sendRequest<IBackendRes<IDelivery[]>>({
+                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/delivery`,
+                method: "GET"
+            })
+            if (res && res.data) {
+                const d = res.data.map(item => ({
+                    label: item.name,
+                    value: String(item._id),
+                    price: item.price,
+                }));
+                setListDelivery(d);
+                if (d.length > 0) {
+                    setSelectedDelivery(d[0].value);
+                    setShippingPrice(d[0].price);
+                    form.setFieldsValue({ shippingMethod: d[0].value });
+                }
+            }
+        }
+        fetchDelivery();
+    }, [])
+    useEffect(() => {
+        if (selectedDelivery) {
+            const selectedMethod = listDelivery.find(method => method.value === selectedDelivery);
+            setShippingPrice(selectedMethod ? selectedMethod.price : 0);
+        }
+    }, [selectedDelivery, listDelivery]);
+    //fetchPayment
+    useEffect(() => {
+        const fetchPayment = async () => {
+            const res = await sendRequest<IBackendRes<IPayment[]>>({
+                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/payment`,
+                method: "GET"
+            })
+
+            if (res && res.data) {
+                const d = res.data.map(item => ({
+                    label: item.name,
+                    value: String(item._id)
+                }));
+                setListPayment(d);
+                if (d.length > 0) {
+                    setSelectedPayment(d[0].value);
+                    form.setFieldsValue({ paymentMethod: d[0].value });
+                }
+            }
+        }
+        fetchPayment();
+    }, [])
+
     useEffect(() => {
         setClientTotal(total);
     }, [total]);
@@ -56,6 +119,7 @@ const InfoCheckout = () => {
             if (savedCoupon) {
                 const couponData = JSON.parse(savedCoupon);
                 setAppliedCoupon({
+                    _id: couponData._id,
                     code: couponData.code,
                     discount: couponData.discount,
                 });
@@ -72,7 +136,6 @@ const InfoCheckout = () => {
         }
     }, []);
 
-
     useEffect(() => {
         const fetchCities = async () => {
             const response = await fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
@@ -82,13 +145,11 @@ const InfoCheckout = () => {
         fetchCities();
     }, []);
 
-    console.log(user);
-
-    useEffect(() => {
-        if (!user) {
-            router.replace("/login");
-        }
-    }, [user, router]);
+    // useEffect(() => {
+    //     if (!user) {
+    //         router.replace("/login");
+    //     }
+    // }, [user, router]);
 
     useEffect(() => {
         if (user && cities.length > 0) {
@@ -101,8 +162,8 @@ const InfoCheckout = () => {
                 ward: user.address?.ward?.key || undefined,
                 street: user.address?.street || "",
                 note: "",
-                shippingMethod: 0,
-                paymentMethod: 0
+                shippingMethod: selectedDelivery,
+                paymentMethod: selectedPayment
             });
 
             if (user.address?.city?.key) {
@@ -126,7 +187,7 @@ const InfoCheckout = () => {
             });
             return;
         }
-        setDistricts(selectedCity.Districts); 
+        setDistricts(selectedCity.Districts);
         setWards([]);
         form.setFieldsValue({
             district: undefined,
@@ -152,55 +213,95 @@ const InfoCheckout = () => {
 
     useEffect(() => {
         if (districts.length > 0 && user?.address?.district?.key) {
-            console.log("📌 Cập nhật Quận/Huyện:", user.address.district.key);
             if (districts.some(d => String(d.Id) === String(user?.address?.district?.key))) {
                 form.setFieldsValue({ district: user.address.district.key });
                 handleDistrictChange(user.address.district.key);
             } else {
-                form.setFieldsValue({ district: undefined }); 
+                form.setFieldsValue({ district: undefined });
             }
         } else {
-            form.setFieldsValue({ district: undefined }); 
+            form.setFieldsValue({ district: undefined });
         }
     }, [districts]);
 
     useEffect(() => {
         if (wards.length > 0) {
             const currentDistrict = form.getFieldValue("district");
-
             if (!currentDistrict) {
                 form.setFieldsValue({ ward: undefined });
             } else if (user?.address?.district?.key === currentDistrict) {
                 form.setFieldsValue({ ward: user?.address?.ward?.key || undefined });
             } else {
-                form.setFieldsValue({ ward: undefined }); 
+                form.setFieldsValue({ ward: undefined });
             }
         }
     }, [wards]);
 
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         const selectedCity = cities.find(city => city.Id === values.city);
         const selectedDistrict = districts.find(district => district.Id === values.district);
         const selectedWard = wards.find(ward => ward.Id === values.ward);
 
         const formattedData = {
             fullName: values.fullName,
-            email: values.email,
             phone: values.phone,
+            email: values.email ?? "",
             address: {
-                city: selectedCity ? { key: selectedCity.Id, name: selectedCity.Name } : null,
-                district: selectedDistrict ? { key: selectedDistrict.Id, name: selectedDistrict.Name } : null,
-                ward: selectedWard ? { key: selectedWard.Id, name: selectedWard.Name } : null,
+                city: selectedCity ? { key: selectedCity.Id, name: selectedCity.Name } : { key: "", name: "" },
+                district: selectedDistrict ? { key: selectedDistrict.Id, name: selectedDistrict.Name } : { key: "", name: "" },
+                ward: selectedWard ? { key: selectedWard.Id, name: selectedWard.Name } : { key: "", name: "" },
                 street: values.street,
             },
             note: values.note,
-            shippingMethod: values.shippingMethod,
-            paymentMethod: values.paymentMethod,
+            products: cartItems.map(item => ({
+                _id: item._id,
+                quantity: item.quantity,
+                detail: { price_new: item.detail.price_new }
+            })),
+            shippingPrice,
+            discountAmount: appliedCoupon?.discount ?? 0,
+            isPaid: false,
+            id_user: user?.id,
+            id_delivery: selectedDelivery,
+            id_payment: selectedPayment,
+            id_coupons: appliedCoupon?._id ?? null,
         };
 
         console.log("Formatted Data:", formattedData);
+
+        const response = await createOrder(formattedData);
+        if (response?.data) {
+            message.success("Đặt hàng thành công!");
+            dispatch(clearCart());
+            router.push("/order");
+        } else {
+            message.error("Có lỗi xảy ra khi tạo đơn hàng!");
+        }
     };
+
+    // Create order
+    async function createOrder(order: any) {
+        try {
+            const res = await sendRequest<IBackendRes<IHistory>>({
+                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order`,
+                method: "POST",
+                body: order,
+            });
+
+            if (res.data) {
+                console.log("Tạo đơn hàng thành công:", res.data._id);
+                return res;
+            } else {
+                console.error("Lỗi khi tạo đơn hàng:", res);
+                return null;
+            }
+        } catch (error) {
+            console.error("Lỗi hệ thống:", error);
+            return null;
+        }
+    }
+    // Create order details
 
     return (
         <Form
@@ -208,10 +309,6 @@ const InfoCheckout = () => {
             autoComplete="off"
             onFinish={onFinish}
             layout="vertical"
-            initialValues={{
-                shippingMethod: 0,
-                paymentMethod: 0,
-            }}
             className="flex justify-between pb-[20px]"
         >
             <div className="basis-8/12 ">
@@ -338,11 +435,12 @@ const InfoCheckout = () => {
                                         showSearch
                                         allowClear
                                         placeholder="Chọn phương thức vận chuyển"
-                                        defaultValue={0}
-                                        options={[
-                                            { value: 0, label: "Giao hàng nhanh" },
-                                            { value: 1, label: "Giao hàng tiết kiệm" },
-                                        ]}
+                                        options={listDelivery}
+                                        value={selectedDelivery}
+                                        onChange={(value) => {
+                                            setSelectedDelivery(value);
+                                            form.setFieldsValue({ shippingMethod: value });
+                                        }}
                                     />
                                 </div>
                             </Form.Item>
@@ -360,11 +458,12 @@ const InfoCheckout = () => {
                                         placeholder="Chọn phương thức thanh toán"
                                         showSearch
                                         allowClear
-                                        defaultValue={0}
-                                        options={[
-                                            { value: 0, label: "Thanh toán tiền mặt khi nhận hàng(COD)" },
-                                            { value: 1, label: "Thanh toán qua VNPAY" },
-                                        ]}
+                                        options={listPayment}
+                                        value={selectedPayment}
+                                        onChange={(value) => {
+                                            setSelectedPayment(value);
+                                            form.setFieldsValue({ paymentMethod: value });
+                                        }}
                                     />
                                 </div>
                             </Form.Item>
@@ -388,7 +487,7 @@ const InfoCheckout = () => {
                     </div>
                     <div className="flex justify-between items-center mt-[8px] mb-[16px] text-caption font-semibold">
                         <p>Phí vận chuyển</p>
-                        <p>Miễn phí</p>
+                        <p>{new Intl.NumberFormat("vi-VN").format(shippingPrice)}</p>
                     </div>
                     <div className="my-[10px]">
                         <hr className="border-dashed border border-bg-text" />
@@ -396,7 +495,7 @@ const InfoCheckout = () => {
                             <h3>Tổng Tiền</h3>
                             <span>
                                 {new Intl.NumberFormat("vi-VN").format(
-                                    clientTotal - (appliedCoupon?.discount || 0)
+                                    clientTotal - (appliedCoupon?.discount || 0) + shippingPrice
                                 )} đ
                             </span>
                         </div>

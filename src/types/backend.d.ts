@@ -191,4 +191,17 @@ declare global {
         Districts: District[];
     }
 
+    interface IDelivery {
+        _id: string;
+        name: string;
+        price: number;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt?: Date | null;
+    }
+    interface IPayment {
+        _id: string;
+        name: string;
+    }
+
 }

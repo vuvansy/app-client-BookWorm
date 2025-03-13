@@ -8,7 +8,6 @@ const TestPage = async () => {
   const res = await sendRequest<IBackendRes<IBookTable[]>>({
     url: "http://localhost:4000/api/v1/book",
     method: "GET"
-
   })
   // console.log(">>>>>> check rs data", res);
 
