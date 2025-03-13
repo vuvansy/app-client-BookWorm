@@ -1,16 +1,17 @@
-"use client";
-import React, { useRef, useState } from "react";
+'user client'
+import { useRef, useState } from "react";
 
 interface CategoryFilterProps {
-  genres: IGenre[]; 
+  genres: IGenre[];
+  onCategoryChange: (id_genre: string) => void; // Thêm prop để thông báo danh mục đã chọn
 }
 
-const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres }) => {
+const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres, onCategoryChange }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả"); 
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
@@ -28,6 +29,12 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres }) => {
   };
 
   const handleMouseUp = () => setIsDragging(false);
+
+  // Hàm xử lý khi chọn danh mục
+  const handleCategorySelect = (id_genre: string) => {
+    setSelectedCategory(id_genre);
+    onCategoryChange(id_genre);
+  };
 
   return (
     <div className="container mx-auto">
@@ -49,9 +56,10 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres }) => {
         </style>
 
         <button
+          onClick={() => handleCategorySelect("")}
           className={`px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap
             ${
-              selectedCategory === "Tất cả"
+              selectedCategory === ""
                 ? "border-orange-500 text-orange-500 font-semibold bg-white"
                 : "border-transparent text-black hover:text-orange-500 hover:font-semibold hover:border-orange-500"
             }`}
@@ -61,8 +69,14 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres }) => {
 
         {genres.map((genre) => (
           <button
-            key={genre._id} 
-            className="px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap border-transparent text-black hover:text-orange-500 hover:font-semibold hover:border-orange-500"
+            key={genre._id}
+            onClick={() => handleCategorySelect(genre._id)} // Truyền ID thể loại khi click
+            className={`px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap
+              ${
+                selectedCategory === genre._id
+                  ? "border-orange-500 text-orange-500 font-semibold bg-white"
+                  : "border-transparent text-black hover:text-orange-500 hover:font-semibold hover:border-orange-500"
+              }`}
           >
             {genre.name}
           </button>
