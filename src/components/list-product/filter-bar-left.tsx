@@ -1,92 +1,112 @@
 "use client";
+import { useState, useEffect } from "react";
 import { Form, InputNumber } from "antd";
-import { useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
 
 interface FilterBarLeftProps {
-  onFilterChange: (filters: {
-    priceFrom: number | null;
-    priceTo: number | null;
-  }) => void;
+  genres: IGenre[];
+  selectedGenres: string[];
+  onGenreChange: (genres: string[]) => void;
+  onResetFilters: () => void;
+  onApplyFilters: (filters: { price_min?: number; price_max?: number }) => void; // Thêm prop truyền giá trị lọc lên
 }
 
-export default function FilterBarLeft({ onFilterChange }: FilterBarLeftProps) {
-  const categories = [
-    "Business",
-    "Comics",
-    "Cooking",
-    "Entertainment",
-    "History",
-    "Music",
-    "Teen",
-    "Travel",
-  ];
-  const [priceFrom, setPriceFrom] = useState<number | null>(null);
-  const [priceTo, setPriceTo] = useState<number | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState("");
+export default function FilterBarLeft({
+  genres,
+  selectedGenres,
+  onGenreChange,
+  onResetFilters,
+  onApplyFilters,
+}: FilterBarLeftProps) {
+  const [selected, setSelected] = useState<string[]>(selectedGenres);
+  const [priceMin, setPriceMin] = useState<number | undefined>(undefined);
+  const [priceMax, setPriceMax] = useState<number | undefined>(undefined);
 
-  const applyFilters = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onFilterChange({ priceFrom, priceTo });
+  useEffect(() => {
+    setSelected(selectedGenres);
+  }, [selectedGenres]);
+
+  const handleGenreChange = (id: string) => {
+    let updatedSelection = selected.includes(id)
+      ? selected.filter((item) => item !== id)
+      : [...selected, id];
+
+    setSelected(updatedSelection);
+    onGenreChange(updatedSelection);
   };
 
+  const handleApplyFilters = () => {
+    onApplyFilters({
+      price_min: priceMin,
+      price_max: priceMax,
+    });
+  };
+  const handleResetFilters = () => {
+    setSelected([]);
+    setPriceMin(undefined);
+    setPriceMax(undefined);
+    onResetFilters();
+  };
   return (
     <div className="w-full bg-white p-5 border rounded-lg">
       <div className="flex mb-4 items-center justify-between pt-[20px]">
         <div className="flex">
-          <FaFilter size={24} />
-          <h3 className="text-[20px] font-bold ml-[10px]">Bộ lọc tìm kiếm</h3>
+          <FaFilter size={24} className="cursor-pointer" />
+          <h3 className="lg:text-[20px] text-sub-heading-bold lg:font-bold ml-[10px]">
+            Bộ lọc tìm kiếm
+          </h3>
         </div>
-        <TbReload size={21} className="text-end cursor-pointer" />
+        <TbReload
+          size={21}
+          className="cursor-pointer"
+          onClick={handleResetFilters}
+        />
       </div>
       <div className="h-[1px] w-[250px] opacity-50 bg-gray-300"></div>
 
       <Form name="category">
         <p className="text-body1 my-5">Danh mục sản phẩm</p>
-        {categories.map((cate, index) => (
-          <div key={index} className="mb-2 flex items-center">
+        {genres.map((genre) => (
+          <div key={genre._id} className="mb-2 flex items-center">
             <input
-              type="radio"
-              name="category"
-              value={cate}
-              checked={selectedCategory === cate}
-              onChange={() => setSelectedCategory(cate)}
+              type="checkbox"
+              checked={selected.includes(genre._id)}
+              onChange={() => handleGenreChange(genre._id)}
               className="mr-[13px] w-5 h-5 border border-gray-400 rounded-md appearance-none relative 
               checked:bg-red-500 checked:border-red-500 
-              checked:after:content-['✓'] checked:after:absolute checked:after:top-0 checked:after:left-[3px] checked:after:text-white checked:after:font-bold"
+              checked:after:content-['✓'] checked:after:absolute checked:after:top-[0px] checked:after:left-[4px] 
+              checked:after:text-white checked:after:font-bold checked:after:text-[14px]"
             />
-            <label className="text-caption">{cate}</label>
+            <label className="text-caption">{genre.name}</label>
           </div>
         ))}
       </Form>
 
-      <div className="border-t border-gray-300 opacity-50 my-5"></div>
-      <Form name="price-range" onSubmitCapture={applyFilters}>
+      <Form name="price-range">
         <div className="mt-4">
           <p className="text-body1 mb-5">Khoảng giá</p>
-          <div className="flex gap-[17px] justify-center items-center max-h-[38px]">
+          <div className="flex gap-[17px] w-full justify-center items-center max-h-[38px] ">
             <InputNumber<number>
               placeholder="đ Từ"
-              value={priceFrom ?? undefined}
-              onChange={(value) => setPriceFrom(value !== null ? value : null)}
-              className="w-[100px]"
+              value={priceMin}
+              onChange={(value) => setPriceMin(value ?? undefined)}
               min={0}
             />
             <div className="h-[1px] w-4 bg-gray-400"></div>
             <InputNumber<number>
               placeholder="đ Đến"
-              value={priceTo ?? undefined}
-              onChange={(value) => setPriceTo(value !== null ? value : null)}
-              className="w-[100px]"
+              value={priceMax}
+              onChange={(value) => setPriceMax(value ?? undefined)}
               min={0}
             />
           </div>
         </div>
 
         <button
-          type="submit"
+          type="button"
           className="bg-[#C92127] text-white w-full mt-4 py-2 rounded-lg text-caption"
+          onClick={handleApplyFilters}
         >
           Áp dụng
         </button>
