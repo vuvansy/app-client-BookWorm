@@ -14,7 +14,6 @@ interface Props {
   limit: number;
   genres: IGenre[];
 }
-
 const BoxProductByType = ({
   initialData,
   totalItems,
@@ -23,32 +22,45 @@ const BoxProductByType = ({
 }: Props) => {
   const [books, setBooks] = useState<IBook[]>(initialData);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedGenre, setSelectedGenre] = useState<string>("");
+  const [sort, setSort] = useState<string>("name");
+  const [totalItemsByCategory, setTotalItemsByCategory] = useState<number>(
+    () => totalItems
+  );
 
-  const totalPages = Math.ceil(totalItems / limit);
+  const totalPages = Math.ceil(totalItemsByCategory / limit);
   const initialBooksRef = useRef<IBook[]>(initialData);
 
   useEffect(() => {
     const fetchBooks = async () => {
-      if (currentPage === 1) {
+      if (currentPage === 1 && selectedGenre === "" && sort === "name") {
         setBooks(initialBooksRef.current);
+        setTotalItemsByCategory(totalItems);
         return;
       }
 
       try {
-        const res = await sendRequest<IModelPaginate<IBook>>({
+        const res = await sendRequest<IBackendRes<IModelPaginate<IBook>>>({
           url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/new`,
           method: "GET",
-          queryParams: { all: true, page: currentPage, limit },
+          queryParams: {
+            all: true,
+            page: currentPage,
+            limit,
+            id_genre: selectedGenre || undefined,
+            sort, // Gửi sort lên backend
+          },
         });
 
-        setBooks(res?.data || []);
+        setBooks(res?.data?.result || []);
+        setTotalItemsByCategory(res?.data?.meta?.total || 0);
       } catch (error) {
         console.error("Lỗi khi lấy sản phẩm", error);
       }
     };
 
     fetchBooks();
-  }, [currentPage, limit]);
+  }, [currentPage, limit, selectedGenre, totalItems, sort]); // Cập nhật dependency array
 
   return (
     <div className="bg-bg-main px-2 pb-[1px] xl:px-0">
@@ -69,13 +81,19 @@ const BoxProductByType = ({
           </p>
         </div>
         <Divider className="!my-0" />
-        <CategoryFilter genres={genres} />
-        <SortFilter  />
+        <CategoryFilter
+          genres={genres}
+          onCategoryChange={(id_genre) => {
+            setSelectedGenre(id_genre);
+            setCurrentPage(1);
+          }}
+        />
+        <SortFilter onSortChange={setSort} /> {/* Truyền hàm cập nhật sort */}
         <ListProductByType
           books={books}
           currentPage={currentPage}
           totalPages={totalPages}
-          totalItems={totalItems}
+          totalItems={totalItemsByCategory}
           limit={limit}
           onPageChange={setCurrentPage}
         />
