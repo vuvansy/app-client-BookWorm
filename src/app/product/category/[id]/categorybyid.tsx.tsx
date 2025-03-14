@@ -71,9 +71,12 @@ const CategoryById = () => {
         queryParams,
       });
 
-      if (resBookByIdGenre?.data?.result) {
+      if (resBookByIdGenre?.data?.result?.length > 0) {
         setProducts(resBookByIdGenre.data.result);
         setTotalPages(Math.ceil(resBookByIdGenre.data.meta.total / limit) || 1);
+      } else {
+        setProducts([]); // Xóa dữ liệu cũ
+        setTotalPages(0); // Ẩn phân trang
       }
     } catch (error) {
       console.error("Lỗi khi fetch dữ liệu:", error);
