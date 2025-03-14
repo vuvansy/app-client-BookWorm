@@ -276,7 +276,7 @@ const InfoCheckout = () => {
                 id_book: item._id,
                 id_order: order?.data?._id
             }));
-            console.log("Sending order details:", orderDetails);
+            // console.log("Sending order details:", orderDetails);
             await createOrderDetail(orderDetails);
             message.success("Đặt hàng thành công!");
             dispatch(clearCart());

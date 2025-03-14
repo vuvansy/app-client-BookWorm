@@ -35,7 +35,7 @@ const GalleryComponent = (props: IProps) => {
                     {
                         original: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${currentBook.image}`,
                         thumbnail: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${currentBook.image}`,
-                        originalClass: "w-full h-[460px] object-contain",
+                        originalClass: "w-full h-[450px] object-contain",
                         thumbnailClass: "!w-[100px] !h-[100px]"
                     },
                 )
@@ -46,7 +46,7 @@ const GalleryComponent = (props: IProps) => {
                         {
                             original: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${item}`,
                             thumbnail: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${item}`,
-                            originalClass: "w-full h-[490px] object-contain",
+                            originalClass: "w-full h-[450px] object-contain",
                             thumbnailClass: "w-[100px] h-[100px] object-contain"
                         },
                     )

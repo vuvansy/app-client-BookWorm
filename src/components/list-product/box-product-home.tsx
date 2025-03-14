@@ -79,7 +79,7 @@ const BoxProductHome = (props: IBook) => {
           </div>
         </div>
         <div className="p-3 flex flex-col justify-center items-center">
-          <div className="w-[190px] h-[190px] mb-2">
+          <div className="w-[190px] h-[190px] mb-2 overflow-hidden">
             <div className="relative">
               <Link href={`/product/${_id}`}>
                 <Image

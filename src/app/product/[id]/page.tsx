@@ -89,7 +89,7 @@ const ProductDetailPage = async (props: Props) => {
             </div>
             <div className="container pt-[8px] pb-5">
                 <div className=" flex flex-col lg:flex-row justify-between gap-x-4">
-                    <div className="w-full lg:w-[40%] max-h-[750px] bg-white lg:sticky lg:top-4 rounded-lg p-4">
+                    <div className="w-full lg:w-[40%] max-h-[740px] bg-white lg:sticky lg:top-4 rounded-lg p-4">
                         <GalleryComponent currentBook={currentBook} />
                         <div className='hidden lg:block'>
                             <h3 className='text-body-bold my-[14px]'>Chính sách ưu đãi của BookWorm</h3>

@@ -22,6 +22,7 @@ const TableOrder = (props: IProps) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [form] = Form.useForm(); // Quản lý form
 
+    console.log(order);
     const showModal = () => {
         setModalOpen(true);
         document.body.classList.add("modal-open"); // Giữ cuộn trang
@@ -84,7 +85,7 @@ const TableOrder = (props: IProps) => {
                                 </span>
                             </td>
                             <td className="text-center">
-                                {item.id_order.status === 3 ? (
+                                {order && order.status === 3 ? (
                                     <button
                                         className="bg-red1 text-white py-[10px] px-[16px] rounded-lg"
                                         onClick={showModal}
@@ -120,7 +121,7 @@ const TableOrder = (props: IProps) => {
             <div className="flex items-center justify-end gap-2 py-[10px] border-b text-caption">
                 <div>Tổng Tiền: </div>
                 <span>
-                    {new Intl.NumberFormat("vi-VN").format((order?.order_total ?? 0) + (order?.shippingPrice ?? 0))} đ
+                    {new Intl.NumberFormat("vi-VN").format((order?.order_total ?? 0) + (order?.shippingPrice ?? 0) - (order?.discountAmount ?? 0))} đ
                 </span>
             </div>
             <Modal

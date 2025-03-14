@@ -2,7 +2,7 @@
 
 import { useCurrentApp } from "@/context/app.context";
 import { sendRequest } from "@/utils/api";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
 import Link from "next/link"
 import { useEffect, useState } from "react";
 
@@ -11,16 +11,25 @@ const TableHistoryOrder = () => {
 
     const { user } = useCurrentApp();
     const [orders, setOrders] = useState<IHistory[] | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if (!user?.id) return;
         const fetchHistoryOrder = async () => {
-            const res = await sendRequest<IBackendRes<IHistory[]>>({
-                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order/${user?.id}`,
-                method: "GET"
-            });
-            if (res?.data) {
-                setOrders(res.data);
+            setIsLoading(true);
+            try {
+                const res = await sendRequest<IBackendRes<IHistory[]>>({
+                    url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order/${user?.id}`,
+                    method: "GET"
+                });
+                if (res?.data) {
+                    setOrders(res.data);
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy lịch sử đơn hàng:", error);
+                setOrders([]);
+            } finally {
+                setIsLoading(false);
             }
         }
         fetchHistoryOrder();
@@ -34,10 +43,18 @@ const TableHistoryOrder = () => {
         4: "Đã hủy"
     };
     const getStatusLabel = (status: number) => orderStatusMap[status] || "Không xác định";
-    if (orders === null) return null;
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[300px]">
+                <Spin size="large">
+                    <span className="text-gray-600">Loading...</span>
+                </Spin>
+            </div>
+        );
+    }
     return (
         <div className="py-[20px] ] px-[10px]">
-            {orders.length > 0 ? (
+            {orders && orders.length > 0 ? (
                 <table className="table-auto border-collapse w-full text-[15px]">
                     <thead>
                         <tr>
@@ -57,7 +74,7 @@ const TableHistoryOrder = () => {
                                     {new Date(order.createdAt).toLocaleString()}
                                 </td>
                                 <td className="p-[10px] text-center text-price-special font-semibold border-b border-solid border-[#ddd]">
-                                    {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice)} đ
+                                    {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice - order.discountAmount)} đ
                                 </td>
                                 <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
                                     {order.id_payment?.name || "Không xác định"}
