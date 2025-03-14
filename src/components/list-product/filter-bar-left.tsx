@@ -102,7 +102,6 @@ export default function FilterBarLeft({
             />
           </div>
         </div>
-
         <button
           type="button"
           className="bg-[#C92127] text-white w-full mt-4 py-2 rounded-lg text-caption"
