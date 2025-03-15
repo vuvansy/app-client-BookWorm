@@ -108,7 +108,6 @@ const CategoryById = () => {
     fetchBooks();
   }, [fetchBooks]);
 
- 
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedGenres, selectedAuthors, filters]);
@@ -128,19 +127,12 @@ const CategoryById = () => {
 
   const handleAuthorChange = (newSelectedAuthors: string[]) => {
     setSelectedAuthors(newSelectedAuthors);
-    setCurrentPage(1); 
-    const params = new URLSearchParams(searchParams);
-    if (newSelectedAuthors.length > 0) {
-      params.set("author", newSelectedAuthors.join(","));
-    } else {
-      params.delete("author");
-    }
-    router.push(`?${params.toString()}`);
+    setCurrentPage(1);
   };
 
   const handleGenreChange = (newSelectedGenres: string[]) => {
     setSelectedGenres(newSelectedGenres);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const handleResetFilters = () => {
