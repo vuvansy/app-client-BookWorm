@@ -2,7 +2,7 @@
 
 import { sendRequest } from "@/utils/api";
 import { App, Button, Popconfirm, Spin } from "antd"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image"
 
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -10,6 +10,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import Swal from "sweetalert2";
 import useSWR, { mutate } from "swr";
 import ModalReviews from "./modal-review";
+import { useCurrentApp } from "@/context/app.context";
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) =>
     fetch(...args).then((res) => res.json());
@@ -21,9 +22,11 @@ interface IProps {
 const InfoOrder = (props: IProps) => {
     const { message } = App.useApp();
     const { id } = props;
+    const { user } = useCurrentApp();
 
     const [modalOpen, setModalOpen] = useState<boolean>(false);
-
+    const [selectedOrderDetail, setSelectedOrderDetail] = useState<IOrderDetailTable | null>(null);
+    const [reviewedItems, setReviewedItems] = useState<string[]>([]);
     // Lấy thông tin đơn hàng
     const { data: orderData, error: orderError, isLoading: orderLoading } = useSWR<IBackendRes<IOrder>>(
         id ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order-id/${id}` : null,
@@ -36,6 +39,18 @@ const InfoOrder = (props: IProps) => {
         fetcher
     );
 
+    const { data: reviewedData, error: reviewedError } = useSWR<IBackendRes<[]>>(
+        user?.id ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/review/${user?.id}` : null,
+        fetcher
+    );
+
+    useEffect(() => {
+        if (reviewedData?.data) {
+            const reviewedIds = reviewedData.data.map((item: any) => item);
+            setReviewedItems(reviewedIds);
+        }
+    }, [reviewedData]);
+    
     if (orderError || orderDetailError) return <div>Lỗi tải dữ liệu</div>;
 
     if (orderLoading || orderDetailLoading) {
@@ -53,7 +68,7 @@ const InfoOrder = (props: IProps) => {
     const order = orderData.data;
     const orderDetails = orderDetailData.data;
 
-
+    // console.log(orderDetails);
     const handleCancelOrder = async () => {
         if (!order) return;
 
@@ -87,9 +102,14 @@ const InfoOrder = (props: IProps) => {
         }
     };
 
-    const showModal = () => {
+    const handleOpenModal = (orderDetail: IOrderDetailTable) => {
+        setSelectedOrderDetail(orderDetail);
         setModalOpen(true);
-        document.body.classList.add("modal-open"); // Giữ cuộn trang
+        document.body.classList.add("modal-open"); 
+    };
+
+    const markAsReviewed = (id_order_detail: string) => {
+        setReviewedItems((prev) => [...prev, id_order_detail]);
     };
 
 
@@ -113,7 +133,6 @@ const InfoOrder = (props: IProps) => {
     const address = typeof order?.address === "string" ? JSON.parse(order.address) : order?.address;
     return (
         <>
-            <h2 className="text-sub-heading-bold py-[8px] border-b border-[#ced4da] uppercase">Chi tiết đơn hàng</h2>
             <div className="py-[10px] text-caption border-b border-[#ced4da]">
                 <h3 className="text-center text-body-bold py-[10px] uppercase">Thông tin khách hàng</h3>
                 <div className="flex gap-2 mb-[8px]">
@@ -207,12 +226,16 @@ const InfoOrder = (props: IProps) => {
                                 </td>
                                 <td className="text-center">
                                     {order && order.status === 3 ? (
-                                        <button
-                                            className="bg-red1 text-white py-[10px] px-[16px] rounded-lg"
-                                            onClick={showModal}
-                                        >
-                                            Đánh giá
-                                        </button>
+                                        reviewedItems.includes(item._id) ? (
+                                            <span className="text-gray-500 font-semibold">Đã đánh giá</span>
+                                        ) : (
+                                            <button
+                                                className="bg-red1 text-white py-[10px] px-[16px] rounded-lg"
+                                                onClick={() => handleOpenModal(item)}
+                                            >
+                                                Đánh giá
+                                            </button>
+                                        )
                                     ) : (
                                         <Popconfirm
                                             placement="topRight"
@@ -249,6 +272,9 @@ const InfoOrder = (props: IProps) => {
             <ModalReviews
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
+                orderDetail={selectedOrderDetail}
+                user={user}
+                markAsReviewed={markAsReviewed}
             />
         </>
     )

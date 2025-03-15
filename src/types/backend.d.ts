@@ -207,4 +207,13 @@ declare global {
         deletedAt?: Date | null;
     }
 
+    interface IReview {
+        comment: string;
+        rating: number;
+        id_user: string;
+        id_order_detail: string;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }
+
 }
