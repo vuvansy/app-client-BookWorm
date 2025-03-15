@@ -3,12 +3,11 @@ import Link from "next/link";
 import { ConfigProvider, Rate } from "antd";
 
 const BoxProduct = (props: IBook) => {
-  const { _id, image, name, price_new, price_old, rating = 0 } = props;
+  const { _id, image, name, price_new, price_old, rating = 0, quantity } = props;
 
-  const discount =
-    price_new && price_new < price_old
-      ? Math.round(((price_old - price_new) / price_old) * 100)
-      : undefined;
+  const discount = (price_new && price_old && price_new < price_old)
+    ? Math.round(((price_old - price_new) / price_old) * 100)
+    : null;
 
   return (
     <div className="group  w-full sm:max-w-[200px] md:max-w-[232px]">
@@ -38,6 +37,12 @@ const BoxProduct = (props: IBook) => {
                   priority
                 />
               </Link>
+              {quantity === 0 && (
+                <div className="absolute top-1/2 left-1/2 w-[150px] bg-red-600 text-white text-md font-bold py-2 text-center shadow-md 
+                rotate-[-25deg] -translate-x-1/2 -translate-y-1/2">
+                  Hết hàng
+                </div>
+              )}
             </div>
           </div>
           <div className="w-full">

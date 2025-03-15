@@ -61,9 +61,11 @@ const ProductDetailPage = async (props: Props) => {
         method: "GET"
     })
     const dataBooksByGenreAPI = resBooksByGenreAPI?.data || null;
-    const discount = currentBook
-        ? Discount(currentBook.price_old ?? 0, currentBook.price_new ?? 0)
-        : 0;
+
+    const discount = (currentBook?.price_new && currentBook?.price_old && currentBook.price_new < currentBook.price_old)
+        ? Math.round(((currentBook.price_old - currentBook.price_new) / currentBook.price_old) * 100)
+        : null;
+    console.log(discount);
 
     return (
         <div className="bg-bg-main px-2 xl:px-0">
@@ -152,8 +154,11 @@ const ProductDetailPage = async (props: Props) => {
                                     <div className="text-caption-light border-r-2 border-gray-300 pr-4 text-yellow-1">
                                         (2 đánh giá)
                                     </div>
-                                    <div className="text-caption-light pl-4">
+                                    <div className="text-caption-light pl-4 border-r-2 border-gray-300 pr-4">
                                         Đã bán {formatNumber(2200)}
+                                    </div>
+                                    <div className="text-caption-light text-[#127daf] pl-4">
+                                        {currentBook?.quantity ? `Còn hàng ` : <span className="text-[#e30e48]">Hết hàng</span>}
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +171,11 @@ const ProductDetailPage = async (props: Props) => {
                                     {new Intl.NumberFormat('vi-VN').format(currentBook?.price_old ?? 0)} đ
                                 </div>
                                 <div className="px-[2px] leading-[22px] rounded-md bg-red1 font-semibold text-info flex items-center justify-center text-white">
-                                    -{discount}%
+                                    {discount !== null && (
+                                        <span className="text-white lg:text-body-bold text-caption-bold">
+                                            -{discount}%
+                                        </span>
+                                    )}
                                 </div>
                             </div>
 
