@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 
 interface CategoryFilterProps {
   genres: IGenre[];
-  onCategoryChange: (id_genre: string) => void; // Thêm prop để thông báo danh mục đã chọn
+  onCategoryChange: (id_genre: string) => void; 
 }
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres, onCategoryChange }) => {
@@ -30,7 +30,6 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres, onCategoryChang
 
   const handleMouseUp = () => setIsDragging(false);
 
-  // Hàm xử lý khi chọn danh mục
   const handleCategorySelect = (id_genre: string) => {
     setSelectedCategory(id_genre);
     onCategoryChange(id_genre);
@@ -70,7 +69,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ genres, onCategoryChang
         {genres.map((genre) => (
           <button
             key={genre._id}
-            onClick={() => handleCategorySelect(genre._id)} // Truyền ID thể loại khi click
+            onClick={() => handleCategorySelect(genre._id)} 
             className={`px-4 py-2 border rounded-lg text-sm transition-all whitespace-nowrap
               ${
                 selectedCategory === genre._id

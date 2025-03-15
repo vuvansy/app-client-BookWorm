@@ -37,7 +37,6 @@ const ListProduct = ({
             ))}
           </div>
 
-          {/* Hiển thị phân trang khi có sản phẩm */}
           <div className="flex justify-center pb-6">
             <Pagination
               className="text-caption"
