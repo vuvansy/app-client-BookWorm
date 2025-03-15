@@ -48,7 +48,7 @@ const BoxProductByType = ({
             page: currentPage,
             limit,
             id_genre: selectedGenre || undefined,
-            sort, // Gửi sort lên backend
+            sort, 
           },
         });
 
@@ -60,7 +60,7 @@ const BoxProductByType = ({
     };
 
     fetchBooks();
-  }, [currentPage, limit, selectedGenre, totalItems, sort]); // Cập nhật dependency array
+  }, [currentPage, limit, selectedGenre, totalItems, sort]);
 
   return (
     <div className="bg-bg-main px-2 pb-[1px] xl:px-0">
@@ -88,7 +88,7 @@ const BoxProductByType = ({
             setCurrentPage(1);
           }}
         />
-        <SortFilter onSortChange={setSort} /> {/* Truyền hàm cập nhật sort */}
+        <SortFilter onSortChange={setSort} /> 
         <ListProductByType
           books={books}
           currentPage={currentPage}

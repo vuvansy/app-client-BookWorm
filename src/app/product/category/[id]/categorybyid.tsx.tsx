@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import FilterBarLeft from "@/components/list-product/filter-bar-left";
 import ListProduct from "@/components/list-product/list-product";
 import { sendRequest } from "@/utils/api";
@@ -9,8 +9,11 @@ const DEFAULT_ITEMS_PER_PAGE = 12;
 
 const CategoryById = () => {
   const params = useParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const idGenre = params?.id || params?.idGenre;
-
+  const [authors, setAuthors] = useState<IAuthor[]>([]);
+  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
   const [products, setProducts] = useState<IBook[]>([]);
   const [genres, setGenres] = useState<IGenre[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -21,10 +24,28 @@ const CategoryById = () => {
     price_min?: number;
     price_max?: number;
   }>({});
+
   const [selectedGenres, setSelectedGenres] = useState<string[]>(() =>
     idGenre ? (Array.isArray(idGenre) ? idGenre : [idGenre]) : []
   );
 
+  // Fetch Authors
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      try {
+        const authorRes = await sendRequest<{ data: IAuthor[] }>({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/author`,
+          method: "GET",
+        });
+        if (authorRes?.data) setAuthors(authorRes.data);
+      } catch (error) {
+        console.error("Lỗi khi fetch tác giả:", error);
+      }
+    };
+    fetchAuthors();
+  }, []);
+
+  // Fetch Genres
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -32,36 +53,27 @@ const CategoryById = () => {
           url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/genre`,
           method: "GET",
         });
-
-        if (genreRes?.data) {
-          setGenres(genreRes.data);
-        }
+        if (genreRes?.data) setGenres(genreRes.data);
       } catch (error) {
         console.error("Lỗi khi fetch thể loại:", error);
       }
     };
-
     fetchGenres();
   }, []);
 
-  const fetchBooks = async (
-    selected: string[],
-    page: number,
-    limit: number,
-    sort: string,
-    filterParams: { price_min?: number; price_max?: number }
-  ) => {
+  // Fetch Books
+  const fetchBooks = useCallback(async () => {
     try {
       const queryParams: Record<string, any> = {
-        page,
-        limit,
+        page: currentPage,
+        limit: itemsPerPage,
         sort,
-        ...filterParams,
+        ...filters,
       };
-
-      if (selected.length > 0) {
-        queryParams.id_genre = selected.join(",");
-      }
+      if (selectedGenres.length > 0)
+        queryParams.id_genre = selectedGenres.join(",");
+      if (selectedAuthors.length > 0)
+        queryParams.authors = selectedAuthors.join(",");
 
       const resBookByIdGenre = await sendRequest<{
         data: IModelPaginate<IBook>;
@@ -73,23 +85,33 @@ const CategoryById = () => {
 
       if (resBookByIdGenre?.data?.result?.length > 0) {
         setProducts(resBookByIdGenre.data.result);
-        setTotalPages(Math.ceil(resBookByIdGenre.data.meta.total / limit) || 1);
+        setTotalPages(
+          Math.ceil(resBookByIdGenre.data.meta.total / itemsPerPage) || 1
+        );
       } else {
-        setProducts([]); // Xóa dữ liệu cũ
-        setTotalPages(0); // Ẩn phân trang
+        setProducts([]);
+        setTotalPages(0);
       }
     } catch (error) {
       console.error("Lỗi khi fetch dữ liệu:", error);
     }
-  };
+  }, [
+    selectedGenres,
+    selectedAuthors,
+    currentPage,
+    itemsPerPage,
+    sort,
+    filters,
+  ]);
 
+  useEffect(() => {
+    fetchBooks();
+  }, [fetchBooks]);
+
+ 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedGenres, itemsPerPage]);
-
-  useEffect(() => {
-    fetchBooks(selectedGenres, currentPage, itemsPerPage, sort, filters);
-  }, [selectedGenres, currentPage, itemsPerPage, sort, filters]);
+  }, [selectedGenres, selectedAuthors, filters]);
 
   useEffect(() => {
     if (idGenre) {
@@ -98,15 +120,36 @@ const CategoryById = () => {
     }
   }, [idGenre]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const authorsFromQuery = params.get("author")?.split(",") || [];
+    setSelectedAuthors(authorsFromQuery);
+  }, [searchParams]);
+
+  const handleAuthorChange = (newSelectedAuthors: string[]) => {
+    setSelectedAuthors(newSelectedAuthors);
+    setCurrentPage(1); 
+    const params = new URLSearchParams(searchParams);
+    if (newSelectedAuthors.length > 0) {
+      params.set("author", newSelectedAuthors.join(","));
+    } else {
+      params.delete("author");
+    }
+    router.push(`?${params.toString()}`);
+  };
+
   const handleGenreChange = (newSelectedGenres: string[]) => {
     setSelectedGenres(newSelectedGenres);
+    setCurrentPage(1); 
   };
 
   const handleResetFilters = () => {
     setSelectedGenres([]);
-    setCurrentPage(1);
+    setSelectedAuthors([]);
     setFilters({});
+    setCurrentPage(1);
   };
+
   const handleApplyFilters = (newFilters: {
     price_min?: number;
     price_max?: number;
@@ -121,8 +164,11 @@ const CategoryById = () => {
         <div className="w-full lg:w-[24%]">
           <FilterBarLeft
             genres={genres}
+            authors={authors}
             selectedGenres={selectedGenres}
+            selectedAuthors={selectedAuthors}
             onGenreChange={handleGenreChange}
+            onAuthorChange={handleAuthorChange}
             onResetFilters={handleResetFilters}
             onApplyFilters={handleApplyFilters}
           />
