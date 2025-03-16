@@ -107,6 +107,7 @@ declare global {
     }
 
     interface IOrder {
+        _id: string;
         fullName: string;
         phone: string;
         email?: string;
@@ -115,16 +116,20 @@ declare global {
         products: ICart[];
         shippingPrice: number;
         discountAmount: number;
+        order_total: number;
         isPaid: boolean;
+        status: number;
         id_user?: string;
         id_delivery?: string;
         id_payment?: string;
         id_coupons?: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }
 
     interface IHistory {
         _id: string;
-        fullname: string;
+        fullName: string;
         phone: string;
         email: string;
         address: string;
@@ -141,17 +146,24 @@ declare global {
         id_delivery: IDelivery;
         id_coupons?: string;
         deleted: boolean;
-        createdAt: string;
-        updatedAt: string;
+        createdAt: Date;
+        updatedAt: Date;
     }
 
 
-    export interface IOrderDetail {
+    interface IOrderDetail {
         _id?: string;
         quantity: number;
         price: string;
         id_book: string;
         id_order: string;
+    }
+    interface IOrderDetailTable {
+        _id: string;
+        quantity: number;
+        price: string;
+        id_book: IBook;
+        id_order: IOrder;
     }
 
 

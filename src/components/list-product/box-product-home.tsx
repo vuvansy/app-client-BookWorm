@@ -14,18 +14,18 @@ import { useRouter } from "next/navigation";
 
 
 const BoxProductHome = (props: IBook) => {
-  const { _id, image, name, price_old, price_new } = props;
+  const { _id, image, name, price_old, price_new, quantity } = props;
   const dispatch = useDispatch();
   const { message, notification } = App.useApp();
   const router = useRouter();
   const cart = useSelector((state: RootState) => state.cart);
 
-  const discount =
-    price_new && price_new < price_old
-      ? Math.round(((price_old - price_new) / price_old) * 100)
-      : undefined;
+  const discount = (price_new && price_old && price_new < price_old)
+    ? Math.round(((price_old - price_new) / price_old) * 100)
+    : null;
 
   const handleAddToCart = (currentBook: IBook) => {
+    if (quantity === 0) return;
     const cartItem = cart.items.find((item) => item._id === currentBook._id);
     const maxQuantity = typeof currentBook.quantity === "number" ? currentBook.quantity : 0;
     const currentCartQuantity = cartItem?.quantity ?? 0;
@@ -54,6 +54,7 @@ const BoxProductHome = (props: IBook) => {
   };
 
   const handleBuyNow = (currentBook: IBook) => {
+    if (quantity === 0) return;
     dispatch(addToCart({ item: currentBook, quantity: 1 }));
     message.success("Thêm sản phẩm vào giỏ hàng thành công.");
     router.push('/cart');
@@ -63,9 +64,11 @@ const BoxProductHome = (props: IBook) => {
       <div className="relative bg-white group-hover:shadow-custom  overflow-hidden">
         {discount && (
           <div className="lg:w-[44px] w-[40px] lg:h-[44px] h-[40px] absolute z-10 top-[6px] left-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
-            <span className="text-white lg:text-body-bold text-caption-bold">
-              -{discount}%
-            </span>
+            {discount !== null && (
+              <span className="text-white lg:text-body-bold text-caption-bold">
+                -{discount}%
+              </span>
+            )}
           </div>
         )}
         <div className="absolute z-10 top-[6px] right-[6px] opacity-0 transition-all ease-in-out duration-1000 group-hover:opacity-100 flex flex-col gap-[4px]">
@@ -79,7 +82,7 @@ const BoxProductHome = (props: IBook) => {
           </div>
         </div>
         <div className="p-3 flex flex-col justify-center items-center">
-          <div className="w-[190px] h-[190px] mb-2">
+          <div className="w-[190px] h-[190px] mb-2 overflow-hidden">
             <div className="relative">
               <Link href={`/product/${_id}`}>
                 <Image
@@ -96,6 +99,12 @@ const BoxProductHome = (props: IBook) => {
                   priority
                 />
               </Link>
+              {quantity === 0 && (
+                <div className="absolute top-1/2 left-1/2 w-[150px] bg-red-600 text-white text-md font-bold py-2 text-center shadow-md 
+                rotate-[-25deg] -translate-x-1/2 -translate-y-1/2">
+                  Hết hàng
+                </div>
+              )}
             </div>
           </div>
           <div className="w-full">

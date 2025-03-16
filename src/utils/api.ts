@@ -14,7 +14,13 @@ export const sendRequest = async <T>(props: IRequest) => {
     const options: any = {
         method: method,
         // by default setting the content-type to be json type
-        headers: new Headers({ 'content-type': 'application/json', ...headers }),
+        headers: new Headers({
+            'content-type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            ...headers
+        }),
         body: body ? JSON.stringify(body) : null,
         ...nextOption
     };

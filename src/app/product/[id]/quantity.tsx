@@ -26,6 +26,8 @@ const QuantitySelector = (props: IProps) => {
     const [currentQuantity, setCurrentQuantity] = useState<number>(1);
     const { message, notification } = App.useApp();
     const router = useRouter();
+    const isOutOfStock = currentBook?.quantity === 0;
+
     const handleChangeButton = (type: UserAction) => {
         if (type === 'MINUS') {
             if (currentQuantity - 1 <= 0) return;
@@ -102,8 +104,12 @@ const QuantitySelector = (props: IProps) => {
             <div className=' flex items-center gap-x-8 my-4'>
                 <div className='text-sub-heading'>Số lượng :</div>
                 <div className="h-[32px] border border-gray-400 flex items-center justify-evenly rounded">
-                    <div onClick={() => handleChangeButton('MINUS')} className='text-gray-1 cursor-pointer pl-2 pr-4'>
+                    <div
+                        onClick={() => !isOutOfStock && handleChangeButton('MINUS')}
+                        className={`cursor-pointer pl-2 pr-4 ${isOutOfStock ? 'text-gray-400' : 'text-gray-800'}`}
+                    >
                         <FaMinus />
+
                     </div>
                     <input
                         onChange={(event) => handleChangeInput(event.target.value)}
@@ -111,21 +117,29 @@ const QuantitySelector = (props: IProps) => {
                         value={currentQuantity === 0 ? "" : currentQuantity}
                         className='w-[3em] text-[#0D0E0F] font-bold text-[1.2em] h-full text-center outline-none'
                     />
-                    <div onClick={() => handleChangeButton('PLUS')} className='text-gray-1 cursor-pointer pr-2 pl-4'>
+                    <div
+                        onClick={() => !isOutOfStock && handleChangeButton('PLUS')}
+                        className={`cursor-pointer pr-2 pl-4 ${isOutOfStock ? 'text-gray-400' : 'text-gray-800'}`}
+                    >
                         <FaPlus />
                     </div>
                 </div>
-            </div>
+            </div >
             <div className='pb-4 flex flex-col md:flex-row gap-y-2 gap-x-2'>
                 <button
-                    onClick={() => currentBook && handleBuyNow(currentBook, currentQuantity)}
-                    className='w-full md:w-[220px] h-[45px] rounded-md bg-red1 text-white text-body-bold flex items-center justify-center gap-x-2'>
+                    onClick={() => !isOutOfStock && currentBook && handleBuyNow(currentBook, currentQuantity)}
+                    className={`w-full md:w-[220px] h-[45px] rounded-md text-body-bold flex items-center justify-center gap-x-2 transition-opacity
+                    ${isOutOfStock ? 'bg-red1 text-white opacity-70 cursor-not-allowed' : 'bg-red1 text-white opacity-100'}`}
+                >
                     <FaShoppingCart className='w-[25px] h-[25px]' />
                     Mua ngay
                 </button>
+
                 <button
-                    onClick={() => currentBook && handleAddToCart(currentBook, currentQuantity)}
-                    className='w-full md:w-[220px] h-[45px] rounded-md border border-red1 text-red1 text-body-bold flex items-center justify-center gap-x-2'>
+                    onClick={() => !isOutOfStock && currentBook && handleAddToCart(currentBook, currentQuantity)}
+                    className={`w-full md:w-[220px] h-[45px] rounded-md border text-body-bold flex items-center justify-center gap-x-2 transition-opacity
+                    ${isOutOfStock ? 'border-red1 text-red1 opacity-70 cursor-not-allowed' : 'border-red1 text-red1 opacity-100'}`}
+                >
                     <FaCartPlus className='w-[25px] h-[25px]' />
                     Thêm vào giỏ hàng
                 </button>
