@@ -216,4 +216,19 @@ declare global {
         updatedAt?: Date;
     }
 
+    interface ICoupon {
+        _id: string,
+        code: string,
+        value: number,
+        max_value: number,
+        min_total: number,
+        description: string,
+        quantity: number,
+        status: boolean | string;
+        start_date: Date,
+        end_date: Date,
+        createdAt?: Date;
+        updatedAt?: Date;
+    }
+
 }
