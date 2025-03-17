@@ -1,31 +1,45 @@
 'use client'
-import { Modal } from 'antd';
-import React, { useState } from 'react'
+import { sendRequest } from '@/utils/api';
+import { App, Modal } from 'antd';
+import React, { useEffect, useState } from 'react'
 import { GrFormNext } from "react-icons/gr";
 import { PiSealPercentBold } from 'react-icons/pi';
 
 
-interface Coupon {
-    name: string;
-    value: string;
-    min: number;
-    max: number;
-    create_date: string;
-    end_date: string;
-}
-
-const coupons = [
-    { name: "Mã giảm 12%", value: "12%", min: 129000, max: 30000, create_date: "01/01/2025", end_date: "21/02/2025" },
-    { name: "Mã giảm 20%", value: "20%", min: 200000, max: 50000, create_date: "02/01/2025", end_date: "22/02/2025" },
-    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "03/01/2025", end_date: "23/02/2025" },
-    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "04/01/2025", end_date: "23/02/2025" },
-    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "05/01/2025", end_date: "23/02/2025" },
-    { name: "Mã giảm 20% - nhà sản xuất abc", value: "20%", min: 200000, max: 50000, create_date: "06/01/2025", end_date: "23/02/2025" },
-
-];
-
 const MoreCoupon = () => {
+    const { message, modal, notification } = App.useApp();
+    const [coupons, setCoupons] = useState<ICoupon[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    const getLatestCoupons = (coupons: ICoupon[]): ICoupon[] => {
+        return coupons
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            .slice(0, 4);
+    };
+    const latestCoupons = getLatestCoupons(coupons);
     const [isOpen, setIsOpen] = useState(false);
+    useEffect(() => {
+        const fetchCoupons = async () => {
+            try {
+                setLoading(true);
+                const res = await sendRequest<IBackendRes<ICoupon[]>>({
+                    url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/coupon`,
+                    method: 'GET',
+                });
+
+                if (res.data) {
+                    setCoupons(res.data);
+                }
+            } catch (error) {
+                message.error('Lỗi khi lấy dữ liệu mã giảm giá');
+                console.log('Error fetching coupons:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCoupons();
+    }, []);
 
     const showModal = () => {
 
@@ -67,12 +81,12 @@ const MoreCoupon = () => {
                                     <PiSealPercentBold className="text-[40px] text-white" />
                                 </div>
                                 <div className='py-1 md:py-0'>
-                                    <h3 className="uppercase font-semibold truncate w-[200px] md:w-[300px]">{coupon.name}</h3>
+                                    <h3 className="uppercase font-semibold truncate w-[200px] md:w-[300px]">Mã Giảm {coupon.value}%</h3>
                                     <div className='text-caption text-price-old pt-1 pb-4'>
-                                        Tối đa {formatNumber(coupon.max)} cho đơn hàng từ {formatNumber(coupon.min)}
+                                        {coupon.description}
                                     </div>
                                     <div className='text-caption text-blue-text'>
-                                        HSD: {coupon.end_date}
+                                        HSD: {coupon.end_date ? new Date(coupon.end_date).toLocaleDateString() : 'N/A'}
                                     </div>
                                 </div>
                             </div>
