@@ -35,6 +35,8 @@ const InfoCheckout = () => {
     const router = useRouter();
     const { message } = App.useApp();
     const [cities, setCities] = useState<City[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
     const [clientTotal, setClientTotal] = useState(0);
@@ -239,6 +241,10 @@ const InfoCheckout = () => {
 
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        if (isLoading) return;
+
+
+        setIsLoading(true);
         const selectedCity = cities.find(city => city.Id === values.city);
         const selectedDistrict = districts.find(district => district.Id === values.district);
         const selectedWard = wards.find(ward => ward.Id === values.ward);
@@ -268,23 +274,84 @@ const InfoCheckout = () => {
             id_coupons: appliedCoupon?._id ?? null,
         };
 
+        // try {
+        //     const order = await createOrder(formattedData);
+        //     const orderDetails = cartItems.map((item) => ({
+        //         quantity: item.quantity,
+        //         price: item.detail.price_new,
+        //         id_book: item._id,
+        //         id_order: order?.data?._id
+        //     }));
+        //     // console.log("Sending order details:", orderDetails);
+        //     await createOrderDetail(orderDetails);
+        //     message.success("Đặt hàng thành công!");
+        //     dispatch(clearCart());
+        //     router.push("/order");
+        // } catch (error) {
+        //     console.error(error);
+        //     alert("Đã có lỗi xảy ra.");
+        // } finally {
+        //     setIsLoading(false);
+        // }
+
         try {
-            const order = await createOrder(formattedData);
-            const orderDetails = cartItems.map((item) => ({
-                quantity: item.quantity,
-                price: item.detail.price_new,
-                id_book: item._id,
-                id_order: order?.data?._id
-            }));
-            // console.log("Sending order details:", orderDetails);
-            await createOrderDetail(orderDetails);
-            message.success("Đặt hàng thành công!");
-            dispatch(clearCart());
-            router.push("/order");
+            const selectedPaymentMethod = listPayment.find(method => method.value === selectedPayment);
+            //COD
+            if (selectedPaymentMethod?.value === "67d1660613d2310d45c29ffb") { // COD
+                const order = await createOrder(formattedData);
+                if (!order?.data?._id) throw new Error("Không thể tạo đơn hàng.");
+                const orderDetails = cartItems.map((item) => ({
+                    quantity: item.quantity,
+                    price: item.detail.price_new,
+                    id_book: item._id,
+                    id_order: order?.data?._id
+                }));
+                await createOrderDetail(orderDetails);
+                message.success("Đặt hàng thành công!");
+                dispatch(clearCart());
+                router.push("/order");
+            } else if (selectedPaymentMethod?.value === "67d1663713d2310d45c29ffe") {
+                // VNPAY
+                const order = await createOrder(formattedData);
+                const orderId = order?.data?._id;
+                if (!orderId) throw new Error("Không thể tạo đơn hàng.");
+                const orderDetails = cartItems.map((item) => ({
+                    quantity: item.quantity,
+                    price: item.detail.price_new,
+                    id_book: item._id,
+                    id_order: order?.data?._id
+                }));
+                await createOrderDetail(orderDetails);
+
+
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/vnpay/create_payment_url`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        amount: cartItems.reduce((sum, item) => {
+                            return sum + (item.detail.price_new as number) * item.quantity;
+                        }, 0) + shippingPrice - (appliedCoupon?.discount ?? 0),
+                        orderId: orderId,
+                        bankCode: "NCB",
+                        language: "vn",
+                    }),
+                });
+                const data = await response.json();
+                if (data.paymentUrl) {
+                    dispatch(clearCart());
+                    window.location.href = data.paymentUrl;
+                } else {
+                    throw new Error("Lỗi khi tạo thanh toán VNPAY.");
+                }
+            }
         } catch (error) {
             console.error(error);
             alert("Đã có lỗi xảy ra.");
+        } finally {
+            setIsLoading(false);
         }
+
+
     };
 
     // Create order
@@ -528,8 +595,12 @@ const InfoCheckout = () => {
                         <hr className="border-dashed border border-bg-text" />
                         <button
                             type="submit"
-                            className="flex justify-center items-center mt-[20px] bg-red1 text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]">
-                            Xác Nhận Thanh Toán
+                            disabled={isLoading}
+                            className={`flex justify-center items-center mt-[20px] 
+                             ${isLoading ? "opacity-70 bg-red1 cursor-not-allowed" : "bg-red1"} 
+                             text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]`}
+                        >
+                            {isLoading ? "Đang xử lý..." : "Xác Nhận Thanh Toán"}
                         </button>
                     </div>
                 </div>

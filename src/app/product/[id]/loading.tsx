@@ -1,6 +1,7 @@
+"use client";
 import { Col, Row, Skeleton } from 'antd';
 
-const BookLoader = () => {
+const Loading = () => {
 
     return (
         <div className='container' style={{ background: '#efefef', padding: "20px 0" }}>
@@ -43,4 +44,4 @@ const BookLoader = () => {
     );
 };
 
-export default BookLoader;
+export default Loading;
