@@ -9,7 +9,6 @@ const DEFAULT_ITEMS_PER_PAGE = 12;
 
 const CategoryById = () => {
   const params = useParams();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const idGenre = params?.id || params?.idGenre;
   const [authors, setAuthors] = useState<IAuthor[]>([]);
