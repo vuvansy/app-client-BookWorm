@@ -124,19 +124,32 @@ export default function FilterBarLeft({
           <p className="text-body1 mb-5">Khoảng giá</p>
           <div className="flex gap-[17px] w-full justify-center items-center max-h-[38px]">
             <InputNumber<number>
-              placeholder="đ Từ"
+              placeholder="Từ"
               value={priceMin}
               onChange={(value) => setPriceMin(value ?? undefined)}
               min={0}
+              style={{ width: "100%" }}
+              formatter={(value) =>
+                value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
+              }
+              parser={(value) => (value ? parseInt(value.replace(/,/g, ""), 10) : 0)}
+              addonAfter="đ"
             />
             <div className="h-[1px] w-4 bg-gray-400"></div>
             <InputNumber<number>
-              placeholder="đ Đến"
+              placeholder="Đến"
               value={priceMax}
               onChange={(value) => setPriceMax(value ?? undefined)}
               min={0}
+              style={{ width: "100%" }}
+              formatter={(value) =>
+                value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
+              }
+              parser={(value) => (value ? parseInt(value.replace(/,/g, ""), 10) : 0)}
+              addonAfter="đ"
             />
           </div>
+
         </div>
         <button
           type="button"
