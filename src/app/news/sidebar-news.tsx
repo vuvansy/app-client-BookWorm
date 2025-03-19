@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AiFillCaretRight } from "react-icons/ai";
+import Image from "next/image";
 
 function Sidebar() {
   const posts = [
@@ -51,52 +52,72 @@ function Sidebar() {
     },
   ];
   return (
-    <div>
-      <aside className="w-[300px] px-[10px] pt-[15px]  sticky top-0 ">
-        <h2 className="text-body-bold h-[22px]">Danh mục tin</h2>
-        <ul className="text-caption">
-          <li className="flex h-[42px] items-center "><AiFillCaretRight /><Link href={"/"} className="pl-[10px]">
-              Giới thiệu</Link>
-          </li>
-          <li className="flex h-[42px] items-center"><AiFillCaretRight /><Link href={"/"} className="pl-[10px]">
-              Tiếp thị liên kết</Link>
-          </li>
-          <li className="flex h-[42px] items-center"><AiFillCaretRight /><Link href={"/"} className="pl-[10px]">
-              Hỗ trợ</Link>
-          </li>
-          <li className="flex h-[42px] items-center"><AiFillCaretRight /><Link href={"/"} className="pl-[10px]">
-              Blog</Link>
-          </li>
-          <li className="flex h-[42px] items-center"><AiFillCaretRight /><Link href={"/"} className="pl-[10px]">
-              Tuyển dụng</Link>
-          </li>
-          <li className="flex h-[42px] items-center"><AiFillCaretRight /><Link href={"/"} className="pl-[10px]">
-              Review sách</Link>
-          </li>
-        </ul>
-        <h2 className="text-body-bold mt-5 h-[22px]">Tin nổi bật</h2>
-        <ul className="text-caption text-[#333333]">
-          {posts.map((item) => (
-            <li
-              key={item.id}
-              className="flex space-x-[15px] min-h-[103px] py-[10px] border-b-[1px] border-[#EBEBEB]"
-            >
-              <div className="relative w-[90px] h-[83px] ">
-                <Link href={`/post/${item.id}`}>
-                  <img  src={item.image} alt={item.title} className="rounded object-cover"/>
-                </Link>
-              </div>
-              <div className="flex w-[180px] flex-col ">
-                <Link href={`/post/${item.id}`}>
-                  <h3 className="line-clamp-3">{item.title}</h3>
-                </Link>
-                <span className="">{item.date}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </aside>
-    </div>
+    <aside className="w-full px-[10px] pt-[15px] md:sticky md:top-0">
+      <h2 className="text-body-bold h-[22px]">Danh mục tin</h2>
+      <ul className=" hidden sm:block  text-caption">
+        <li className="flex h-[42px] items-center ">
+          <AiFillCaretRight />
+          <Link href={"/"} className="pl-[10px]">
+            Giới thiệu
+          </Link>
+        </li>
+        <li className="flex h-[42px] items-center">
+          <AiFillCaretRight />
+          <Link href={"/"} className="pl-[10px]">
+            Tiếp thị liên kết
+          </Link>
+        </li>
+        <li className="flex h-[42px] items-center">
+          <AiFillCaretRight />
+          <Link href={"/"} className="pl-[10px]">
+            Hỗ trợ
+          </Link>
+        </li>
+        <li className="flex h-[42px] items-center">
+          <AiFillCaretRight />
+          <Link href={"/"} className="pl-[10px]">
+            Blog
+          </Link>
+        </li>
+        <li className="flex h-[42px] items-center">
+          <AiFillCaretRight />
+          <Link href={"/"} className="pl-[10px]">
+            Tuyển dụng
+          </Link>
+        </li>
+        <li className="flex h-[42px] items-center">
+          <AiFillCaretRight />
+          <Link href={"/"} className="pl-[10px]">
+            Review sách
+          </Link>
+        </li>
+      </ul>
+      <h2 className="text-body-bold mt-5 h-[22px]">Tin nổi bật</h2>
+      <div className="text-[#333333]">
+        {posts.map((item) => (
+          <div
+                   key={item.id}
+                   className="flex flex-row items-start space-x-4 py-4 border-b border-gray-200"
+                 >
+                   <div className="flex-none w-[180px] h-[100px] sm:w-[200px] sm:h-[120px] md:w-[88px] md:h-[58px] shrink-0 relative">
+                     <Link href="">
+                       <Image
+                         src={item.image}
+                         alt={item.title}
+                         fill
+                         className="object-cover rounded"
+                       />
+                     </Link>
+                   </div>
+                   <div className="flex-1">
+                     <Link href="">
+                       <h3 className="text-caption-bold md:text-caption md:font-normal line-clamp-3 ">{item.title}</h3>
+                     </Link>
+                   </div>
+                 </div>
+        ))}
+      </div>
+    </aside>
   );
 }
 
