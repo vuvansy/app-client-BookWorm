@@ -35,8 +35,15 @@ const Home = () => {
     isLoading: bookLoading,
   } = useSWR("http://localhost:4000/api/v1/book/new?limit=10", fetcher);
 
-  if (genreError || bookError || flsError) return <div>Lỗi tải dữ liệu</div>;
-  if (genreLoading || bookLoading || flsLoading)
+  const {
+    data: dataBookTrend,
+    error: bookTrendError,
+    isLoading: bookTrendLoading,
+  } = useSWR("http://localhost:4000/api/v1/book/trending?limit=10", fetcher);
+
+  if (genreError || bookError || flsError || bookTrendError)
+    return <div>Lỗi tải dữ liệu</div>;
+  if (genreLoading || bookLoading || flsLoading || bookTrendLoading)
     return (
       <div className="flex items-center justify-center min-h-[100px]">
         <Spin size="large">
@@ -148,7 +155,7 @@ const Home = () => {
             Sản Phẩm Mới Ra Mắt
           </p>
         </div>
-        <ListProductHome dataBookNew={dataBookNew?.data} />
+        <ListProductHome dataBooks={dataBookNew?.data} link="/product/by/new" />
       </div>
       <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">
@@ -157,7 +164,10 @@ const Home = () => {
             Xu Hướng Mỗi Ngày
           </p>
         </div>
-        <ListProductHome dataBookNew={dataBookNew?.data} />
+        <ListProductHome
+          dataBooks={dataBookTrend?.data}
+          link="/product/by/trending"
+        />
       </div>
       <div className="container  bg-white rounded-lg overflow-hidden">
         <div className="flex items-center gap-x-3  w-full max-w-full whitespace-nowrap">

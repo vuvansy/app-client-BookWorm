@@ -230,5 +230,9 @@ declare global {
         createdAt?: Date;
         updatedAt?: Date;
     }
-
+    interface IBookLike{
+        _id:string;
+        id_user:string;
+        id_book:IBook;
+    }
 }
