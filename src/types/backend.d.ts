@@ -231,4 +231,11 @@ declare global {
         updatedAt?: Date;
     }
 
+    interface IBookLike {
+        id_user: string;
+        id_book: string;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }
+
 }

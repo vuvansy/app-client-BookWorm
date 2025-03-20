@@ -332,7 +332,7 @@ const InfoCheckout = () => {
                             return sum + (item.detail.price_new as number) * item.quantity;
                         }, 0) + shippingPrice - (appliedCoupon?.discount ?? 0),
                         orderId: orderId,
-                        bankCode: "NCB",
+                        bankCode: "",
                         language: "vn",
                     }),
                 });
