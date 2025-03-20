@@ -83,7 +83,34 @@ const CategoryById = () => {
       });
 
       if (resBookByIdGenre?.data?.result?.length > 0) {
-        setProducts(resBookByIdGenre.data.result);
+        const books = resBookByIdGenre.data.result;
+        const bookReviewsPromises = books.map(async (book) => {
+          try {
+            const reviewRes = await sendRequest<{ data: { rating: number }[] }>(
+              {
+                url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/review/book/${book._id}`,
+                method: "GET",
+              }
+            );
+            const ratings = reviewRes.data || [];
+            const avgRating =
+              ratings.length > 0
+                ? ratings.reduce((acc, cur) => acc + cur.rating, 0) /
+                  ratings.length
+                : 0;
+
+            return { ...book, rating: avgRating };
+          } catch (error) {
+            console.error(
+              `Lỗi khi fetch đánh giá cho sách ${book._id}:`,
+              error
+            );
+            return { ...book, rating: 0 }; 
+          }
+        });
+
+        const booksWithRatings = await Promise.all(bookReviewsPromises);
+        setProducts(booksWithRatings);
         setTotalPages(
           Math.ceil(resBookByIdGenre.data.meta.total / itemsPerPage) || 1
         );

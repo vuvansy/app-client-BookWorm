@@ -13,12 +13,14 @@ interface Props {
   totalItems: number;
   limit: number;
   genres: IGenre[];
+  type: string;
 }
 const BoxProductByType = ({
   initialData,
   totalItems,
   limit,
   genres,
+  type,
 }: Props) => {
   const [books, setBooks] = useState<IBook[]>(initialData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,14 +43,14 @@ const BoxProductByType = ({
 
       try {
         const res = await sendRequest<IBackendRes<IModelPaginate<IBook>>>({
-          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/new`,
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${type}`,
           method: "GET",
           queryParams: {
             all: true,
             page: currentPage,
             limit,
             id_genre: selectedGenre || undefined,
-            sort, 
+            sort,
           },
         });
 
@@ -60,7 +62,7 @@ const BoxProductByType = ({
     };
 
     fetchBooks();
-  }, [currentPage, limit, selectedGenre, totalItems, sort]);
+  }, [currentPage, limit, selectedGenre, totalItems, sort, type]);
 
   return (
     <div className="bg-bg-main px-2 pb-[1px] xl:px-0">
@@ -68,7 +70,13 @@ const BoxProductByType = ({
         <Breadcrumb
           items={[
             { title: "Trang Chủ" },
-            { title: <div className="capitalize">Sản Phẩm Mới Ra Mắt</div> },
+            {
+              title: (
+                <div className="capitalize">
+                  {type === "new" ? "Sản Phẩm Mới Ra Mắt" : "Sản Phẩm Xu Hướng"}
+                </div>
+              ),
+            },
           ]}
         />
       </div>
@@ -77,7 +85,7 @@ const BoxProductByType = ({
         <div className="flex bg-[#FCDDEF] lg:py-4 py-2 pr-4 pl-4">
           <FaBook className="text-[#C92127] text-[25px] lg:text-[32px]" />
           <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127]">
-            Sản Phẩm Mới Ra Mắt
+            {type === "new" ? "Sản Phẩm Mới Ra Mắt" : "Sản Phẩm Xu Hướng"}
           </p>
         </div>
         <Divider className="!my-0" />
@@ -88,7 +96,7 @@ const BoxProductByType = ({
             setCurrentPage(1);
           }}
         />
-        <SortFilter onSortChange={setSort} /> 
+        <SortFilter onSortChange={setSort} />
         <ListProductByType
           books={books}
           currentPage={currentPage}

@@ -3,9 +3,12 @@ import BoxProductByType from "./box-productbytype";
 
 const ITEMS_PER_PAGE = 15;
 const DEFAULT_SORT = "name";
-const Page = async () => {
+
+const Page = async ({ params }: { params: { type: string } }) => {
+  const { type } = params; 
+
   const res = await sendRequest<IBackendRes<IModelPaginate<IBook>>>({
-    url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/new`,
+    url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${type}`,
     method: "GET",
     queryParams: {
       all: true,
@@ -26,6 +29,7 @@ const Page = async () => {
       totalItems={res?.data?.meta?.total || 0}
       limit={ITEMS_PER_PAGE}
       genres={genreRes?.data || []}
+      type={type} 
     />
   );
 };

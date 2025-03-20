@@ -1,6 +1,8 @@
+import Image from "next/image";
+
 function MaincontentAbout() {
   return (
-    <div className="w-[70%]">
+    <div className="">
       <h1 className="text-heading3-bold text-[#333333]">Về chúng tôi</h1>
       <p className="text-info text-[#888888]">29/11/2019</p>
       <div className="pt-[15px]">
@@ -25,10 +27,10 @@ function MaincontentAbout() {
         <p className="pt-4 leading-5 text-[16px]">
           18 năm, từ một công ty nhỏ thành lập bởi một nhóm tri thức trẻ Hà Nội,
           BookWorm hiện đã phát triển mở rộng thương hiệu chính là BookWorm-
-          dòng sách quản trị kinh doanh & kỹ năng và với 5 thương hiệu
-          con: Omega Plus - dòng sách tinh hoa về văn hóa, lịch sử; ETS - dòng
-          sách về khoa học; Gamma - dòng sách ngoại ngữ; Sống - dòng sách tác
-          giả Việt; Medinsight - dòng sách y học.
+          dòng sách quản trị kinh doanh & kỹ năng và với 5 thương hiệu con:
+          Omega Plus - dòng sách tinh hoa về văn hóa, lịch sử; ETS - dòng sách
+          về khoa học; Gamma - dòng sách ngoại ngữ; Sống - dòng sách tác giả
+          Việt; Medinsight - dòng sách y học.
         </p>
         <p className="pt-4 leading-5 text-[16px]">
           Bên cạnh việc sở hữu hơn 4.000 đầu sách cùng 15.000.000 bản in,
@@ -41,11 +43,11 @@ function MaincontentAbout() {
         <p className="pt-4 leading-5 text-[16px]">
           Tiếp nối thành công, với mong muốn xây dựng một thế hệ các nhà lãnh
           đạo và quản lý mới có năng lực lãnh đạo, tầm nhìn chiến lược và khả
-          năng giải quyết vấn đề sáng tạo, BookWorm đã ra mắt dòng sách cao
-          cấp Harvard Business Review tại Việt Nam với thiết kế hiện đại, đa
-          dạng chủ đề, bắt kịp tư duy kinh doanh của thời đại nhằm đưa ra những
-          giải pháp triệt để và kiến thức quản trị nâng cao giúp nhà lãnh đạo -
-          quản lý đối phó với biến động của nền kinh tế toàn cầu.
+          năng giải quyết vấn đề sáng tạo, BookWorm đã ra mắt dòng sách cao cấp
+          Harvard Business Review tại Việt Nam với thiết kế hiện đại, đa dạng
+          chủ đề, bắt kịp tư duy kinh doanh của thời đại nhằm đưa ra những giải
+          pháp triệt để và kiến thức quản trị nâng cao giúp nhà lãnh đạo - quản
+          lý đối phó với biến động của nền kinh tế toàn cầu.
         </p>
         <p className="pt-4 leading-5 text-[16px]">
           Harvard Business Review (HBR) thuộc top đầu sách Quản trị Kinh doanh
@@ -68,13 +70,20 @@ function MaincontentAbout() {
           BookWorm “bản địa hoá" thành công và ra mắt tại Việt Nam với những bộ
           sách chất lượng hàng đầu, nhận được rất nhiều sự yêu thích và đón chờ
           từ độc giả, đặc biệt bởi Shark Nguyễn Thanh Việt, Bà Nguyễn Phương
-          Thảo Tổng Giám đốc Vietjet Air, Bà Hà Thu Thanh Chủ tịch Deloitte
-          Việt Nam, Ông Hồ Quang Minh Chủ tịch BNI Việt Nam….
+          Thảo Tổng Giám đốc Vietjet Air, Bà Hà Thu Thanh Chủ tịch Deloitte Việt
+          Nam, Ông Hồ Quang Minh Chủ tịch BNI Việt Nam….
         </p>
       </div>
       <div className="pt-4">
-        <img src="/about1.webp" alt="about" />
-      </div>
+  <Image
+    src="/about1.webp"
+    alt="about"
+    width={800}
+    height={500}
+    className="object-cover w-full h-auto rounded"
+  />
+</div>
+
     </div>
   );
 }
