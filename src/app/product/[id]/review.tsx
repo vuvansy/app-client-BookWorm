@@ -65,7 +65,7 @@ const CustomerReviews = (props: IProps) => {
                                             }
                                         }}
                                     >
-                                        <Rate disabled defaultValue={review.rating} />
+                                        <Rate disabled value={review.rating} />
                                     </ConfigProvider>
                                 </div>
                                 <div className="w-full lg:w-[90%] text-caption  ">
