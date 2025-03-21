@@ -8,6 +8,7 @@ type FieldType = {
 
 const ForgotPasswordForm = () => {
     const { message, modal, notification } = App.useApp();
+    const [form] = Form.useForm();
 
     const onFinish = async (values: any) => {
         try {
@@ -28,6 +29,7 @@ const ForgotPasswordForm = () => {
             if (d.statusCode === 201) {
                 //success
                 message.success(d.message);
+                setTimeout(() => form.resetFields(), 0);
             } if (d.statusCode === 404) {
                 message.error(d.message);
             }
@@ -42,6 +44,7 @@ const ForgotPasswordForm = () => {
 
     return (
         <Form
+            form={form}
             name="basic"
             // labelCol={{ span: 8 }}
             // wrapperCol={{ span: 16 }}
