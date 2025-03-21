@@ -238,7 +238,7 @@ const ProductDetailPage = async (props: Props) => {
             </div>
             <div className="container">
                 <ProductDescription currentBook={currentBook} />
-                <CustomerReviews />
+                <CustomerReviews currentBook={currentBook} />
             </div>
             <div className='container mt-5 pb-[30px] bg-white rounded-lg'>
                 <div className='py-[15px] pl-[15px]'>
@@ -251,4 +251,3 @@ const ProductDetailPage = async (props: Props) => {
 }
 
 export default ProductDetailPage;
-
