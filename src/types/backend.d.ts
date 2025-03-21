@@ -210,8 +210,8 @@ declare global {
     interface IReview {
         comment: string;
         rating: number;
-        id_user: string;
-        id_order_detail: string;
+        id_user: IUser;
+        id_order_detail: IOrderDetail;
         createdAt?: Date;
         updatedAt?: Date;
     }
