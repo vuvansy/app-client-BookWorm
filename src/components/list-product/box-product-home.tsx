@@ -177,12 +177,14 @@ const BoxProductHome = (props: IBook) => {
             className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
             onClick={() => handleToggleFavorite(_id)}
           >
-            {!loading &&
-              (favoriteList.some((item) => item.id_book._id === _id) ? (
-                <MdFavorite className="text-[22px] text-red-500" />
-              ) : (
-                <MdOutlineFavoriteBorder className="text-[22px] text-red-500" />
-              ))}
+            {!user ? (
+              <MdOutlineFavoriteBorder className="text-[22px] text-red-500" /> // Trái tim trắng khi chưa đăng nhập
+            ) : !loading &&
+              favoriteList.some((item) => item.id_book._id === _id) ? (
+              <MdFavorite className="text-[22px] text-red-500" /> // Trái tim đỏ khi đã thích
+            ) : (
+              <MdOutlineFavoriteBorder className="text-[22px] text-red-500" /> // Trái tim viền đỏ khi chưa thích
+            )}
           </div>
         </div>
         <div className="p-3 flex flex-col justify-center items-center">
