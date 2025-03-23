@@ -17,21 +17,19 @@ const AppFooter = () => {
     <footer className="pt-[30px] bg-bg-main ">
       <div className=" container bg-white flex flex-col lg:flex-row pt-[16px] rounded-lg">
         <div className="relative basis-2/6 text-info ">
-          <div className=" w-full h-[69px] mb-[8px] py-2.5 pr-[15px] ">
-              <div className="relative w-[300px] h-[49px] ">
+          <div className=" w-full h-[69px] mb-[8px] py-2.5 px-[15px] ">
             <Link href={"/"}>
-                <Image
+              <div className="relative w-[270px] h-[50px] ">
+            <Image
                   src={"/icon/logo.png"}
                   alt="logo BookWorm"
-                  layout="fill"
-                  objectFit="contain"
+                  fill
                   priority
-                  className="w-full h-full"
+                  className="object-contain w-full h-full"
                 />
-            </Link>
               </div>
+            </Link>
           </div>
-
           <div className="ml-[10px] mt-[10px] ">
             <p className="pr-[15px] pl-[10px]">
               Lầu 3, 387-389 Hai Bà Trưng, Quận 3, TP. HCM <br />
