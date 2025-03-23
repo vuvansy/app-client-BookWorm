@@ -2,8 +2,8 @@ import { Select } from "antd";
 import React from "react";
 
 const SORT_OPTIONS = [
-  { label: "A-Z", value: "name" },
-  { label: "Z-A", value: "-name" },
+  { label: "Theo Tên Từ A-Z", value: "name" },
+  { label: "Theo Tên Từ Z-A", value: "-name" },
   { label: "Giá Tăng Dần", value: "price_new" },
   { label: "Giá Giảm Dần", value: "-price_new" },
 ];
