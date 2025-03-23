@@ -274,26 +274,6 @@ const InfoCheckout = () => {
             id_coupons: appliedCoupon?._id ?? null,
         };
 
-        // try {
-        //     const order = await createOrder(formattedData);
-        //     const orderDetails = cartItems.map((item) => ({
-        //         quantity: item.quantity,
-        //         price: item.detail.price_new,
-        //         id_book: item._id,
-        //         id_order: order?.data?._id
-        //     }));
-        //     // console.log("Sending order details:", orderDetails);
-        //     await createOrderDetail(orderDetails);
-        //     message.success("Đặt hàng thành công!");
-        //     dispatch(clearCart());
-        //     router.push("/order");
-        // } catch (error) {
-        //     console.error(error);
-        //     alert("Đã có lỗi xảy ra.");
-        // } finally {
-        //     setIsLoading(false);
-        // }
-
         try {
             const selectedPaymentMethod = listPayment.find(method => method.value === selectedPayment);
             //COD

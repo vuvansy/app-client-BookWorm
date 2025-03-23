@@ -77,11 +77,12 @@ const ModalReviews = (props: IProps) => {
             footer={null}
         >
             <Form
-                form={form} // Gán form để quản lý dữ liệu
+                form={form}
                 name="basic"
                 onFinish={onFinish}
                 layout="vertical"
                 autoComplete="off"
+                initialValues={{ comment: "Sản phẩm tuyệt vời!", rating: 5 }}
             >
                 <Form.Item<FieldType>
                     name="comment"
@@ -98,14 +99,10 @@ const ModalReviews = (props: IProps) => {
                         <span className="text-[15px] font-semibold">Đánh giá</span>
                         <Rate
                             className="text-[16px]"
+                            defaultValue={5}
                             onChange={(value) => form.setFieldsValue({ rating: value })}
                         />
-                        {/* <button
-                            type="submit"
-                            className="py-[7px] px-[25px] border border-red1 text-red1 rounded ml-[20px] hover:bg-red1 hover:text-white"
-                        >
-                            GỬI
-                        </button> */}
+
                         <Button
                             type="primary"
                             danger
