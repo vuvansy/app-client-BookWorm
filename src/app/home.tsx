@@ -161,7 +161,7 @@ const Home = () => {
         <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">
           <FaArrowTrendUp className="text-[#C92127] text-[25px] lg:text-[32px]" />
           <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127] ">
-            Xu Hướng Mỗi Ngày
+            Xu Hướng Mua Sắm
           </p>
         </div>
         <ListProductHome

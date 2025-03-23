@@ -73,7 +73,7 @@ const BoxProductByType = ({
             {
               title: (
                 <div className="capitalize">
-                  {type === "new" ? "Sản Phẩm Mới Ra Mắt" : "Sản Phẩm Xu Hướng"}
+                  {type === "new" ? "Sản Phẩm Mới Ra Mắt" : "Sản Phẩm Xu Hướng Mua Sắm"}
                 </div>
               ),
             },
