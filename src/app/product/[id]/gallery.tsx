@@ -176,12 +176,16 @@ const GalleryComponent = ({ currentBook }: IProps) => {
         onClick={handleToggleFavorite}
         className="absolute top-[180px] md:top-[160px] lg:top-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-red-100 transition"
       >
-        {!loading &&
+        {!user ? (
+          <FaRegHeart className="text-gray-500 text-[20px]" /> // Trái tim trắng khi chưa đăng nhập
+        ) : (
+          !loading &&
           (isFavorite ? (
             <FaHeart className="text-red-500 text-[20px]" />
           ) : (
             <FaRegHeart className="text-gray-500 text-[20px]" />
-          ))}
+          ))
+        )}
       </button>
 
       <ModalGallery
