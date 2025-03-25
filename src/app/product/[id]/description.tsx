@@ -26,7 +26,9 @@ const ProductDescription = (props: IProps) => {
             </div>
             {isOpen && (
                 <div className="pt-4">
-                    <div className="text-caption">{currentBook?.description}</div>
+                    <div className="text-caption" dangerouslySetInnerHTML={{ __html: currentBook?.description || "" }}>
+                        {/* {currentBook?.description} */}
+                    </div>
                 </div>
             )}
         </div>
