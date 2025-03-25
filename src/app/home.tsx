@@ -45,7 +45,7 @@ const Home = () => {
     return <div>Lỗi tải dữ liệu</div>;
   if (genreLoading || bookLoading || flsLoading || bookTrendLoading)
     return (
-      <div className="flex items-center justify-center min-h-[100px]">
+      <div className="flex items-center justify-center min-h-[600px]">
         <Spin size="large">
           <span className="">Loading...</span>
         </Spin>
