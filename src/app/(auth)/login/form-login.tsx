@@ -36,6 +36,7 @@ const LoginForm = () => {
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    credentials: "include",
                     body: JSON.stringify(data)
                 }
             )
@@ -79,7 +80,7 @@ const LoginForm = () => {
                     { type: "email", message: "Email không đúng định dạng!" }
                 ]}
             >
-                <Input autoComplete="email"/>
+                <Input autoComplete="email" />
             </Form.Item>
 
             <Form.Item<FieldType>
