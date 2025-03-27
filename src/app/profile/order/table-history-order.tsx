@@ -3,6 +3,7 @@
 import { useCurrentApp } from "@/context/app.context";
 import { sendRequest } from "@/utils/api";
 import { Empty, Spin, Tabs } from "antd";
+import dayjs from "dayjs";
 import Link from "next/link"
 import { useState } from "react";
 import useSWR from "swr";
@@ -87,7 +88,7 @@ const TableHistoryOrder = () => {
                                 <tr key={order._id} className="border-y odd:bg-gray-100 even:bg-white text-caption">
                                     <td className="p-[10px] border-b border-solid border-[#ddd]">{order._id}</td>
                                     <td className="p-[10px] text-left border-b border-solid border-[#ddd]">
-                                        {new Date(order.createdAt).toLocaleString()}
+                                        {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
                                     </td>
                                     <td className="p-[10px] text-center text-price-special font-semibold border-b border-solid border-[#ddd]">
                                         {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice - order.discountAmount)} đ

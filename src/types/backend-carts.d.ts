@@ -108,6 +108,7 @@ declare global {
         discountAmount: number;
         order_total: number;
         isPaid: boolean;
+        paidAt?: string;
         status: number;
         id_user?: string;
         id_delivery?: string;

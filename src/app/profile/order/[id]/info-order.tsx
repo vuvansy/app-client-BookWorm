@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import useSWR, { mutate } from "swr";
 import ModalReviews from "./modal-review";
 import { useCurrentApp } from "@/context/app.context";
+import dayjs from "dayjs";
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) =>
     fetch(...args).then((res) => res.json());
@@ -50,7 +51,7 @@ const InfoOrder = (props: IProps) => {
             setReviewedItems(reviewedIds);
         }
     }, [reviewedData]);
-    
+
     if (orderError || orderDetailError) return <div>Lỗi tải dữ liệu</div>;
 
     if (orderLoading || orderDetailLoading) {
@@ -105,7 +106,7 @@ const InfoOrder = (props: IProps) => {
     const handleOpenModal = (orderDetail: IOrderDetailTable) => {
         setSelectedOrderDetail(orderDetail);
         setModalOpen(true);
-        document.body.classList.add("modal-open"); 
+        document.body.classList.add("modal-open");
     };
 
     const markAsReviewed = (id_order_detail: string) => {
@@ -159,7 +160,11 @@ const InfoOrder = (props: IProps) => {
                 </div>
                 <div className="flex gap-2 mb-[6px]">
                     <span className="text-caption-bold">Ngày Đặt Hàng:</span>
-                    {new Date(order?.createdAt ?? Date.now()).toLocaleString()}
+                    {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
+                </div>
+                <div className="flex gap-2 mb-[6px]">
+                    <span className="text-caption-bold">Trạng Thái Thanh Toán:</span>
+                    <p>{(order?.isPaid) ? "✅ Đã thanh toán" : "⏳Chưa thanh toán"}</p>
                 </div>
                 <div className="flex gap-6 items-center">
                     <div className="flex gap-2">

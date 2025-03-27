@@ -7,7 +7,6 @@ const protectedPaths = ["/profile/order", "/profile/wishlist", "/edit-profile", 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const refresh_token = request.cookies.get("refresh_token")?.value;
-    console.log(refresh_token);
     if (!refresh_token) {
         if (protectedPaths.some((path) => pathname.startsWith(path))) {
             return NextResponse.redirect(new URL("/", request.url));
