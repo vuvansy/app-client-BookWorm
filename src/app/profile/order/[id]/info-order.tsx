@@ -162,10 +162,6 @@ const InfoOrder = (props: IProps) => {
                     <span className="text-caption-bold">Ngày Đặt Hàng:</span>
                     {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
                 </div>
-                <div className="flex gap-2 mb-[6px]">
-                    <span className="text-caption-bold">Trạng Thái Thanh Toán:</span>
-                    <p>{(order?.isPaid) ? "✅ Đã thanh toán" : "⏳Chưa thanh toán"}</p>
-                </div>
                 <div className="flex gap-6 items-center">
                     <div className="flex gap-2">
                         <span className="text-caption-bold">Trạng Thái:</span>

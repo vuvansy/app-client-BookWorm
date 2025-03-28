@@ -151,7 +151,9 @@ const TotalCart = (props: IProps) => {
         <div className="basis-4/12 pl-[15px]">
             <div className="bg-white rounded-lg px-[15px]">
                 <div className="h-[50px] flex justify-between items-center">
-                    <div className="flex items-center gap-x-2 text-blue-text">
+                    <div
+                        onClick={showModal}
+                        className="flex items-center gap-x-2 text-blue-text cursor-pointer">
                         <RiCoupon3Fill className="text-[18px]" />
                         <span className="text-caption">KHUYẾN MÃI</span>
                     </div>
