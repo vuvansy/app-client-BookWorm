@@ -41,10 +41,21 @@ const ProductDetailPage = async (props: Props) => {
         method: "GET"
     })
     const currentBook = res?.data || null;
+
+    if (!currentBook) {
+        return <div>Book not found</div>;
+    }
+
+    const authorIds = currentBook.authors?.map((author) => author._id) || []; 
+
+    if (authorIds.length === 0) {
+        return <div>No authors found for this book</div>;
+    }
+
     const resBooksByGenreAPI = await sendRequest<IBackendRes<IBookTable[]>>({
-        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${currentBook?._id}/genre/${currentBook?.id_genre._id}`,
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/${currentBook._id}/genre/${currentBook.id_genre._id}/author/${authorIds.join(',')}`,
         method: "GET"
-    })
+    });
     const dataBooksByGenreAPI = resBooksByGenreAPI?.data || null;
 
     return (
