@@ -73,7 +73,11 @@ const BoxProductByType = ({
             {
               title: (
                 <div className="capitalize">
-                  {type === "new" ? "Sản Phẩm Mới Ra Mắt" : "Sản Phẩm Xu Hướng Mua Sắm"}
+                  {type === "new"
+                    ? "Sản Phẩm Mới Ra Mắt"
+                    : type === "flash-sale"
+                    ? "Sản Phẩm Flash Sale"
+                    : "Sản Phẩm Xu Hướng Mua Sắm"}
                 </div>
               ),
             },
@@ -85,7 +89,11 @@ const BoxProductByType = ({
         <div className="flex bg-[#FCDDEF] lg:py-4 py-2 pr-4 pl-4">
           <FaBook className="text-[#C92127] text-[25px] lg:text-[32px]" />
           <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127]">
-            {type === "new" ? "Sản Phẩm Mới Ra Mắt" : "Sản Phẩm Xu Hướng"}
+            {type === "new"
+              ? "Sản Phẩm Mới Ra Mắt"
+              : type === "flash-sale"
+              ? "Sản Phẩm Flash Sale"
+              : "Sản Phẩm Xu Hướng Mua Sắm"}
           </p>
         </div>
         <Divider className="!my-0" />

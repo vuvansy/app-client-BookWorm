@@ -79,7 +79,7 @@ const Home = () => {
               </Link>
             </div>
             <div className="">
-              <Link href={""}>
+              <Link href="/product/by/flash-sale">
                 <div className="flex items-center justify-center">
                   <span className="lg:text-caption-bold text-info text-[#1478FC]">
                     Xem tất cả
