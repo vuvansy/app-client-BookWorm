@@ -31,11 +31,17 @@ const ListProductByType = ({
       <div className="flex justify-center my-4">
         <Pagination
           current={currentPage}
-          pageSize={limit} 
-          total={totalItems} 
+          pageSize={limit}
+          total={totalItems}
           onChange={onPageChange}
           showSizeChanger={false}
-          disabled={totalPages <= 1}
+          showQuickJumper={false}
+          hideOnSinglePage={false}
+          itemRender={(page, type, originalElement) => {
+            if (type === "prev") return <a>«</a>;
+            if (type === "next") return <a>»</a>;
+            return originalElement;
+          }}
         />
       </div>
     </div>
