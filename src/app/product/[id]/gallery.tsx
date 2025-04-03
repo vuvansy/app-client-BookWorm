@@ -157,7 +157,7 @@ const GalleryComponent = ({ currentBook }: IProps) => {
   }, [currentBook]);
 
   return (
-    <>
+    <div className="relative">
       <ImageGallery
         key={currentBook?._id}
         ref={refGallery}
@@ -174,7 +174,7 @@ const GalleryComponent = ({ currentBook }: IProps) => {
 
       <button
         onClick={handleToggleFavorite}
-        className="absolute top-[180px] md:top-[160px] lg:top-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-red-100 transition"
+        className="absolute top-[0] lg:top-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-red-100 transition"
       >
         {!user ? (
           <FaRegHeart className="text-gray-500 text-[20px]" /> // Trái tim trắng khi chưa đăng nhập
@@ -195,7 +195,7 @@ const GalleryComponent = ({ currentBook }: IProps) => {
         items={imageGallery}
         title={currentBook?.name ?? ""}
       />
-    </>
+    </div>
   );
 };
 
