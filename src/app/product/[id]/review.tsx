@@ -1,5 +1,6 @@
 'use client'
 import { ConfigProvider, Rate } from "antd";
+import Image from "next/image";
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
@@ -50,7 +51,7 @@ const CustomerReviews = (props: IProps) => {
                 <div className="bg-white rounded-b-lg">
                     {reviews.length > 0 ? (
                         reviews.map((review, index) => (
-                            <div key={index} className="bg-white rounded-lg flex flex-col lg:flex-row px-4 py-1">
+                            <div key={index} className="bg-white rounded-lg flex flex-col lg:flex-row px-4 py-4">
                                 <div className="w-full lg:w-[10%] ">
                                     <div className="text-caption ">{review.id_user.fullName}</div>
                                     <ConfigProvider
@@ -77,8 +78,21 @@ const CustomerReviews = (props: IProps) => {
                             </div>
                         ))
                     ) : (
-                        <div className="bg-white rounded-lg flex items-center justify-center h-[100px]">
-                            <div className="text-caption">Sản phẩm chưa có đánh giá</div>
+                        <div className="bg-white rounded-lg flex items-center justify-center h-[150px]">
+                            <div className="text-caption w-[290px]">
+                                <Image
+                                    src={"/review/no_review2.png"}
+                                    alt={'Chưa có đánh giá'}
+                                    width={0}
+                                    height={0}
+                                    sizes="18vw"
+                                    style={{
+                                        width: "100%",
+                                        height: "auto",
+                                    }}
+                                    priority
+                                    className="w-full object-cover" />
+                            </div>
                         </div>
                     )}
                 </div>
