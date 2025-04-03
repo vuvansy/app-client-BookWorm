@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 import { FaAngleRight, FaBook } from "react-icons/fa";
-import { FaArrowTrendUp } from "react-icons/fa6";
 import ListProductHome from "@/components/list-product/list-product-home";
 import ListFlashSale from "@/components/list-flashsale";
 import ListCategoryHome from "@/components/list-Category";
@@ -114,8 +113,13 @@ const Home = () => {
       </div>
       <div className="container h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className="flex bg-[#FCDDEF] lg:py-4 py-2 pr-4 pl-4">
-          <FaBook className="text-[#C92127] text-[25px] lg:text-[32px]" />
-          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127] ">
+          <Image
+            width={32}
+            height={32}
+            alt="Sản Phẩm Mới Ra Mắt"
+            src="/ico_sachtrongnuoc.svg"
+          />
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black ">
             Sản Phẩm Mới Ra Mắt
           </p>
         </div>
@@ -150,8 +154,13 @@ const Home = () => {
 
       <div className="container h-auto rounded-lg overflow-hidden mt-5 mb-5">
         <div className="flex bg-[#FCDDEF] pt-4 pr-4 pl-4 pb-3">
-          <FaArrowTrendUp className="text-[#C92127] text-[25px] lg:text-[32px]" />
-          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127] ">
+          <Image
+            width={32}
+            height={32}
+            alt="Xu Hướng Mua Sắm"
+            src="/icon_dealhot_new.png"
+          />
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black ">
             Xu Hướng Mua Sắm
           </p>
         </div>

@@ -14,30 +14,34 @@ interface Props {
   limit: number;
   genres: IGenre[];
   type: string;
+  totalPages: number; // Nhận totalPages từ API
 }
+
 const BoxProductByType = ({
   initialData,
   totalItems,
   limit,
   genres,
   type,
+  totalPages: initialTotalPages, // Nhận totalPages từ API
 }: Props) => {
   const [books, setBooks] = useState<IBook[]>(initialData);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [sort, setSort] = useState<string>("name");
-  const [totalItemsByCategory, setTotalItemsByCategory] = useState<number>(
-    () => totalItems
-  );
+  const [totalItemsByCategory, setTotalItemsByCategory] =
+    useState<number>(totalItems);
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages); // Sử dụng giá trị từ API
 
-  const totalPages = Math.ceil(totalItemsByCategory / limit);
   const initialBooksRef = useRef<IBook[]>(initialData);
 
   useEffect(() => {
     const fetchBooks = async () => {
+      // Nếu ở trang đầu tiên, không có bộ lọc nào -> sử dụng dữ liệu ban đầu
       if (currentPage === 1 && selectedGenre === "" && sort === "name") {
         setBooks(initialBooksRef.current);
         setTotalItemsByCategory(totalItems);
+        setTotalPages(initialTotalPages);
         return;
       }
 
@@ -56,13 +60,22 @@ const BoxProductByType = ({
 
         setBooks(res?.data?.result || []);
         setTotalItemsByCategory(res?.data?.meta?.total || 0);
+        setTotalPages(res?.data?.meta?.pages || 1); // Cập nhật totalPages từ API
       } catch (error) {
         console.error("Lỗi khi lấy sản phẩm", error);
       }
     };
 
     fetchBooks();
-  }, [currentPage, limit, selectedGenre, totalItems, sort, type]);
+  }, [
+    currentPage,
+    limit,
+    selectedGenre,
+    sort,
+    type,
+    initialTotalPages,
+    totalItems,
+  ]);
 
   return (
     <div className="bg-bg-main px-2 pb-[1px] xl:px-0">
@@ -88,7 +101,7 @@ const BoxProductByType = ({
       <div className="container h-auto rounded-lg overflow-hidden mb-5">
         <div className="flex bg-[#FCDDEF] lg:py-4 py-2 pr-4 pl-4">
           <FaBook className="text-[#C92127] text-[25px] lg:text-[32px]" />
-          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127]">
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black">
             {type === "new"
               ? "Sản Phẩm Mới Ra Mắt"
               : type === "flash-sale"
@@ -108,7 +121,7 @@ const BoxProductByType = ({
         <ListProductByType
           books={books}
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalPages={totalPages} // Truyền totalPages từ API
           totalItems={totalItemsByCategory}
           limit={limit}
           onPageChange={setCurrentPage}
