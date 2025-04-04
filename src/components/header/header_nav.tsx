@@ -84,13 +84,13 @@ const HeaderNav = () => {
 
                         </li>
                         <li className="w-full flex justify-start items-center">
-                            <Link href={''} className='px-[10px] py-[8px] capitalize'>Cửa hàng</Link>
+                            <Link href={'/shop'} className='px-[10px] py-[8px] capitalize'>Cửa hàng</Link>
                         </li>
                         <li className="w-full flex justify-start items-center">
-                            <Link href={''} className='px-[10px] py-[8px] capitalize'>Liên hệ</Link>
+                            <Link href={'/contact'} className='px-[10px] py-[8px] capitalize'>Liên hệ</Link>
                         </li>
                         <li className="w-full flex justify-start items-center">
-                            <Link href={''} className='px-[10px] py-[8px] capitalize'>Tuyển dụng</Link>
+                            <Link href={'/recruitment'} className='px-[10px] py-[8px] capitalize'>Tuyển dụng</Link>
                         </li>
                         <li className="w-full flex justify-start items-center">
                             <Link href={'/news'} className='px-[10px] py-[8px] capitalize'>Tin tức</Link>
