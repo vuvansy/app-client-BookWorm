@@ -4,6 +4,7 @@ import { useCurrentApp } from "@/context/app.context";
 import { sendRequest } from "@/utils/api";
 import { Empty, Spin, Tabs } from "antd";
 import dayjs from "dayjs";
+import { useSession } from "next-auth/react";
 import Link from "next/link"
 import { useState } from "react";
 import useSWR from "swr";
@@ -12,8 +13,10 @@ const fetcher = (...args: [RequestInfo, RequestInit?]) =>
     fetch(...args).then((res) => res.json());
 
 const TableHistoryOrder = () => {
-    const [status, setStatus] = useState<string | undefined>(undefined); 
-    const { user } = useCurrentApp();
+    const [status, setStatus] = useState<string | undefined>(undefined);
+    // const { user } = useCurrentApp();
+    const { data: session } = useSession();
+    const user = session?.user;
     const url = user?.id
         ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order/${user.id}${status ? `?status=${status}` : ""}`
         : null;
@@ -91,7 +94,7 @@ const TableHistoryOrder = () => {
                                         {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
                                     </td>
                                     <td className="p-[10px] text-center text-price-special font-semibold border-b border-solid border-[#ddd]">
-                                        {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice - order.discountAmount)} đ
+                                        {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice)} đ
                                     </td>
                                     <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
                                         {order.id_payment?.name || "Không xác định"}

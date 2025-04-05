@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCurrentApp } from '@/context/app.context';
-
+import { signIn, useSession } from "next-auth/react";
 
 type FieldType = {
     email: string;
@@ -14,49 +13,53 @@ type FieldType = {
 };
 
 const LoginForm = () => {
-    const { setIsAuthenticated, setUser, user } = useCurrentApp();
+    const { data: session } = useSession();
     const { message, notification } = App.useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
+    
     useEffect(() => {
         const redirectTo = searchParams.get("redirect");
-        if (user && redirectTo) {
+        if (session?.user && redirectTo) {
             router.push(redirectTo);
         }
-    }, [user]);
+    }, [session?.user]);
+    
+    useEffect(() => {
+        if (session?.error) {
+            notification.error({
+                message: "Lỗi Đăng Nhập",
+                description: session.error,
+            });
+        }
+    }, [session?.error]);
 
     const onFinish = async (values: any) => {
         try {
             const { email, password } = values;
-            const data = { email, password };
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/login`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify(data)
-                }
-            )
-            const dataRes: IBackendRes<ILogin> = await res.json();
-            if (dataRes.data) {
-                //success
-                setIsAuthenticated(true);
-                setUser(dataRes.data.user)
-                localStorage.setItem('access_token', dataRes.data.access_token);
-                message.success('Đăng nhập tài khoản thành công!');
-                router.push('/');
+           
+            const res = await signIn("credentials", {
+                redirect: false,
+                email: email,
+                password: password,
+            });
+
+            if (!res?.error) {
+                message.success("Đăng nhập tài khoản thành công!");
+                router.push("/");
             } else {
                 notification.error({
-                    message: 'Lỗi Đăng Nhập',
-                    description: (dataRes.message),
+                    message: "Lỗi Đăng Nhập",
+                    description: res.error,
                 });
-
             }
+
         } catch (error) {
-            console.error('Error:', error);
+            console.error("Error:", error);
+            notification.error({
+                message: "Lỗi",
+                description: "Đã xảy ra lỗi trong quá trình đăng nhập!",
+            });
         }
     };
 
@@ -64,9 +67,6 @@ const LoginForm = () => {
 
         <Form
             name="basic"
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 16 }}
-            // style={{ maxWidth: 600, marginTop: "50px" }}
             className='max-w-[800px] '
             onFinish={onFinish}
             layout="vertical"
@@ -90,7 +90,13 @@ const LoginForm = () => {
             >
                 <Input.Password autoComplete="current-password" />
             </Form.Item>
-            <Button type="primary" htmlType="submit" className='w-full !bg-red1 !text-body-bold'>Đăng Nhập</Button>
+            <Button
+                type="primary"
+                htmlType="submit"
+                className='w-full !bg-red1 !text-body-bold'
+            >
+                Đăng Nhập
+            </Button>
             <div className=' my-[10px] text-body1 items-center flex justify-between'>
                 <span>Bạn chưa có tài khoản? <Link href="/register" className='!text-red1'>Đăng ký ngay</Link></span>
             </div>
@@ -98,8 +104,25 @@ const LoginForm = () => {
                 <Link href="/forgot-password" className='!text-red1'>Quên mật khẩu</Link>
             </div>
             <div className='flex items-center justify-center text-body-bold mb-[10px]'>Hoặc</div>
-            <Button type="primary" icon={<FaFacebook size={20} />} className='w-full !text-body-bold items-center !flex justify-center mb-4'>Đăng nhập với Facebook</Button>
-            <Button icon={<FaGoogle size={20} />} className='w-full !text-body-bold items-center !flex justify-center !border !border-black/30  !pr-8   !text-black'>Đăng nhập với Google</Button>
+            <Button
+                onClick={() => {
+                    signIn("github")
+                }}
+                type="primary"
+                icon={<FaFacebook size={20} />}
+                className='w-full !text-body-bold items-center !flex justify-center mb-4'
+            >
+                Đăng nhập với Facebook
+            </Button>
+            <Button
+                onClick={() => {
+                    signIn("google")
+                }}
+                icon={<FaGoogle size={20} />}
+                className='w-full !text-body-bold items-center !flex justify-center !border !border-black/30 !pr-8 !text-black'
+            >
+                Đăng nhập với Google
+            </Button>
 
         </Form>
     );

@@ -239,10 +239,19 @@ declare global {
         updatedAt?: Date;
     }
 
-    interface IBookLike{
-        _id:string;
-        id_user:string;
-        id_book:IBook;
+    interface IBookLike {
+        _id: string;
+        id_user: string;
+        id_book: IBook;
+    }
+
+    interface IBanner {
+        _id?: string;
+        name: string;
+        image: string;
+        status: boolean;  // true = hiển thị, false = ẩn
+        createdAt?: Date;
+        updatedAt?: Date;
     }
 
 }

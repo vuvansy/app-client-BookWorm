@@ -4,7 +4,6 @@ import { Empty, Spin, Rate, ConfigProvider, notification } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
-import { useCurrentApp } from "@/context/app.context";
 import { BsCartPlus } from "react-icons/bs";
 import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 import { sendRequest } from "@/utils/api";
@@ -12,11 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import Swal from "sweetalert2";
 import { RootState } from "@/redux/store";
+import { useSession } from "next-auth/react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProductFavorite = () => {
-  const { user } = useCurrentApp();
+  const { data: session } = useSession();
+  const user = session?.user;
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
   const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
@@ -108,9 +109,8 @@ const ProductFavorite = () => {
     if (currentCartQuantity + 1 > maxQuantity) {
       notification.warning({
         message: "Lỗi Số Lượng",
-        description: `Số lượng yêu cầu (${
-          currentCartQuantity + 1
-        }) không có sẵn.`,
+        description: `Số lượng yêu cầu (${currentCartQuantity + 1
+          }) không có sẵn.`,
       });
       return;
     }
@@ -174,7 +174,7 @@ const ProductFavorite = () => {
       });
     }
   };
-  
+
   return (
     <div className="bg-white overflow-hidden pb-4">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 px-4 mt-4 mb-6">

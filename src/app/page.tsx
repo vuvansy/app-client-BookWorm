@@ -4,6 +4,7 @@ import CarouselHome from "@/components/carousel";
 import Link from "next/link";
 import Image from "next/image";
 import NewsBox from "@/components/box-news";
+
 const shipper = [
   {
     img: "/Frame139.png",

@@ -12,9 +12,11 @@
     "@ant-design/cssinjs": "1.17.2",
     "@reduxjs/toolkit": "^2.2.7",
     "antd": "5.11.1",
+    "dayjs": "1.11.13",
     "lodash": "^4.17.21",
     "my-nextjs-app": "file:",
     "next": "14.2.4",
+    "next-auth": "4.24.5",
     "query-string": "8.1.0",
     "react": "^18",
     "react-dom": "^18",
@@ -24,7 +26,6 @@
     "react-spinners": "^0.14.1",
     "sweetalert2": "^11.17.2",
     "swiper": "^11.2.4",
-    "dayjs": "1.11.13",
     "swr": "^2.3.3"
   },
   "devDependencies": {

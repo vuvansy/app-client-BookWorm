@@ -9,11 +9,10 @@ import { useEffect, useMemo, useState } from "react";
 const { TextArea } = Input;
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useCurrentApp } from "@/context/app.context";
 import { useRouter } from "next/navigation";
 import { sendRequest } from "@/utils/api";
 import { clearCart } from "@/redux/slices/cartSlice";
-import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 
 type FieldType = {
     fullName: string;
@@ -30,7 +29,8 @@ type FieldType = {
 
 const InfoCheckout = () => {
     const [form] = Form.useForm();
-    const { user } = useCurrentApp();
+    const { data: session } = useSession();
+    const user = session?.user;
     const dispatch = useDispatch();
     const router = useRouter();
     const { message } = App.useApp();
@@ -58,6 +58,7 @@ const InfoCheckout = () => {
             ),
         [cartItems]
     );
+    console.log(total);
 
     //fetchDelivery
     useEffect(() => {
@@ -114,6 +115,7 @@ const InfoCheckout = () => {
     useEffect(() => {
         setClientTotal(total);
     }, [total]);
+    console.log("clientTotal", clientTotal);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -147,11 +149,11 @@ const InfoCheckout = () => {
         fetchCities();
     }, []);
 
-    useEffect(() => {
-        if (!user) {
-            router.replace("/login");
-        }
-    }, [user, router]);
+    // useEffect(() => {
+    //     if (!user) {
+    //         router.replace("/auth/signin");
+    //     }
+    // }, [user, router]);
 
     useEffect(() => {
         if (user && cities.length > 0) {
@@ -550,7 +552,7 @@ const InfoCheckout = () => {
                     <h2 className="text-body-bold uppercase pt-2">Đơn hàng</h2>
                     <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
                         <p>Tạm tính</p>
-                        <span>{new Intl.NumberFormat("vi-VN").format(clientTotal) + " đ"}</span>
+                        <span>{new Intl.NumberFormat("vi-VN").format(total) + " đ"}</span>
                     </div>
                     <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
                         <p>Giảm giá</p>
@@ -568,7 +570,7 @@ const InfoCheckout = () => {
                             <h3>Tổng Tiền</h3>
                             <span>
                                 {new Intl.NumberFormat("vi-VN").format(
-                                    clientTotal - (appliedCoupon?.discount || 0) + shippingPrice
+                                    total - (appliedCoupon?.discount || 0) + shippingPrice
                                 )} đ
                             </span>
                         </div>

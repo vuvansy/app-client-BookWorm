@@ -12,8 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { RiCoupon3Fill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
-import { useCurrentApp } from "@/context/app.context";
-
+import { useSession } from "next-auth/react";
 
 type FieldType = {
     code?: string;
@@ -24,7 +23,8 @@ interface IProps {
 }
 
 const TotalCart = (props: IProps) => {
-    const { user } = useCurrentApp();
+    const { data: session } = useSession();
+
     const { dataCoupon } = props
 
     const [form] = Form.useForm();
@@ -128,9 +128,9 @@ const TotalCart = (props: IProps) => {
     };
 
     const handleCheckout = () => {
-        if (!user) {
+        if (!session) {
             message.warning("Bạn cần đăng nhập để tiếp tục thanh toán!");
-            router.push(`/login?redirect=/checkout`);
+            router.push(`/auth/signin?redirect=/checkout`);
             return;
         }
         router.push("/checkout");

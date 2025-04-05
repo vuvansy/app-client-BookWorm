@@ -11,13 +11,14 @@ import type { RootState } from "@/redux/store";
 import { App } from "antd";
 import { useRouter } from "next/navigation";
 import { MdFavorite } from "react-icons/md";
-import { useCurrentApp } from "@/context/app.context";
 import { useEffect } from "react";
 import { sendRequest } from "@/utils/api";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const BoxProductHome = (props: IBook) => {
-  const { user } = useCurrentApp();
+  const { data: session } = useSession();
+  const user = session?.user;
   const userId = user?.id;
   const { _id, image, name, price_old, price_new, quantity } = props;
   const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
@@ -126,9 +127,8 @@ const BoxProductHome = (props: IBook) => {
     if (currentCartQuantity + 1 > maxQuantity) {
       notification.warning({
         message: "Lỗi Số Lượng",
-        description: `Số lượng yêu cầu cho ${
-          1 + currentCartQuantity
-        } sản phẩm không có sẵn.`,
+        description: `Số lượng yêu cầu cho ${1 + currentCartQuantity
+          } sản phẩm không có sẵn.`,
         placement: "topRight",
       });
       return;

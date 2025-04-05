@@ -108,7 +108,7 @@ const ModalReviews = (props: IProps) => {
                             danger
                             htmlType="submit"
                             loading={loading}
-                            icon={loading ? <SyncOutlined spin /> : null} // Thêm icon tùy chỉnh khi loading
+                            icon={loading ? <SyncOutlined spin /> : null}
                             className="ml-[20px]"
                         >
                             {loading ? "Đang gửi..." : "GỬI"}
