@@ -3,10 +3,14 @@ import SidebarAbout from "@/app/about/sidebar-about";
 
 function About() {
   return (
-    <main className="bg-bg-main pt-[20px] ">
-      <div className="container flex w-full py-[18px] px-[10px] bg-white rounded-lg">
-        <MaincontentAbout/>
-        <SidebarAbout/>
+    <main className="bg-bg-main pt-[20px]">
+      <div className="container flex flex-col lg:flex-row w-full py-[18px] px-[10px] bg-white rounded-lg">
+        <div className="w-full lg:w-[70%]">
+          <MaincontentAbout />
+        </div>
+        <div className="w-full lg:w-[30%]">
+          <SidebarAbout />
+        </div>
       </div>
     </main>
   );

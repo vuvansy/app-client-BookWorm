@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 function SidebarAbout() {
@@ -50,32 +51,33 @@ function SidebarAbout() {
     },
   ];
   return (
-    <div className="w-[30%] pl-[10px] sticky top-0 self-start">
+    <div className=" pl-[10px] sticky top-0 self-start">
       <h2 className="text-body1">Bài viết khác</h2>
-      <ul>
+      <div className="text-[#333333]">
         {posts.map((item) => (
-          <li
-            key={item.id}
-            className="flex space-x-[15px] min-h-[103px] py-[10px] border-b-[1px] border-[#EBEBEB]"
-          >
-            <div className="relative w-[155px] h-[115px]  ">
-              <Link href={""}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="rounded object-cover"
-                />
-              </Link>
-            </div>
-            <div className="flex w-[180px] flex-col ">
-              <Link href={""}>
-                <h3 className=" text-info-bold line-clamp-3">{item.title}</h3>
-              </Link>
-              <span className="text-info text-[#333333]">{item.date}</span>
-            </div>
-          </li>
+          <div
+                   key={item.id}
+                   className="flex flex-row items-start space-x-4 py-4 border-b border-gray-200"
+                 >
+                   <div className="flex-none w-[180px] h-[100px] sm:w-[200px] sm:h-[120px] md:w-[88px] md:h-[58px] shrink-0 relative">
+                     <Link href="">
+                       <Image
+                         src={item.image}
+                         alt={item.title}
+                         fill
+                         className="object-cover rounded"
+                       />
+                     </Link>
+                   </div>
+                   <div className="flex-1">
+                     <Link href="">
+                       <h3 className="text-caption-bold line-clamp-3">{item.title}</h3>
+                     </Link>
+                     <span className="text-info">{item.date}</span>
+                   </div>
+                 </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

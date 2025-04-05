@@ -25,6 +25,14 @@ declare global {
             pageSize: number;
             pages: number;
             total: number;
+            statusCounts?: {
+                "0": number;
+                "1": number;
+                "2": number;
+                "3": number;
+                "4": number;
+                "": number;
+            };
         },
         result: T[]
     }
@@ -210,8 +218,38 @@ declare global {
     interface IReview {
         comment: string;
         rating: number;
+        id_user: IUser;
+        id_order_detail: IOrderDetail;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }
+
+    interface ICoupon {
+        _id: string,
+        code: string,
+        value: number,
+        max_value: number,
+        min_total: number,
+        description: string,
+        quantity: number,
+        status: boolean | string;
+        start_date: Date,
+        end_date: Date,
+        createdAt?: Date;
+        updatedAt?: Date;
+    }
+
+    interface IBookLike {
+        _id: string;
         id_user: string;
-        id_order_detail: string;
+        id_book: IBook;
+    }
+
+    interface IBanner {
+        _id?: string;
+        name: string;
+        image: string;
+        status: boolean;  // true = hiển thị, false = ẩn
         createdAt?: Date;
         updatedAt?: Date;
     }

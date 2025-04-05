@@ -4,13 +4,12 @@ import { sendRequest } from "@/utils/api";
 import { App, Button, Popconfirm, Spin } from "antd"
 import { useEffect, useState } from "react";
 import Image from "next/image"
-
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-
 import Swal from "sweetalert2";
 import useSWR, { mutate } from "swr";
 import ModalReviews from "./modal-review";
-import { useCurrentApp } from "@/context/app.context";
+import dayjs from "dayjs";
+import { useSession } from "next-auth/react";
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) =>
     fetch(...args).then((res) => res.json());
@@ -22,7 +21,8 @@ interface IProps {
 const InfoOrder = (props: IProps) => {
     const { message } = App.useApp();
     const { id } = props;
-    const { user } = useCurrentApp();
+    const { data: session } = useSession();
+    const user = session?.user;
 
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [selectedOrderDetail, setSelectedOrderDetail] = useState<IOrderDetailTable | null>(null);
@@ -50,7 +50,7 @@ const InfoOrder = (props: IProps) => {
             setReviewedItems(reviewedIds);
         }
     }, [reviewedData]);
-    
+
     if (orderError || orderDetailError) return <div>Lỗi tải dữ liệu</div>;
 
     if (orderLoading || orderDetailLoading) {
@@ -105,7 +105,7 @@ const InfoOrder = (props: IProps) => {
     const handleOpenModal = (orderDetail: IOrderDetailTable) => {
         setSelectedOrderDetail(orderDetail);
         setModalOpen(true);
-        document.body.classList.add("modal-open"); 
+        document.body.classList.add("modal-open");
     };
 
     const markAsReviewed = (id_order_detail: string) => {
@@ -159,7 +159,7 @@ const InfoOrder = (props: IProps) => {
                 </div>
                 <div className="flex gap-2 mb-[6px]">
                     <span className="text-caption-bold">Ngày Đặt Hàng:</span>
-                    {new Date(order?.createdAt ?? Date.now()).toLocaleString()}
+                    {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
                 </div>
                 <div className="flex gap-6 items-center">
                     <div className="flex gap-2">
@@ -263,9 +263,15 @@ const InfoOrder = (props: IProps) => {
                     </span>
                 </div>
                 <div className="flex items-center justify-end gap-2 py-[10px] border-b text-caption">
+                    <div>Phí Giao Hàng: </div>
+                    <span>
+                        {new Intl.NumberFormat("vi-VN").format(order?.shippingPrice ?? 0)} đ
+                    </span>
+                </div>
+                <div className="flex items-center justify-end gap-2 py-[10px] border-b text-caption">
                     <div>Tổng Tiền: </div>
                     <span>
-                        {new Intl.NumberFormat("vi-VN").format((order?.order_total ?? 0) + (order?.shippingPrice ?? 0) - (order?.discountAmount ?? 0))} đ
+                        {new Intl.NumberFormat("vi-VN").format((order?.order_total ?? 0) + (order?.shippingPrice ?? 0))} đ
                     </span>
                 </div>
             </div>
@@ -273,7 +279,7 @@ const InfoOrder = (props: IProps) => {
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
                 orderDetail={selectedOrderDetail}
-                user={user}
+                user={user as IUser}
                 markAsReviewed={markAsReviewed}
             />
         </>

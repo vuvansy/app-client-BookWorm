@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 function MainContent() {
@@ -21,17 +22,15 @@ function MainContent() {
     },
     {
       id: 3,
-
       image: "/post3.jpeg",
       title:
         "Review sách: Nền Giáo Dục Của Người Giàu - Những Bài Học Để Thành Công Chỉ Trường Đời Mới Dạy",
       description:
-        "“Thiết Kế Game Nâng Cao: Phương Pháp Tư Duy Hệ Thống” của tác giả Michael Sellers là cuốn sách thiết kế game mới nhất dành cho những nhà Thiết kế Game mong muốn bước chân vào con đường Thiết kế game chuyên nghiệp. ",
+        "“Thiết Kế Game Nâng Cao: Phương Pháp Tư Duy Hệ Thống” của tác giả Michael Sellers là cuốn sách thiết kế game mới nhất dành cho những nhà Thiết kế Game mong muốn bước chân vào con đường Thiết kế game chuyên nghiệp.",
       date: "07/03/2023",
     },
     {
       id: 4,
-
       image: "/post4.jpeg",
       title:
         "Thiết Kế Game Nâng Cao – Nâng Nghệ Thuật Thiết Kế Game Lên Tầm Cao Mới",
@@ -41,7 +40,6 @@ function MainContent() {
     },
     {
       id: 5,
-
       image: "/post5.jpeg",
       title: "Hành trình vươn tầm tri thức",
       description:
@@ -50,29 +48,29 @@ function MainContent() {
     },
   ];
   return (
-    <div>
+    <div className="space-y-4">
       {posts.map((item) => (
         <div
           key={item.id}
-          className="flex py-[15px] border-b-[1px] border-[#EBEBEB]"
+          className="flex flex-row items-start space-x-4 py-4 border-b border-gray-200"
         >
-          <div className="relative w-[300px] h-[202px]">
+          <div className="flex-none w-[300px] h-[180px] shrink-0 relative">
             <Link href="">
-              <img
+              <Image
                 src={item.image}
                 alt={item.title}
-                className="rounded object-cover"
+                fill
+                className="object-cover rounded"
               />
             </Link>
           </div>
-
-          <div className="w-[580px] h-[202px] pl-[20px]">
+          <div className="flex-1">
             <Link href="">
-              <h3 className="text-[18px] font-semibold">{item.title}</h3>
+              <h3 className="text-xl font-semibold">{item.title}</h3>
             </Link>
             <p className="text-info mt-2">{item.date}</p>
             <Link href="">
-              <p className="text-caption">{item.description}</p>
+              <p className="text-caption mt-2">{item.description}</p>
             </Link>
           </div>
         </div>

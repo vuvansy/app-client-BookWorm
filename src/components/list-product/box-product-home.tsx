@@ -7,39 +7,134 @@ import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import Swal from "sweetalert2";
-import type { RootState } from '@/redux/store';
+import type { RootState } from "@/redux/store";
 import { App } from "antd";
 import { useRouter } from "next/navigation";
-
-
+import { MdFavorite } from "react-icons/md";
+import { useEffect } from "react";
+import { sendRequest } from "@/utils/api";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const BoxProductHome = (props: IBook) => {
+  const { data: session } = useSession();
+  const user = session?.user;
+  const userId = user?.id;
   const { _id, image, name, price_old, price_new, quantity } = props;
+  const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
   const { message, notification } = App.useApp();
   const router = useRouter();
   const cart = useSelector((state: RootState) => state.cart);
+  const discount =
+    price_new && price_old && price_new < price_old
+      ? Math.round(((price_old - price_new) / price_old) * 100)
+      : null;
 
-  const discount = (price_new && price_old && price_new < price_old)
-    ? Math.round(((price_old - price_new) / price_old) * 100)
-    : null;
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchFavorites = async () => {
+      try {
+        const res = await sendRequest<{
+          message: string;
+          data: IBookLike[];
+        }>({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${userId}`,
+          method: "GET",
+        });
+
+        if (res?.data) {
+          setFavoriteList(res.data);
+          setIsFavorite(res.data.some((item) => item.id_book._id === _id));
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách yêu thích", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFavorites();
+  }, [userId, _id]);
+
+  const handleToggleFavorite = async (bookId: string) => {
+    if (!userId) {
+      notification.warning({
+        message: "Thông báo",
+        description: "Bạn cần đăng nhập để thích sản phẩm!",
+      });
+      return;
+    }
+
+    const bookLikeItem = favoriteList.find(
+      (item) => item.id_book._id === bookId
+    );
+    const bookLikeId = bookLikeItem?._id;
+
+    try {
+      if (bookLikeId) {
+        await sendRequest({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${bookLikeId}`,
+          method: "DELETE",
+        });
+        notification.success({
+          message: "Thông báo",
+          description: "Đã Bỏ Yêu Thích!",
+        });
+      } else {
+        const res = await sendRequest<{ message: string; data: IBookLike }>({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like`,
+          method: "POST",
+          body: { id_user: userId, id_book: bookId },
+        });
+
+        if (res?.data) {
+          notification.success({
+            message: "Thông báo",
+            description: "Đã Thêm Vào Sản Phẩm Yêu Thích!",
+          });
+        }
+      }
+      const resFavorites = await sendRequest<{
+        message: string;
+        data: IBookLike[];
+      }>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${userId}`,
+        method: "GET",
+      });
+
+      if (resFavorites?.data) {
+        setFavoriteList(resFavorites.data);
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật yêu thích:", error);
+      notification.error({
+        message: "Lỗi",
+        description: "Không thể cập nhật danh sách yêu thích.",
+      });
+    }
+  };
 
   const handleAddToCart = (currentBook: IBook) => {
     if (quantity === 0) return;
     const cartItem = cart.items.find((item) => item._id === currentBook._id);
-    const maxQuantity = typeof currentBook.quantity === "number" ? currentBook.quantity : 0;
+    const maxQuantity =
+      typeof currentBook.quantity === "number" ? currentBook.quantity : 0;
     const currentCartQuantity = cartItem?.quantity ?? 0;
     if (currentCartQuantity + 1 > maxQuantity) {
       notification.warning({
-        message: 'Lỗi Số Lượng',
-        description: `Số lượng yêu cầu cho ${1 + currentCartQuantity} sản phẩm không có sẵn.`,
-        placement: 'topRight',
+        message: "Lỗi Số Lượng",
+        description: `Số lượng yêu cầu cho ${1 + currentCartQuantity
+          } sản phẩm không có sẵn.`,
+        placement: "topRight",
       });
       return;
     }
 
     dispatch(addToCart({ item: currentBook, quantity: 1 }));
-    // message.success('Sản phẩm đã được thêm vào giỏ hàng!')
     Swal.fire({
       icon: "success",
       title: "Sản phẩm đã được thêm vào giỏ hàng!",
@@ -57,7 +152,7 @@ const BoxProductHome = (props: IBook) => {
     if (quantity === 0) return;
     dispatch(addToCart({ item: currentBook, quantity: 1 }));
     message.success("Thêm sản phẩm vào giỏ hàng thành công.");
-    router.push('/cart');
+    router.push("/cart");
   };
   return (
     <div className="group w-full sm:max-w-[200px] md:max-w-[232px] ">
@@ -72,13 +167,24 @@ const BoxProductHome = (props: IBook) => {
           </div>
         )}
         <div className="absolute z-10 top-[6px] right-[6px] opacity-0 transition-all ease-in-out duration-1000 group-hover:opacity-100 flex flex-col gap-[4px]">
-          <div className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
+          <div
+            className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
             onClick={() => handleAddToCart(props)}
           >
             <BsCartPlus className="text-[22px] text-red1" />
           </div>
-          <div className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer">
-            <MdOutlineFavoriteBorder className="text-[22px] text-red1" />
+          <div
+            className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
+            onClick={() => handleToggleFavorite(_id)}
+          >
+            {!user ? (
+              <MdOutlineFavoriteBorder className="text-[22px] text-red-500" /> // Trái tim trắng khi chưa đăng nhập
+            ) : !loading &&
+              favoriteList.some((item) => item.id_book._id === _id) ? (
+              <MdFavorite className="text-[22px] text-red-500" /> // Trái tim đỏ khi đã thích
+            ) : (
+              <MdOutlineFavoriteBorder className="text-[22px] text-red-500" /> // Trái tim viền đỏ khi chưa thích
+            )}
           </div>
         </div>
         <div className="p-3 flex flex-col justify-center items-center">
@@ -100,8 +206,10 @@ const BoxProductHome = (props: IBook) => {
                 />
               </Link>
               {quantity === 0 && (
-                <div className="absolute top-1/2 left-1/2 w-[150px] bg-red-600 text-white text-md font-bold py-2 text-center shadow-md 
-                rotate-[-25deg] -translate-x-1/2 -translate-y-1/2">
+                <div
+                  className="absolute top-1/2 left-1/2 w-[150px] bg-red-600 text-white text-md font-bold py-2 text-center shadow-md 
+                  rotate-[-25deg] -translate-x-1/2 -translate-y-1/2"
+                >
                   Hết hàng
                 </div>
               )}
@@ -126,7 +234,8 @@ const BoxProductHome = (props: IBook) => {
           <div className="pb-[4px]">
             <button
               onClick={() => handleBuyNow(props)}
-              className="xl:px-[25px] px-[30px] py-[5px] flex justify-center items-center gap-x-2 text-red1 lg:text-body-bold text-caption-bold bg-white border border-red1 rounded-lg hover:text-white hover:bg-red1">
+              className="xl:px-[25px] px-[30px] py-[5px] flex justify-center items-center gap-x-2 text-red1 lg:text-body-bold text-caption-bold bg-white border border-red1 rounded-lg hover:text-white hover:bg-red1"
+            >
               <MdShoppingCart className="text-[22px] hidden md:block" />
               <span>Mua ngay</span>
             </button>

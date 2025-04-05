@@ -12,8 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { RiCoupon3Fill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
-import { useCurrentApp } from "@/context/app.context";
-
+import { useSession } from "next-auth/react";
 
 type FieldType = {
     code?: string;
@@ -24,7 +23,8 @@ interface IProps {
 }
 
 const TotalCart = (props: IProps) => {
-    const { user } = useCurrentApp();
+    const { data: session } = useSession();
+
     const { dataCoupon } = props
 
     const [form] = Form.useForm();
@@ -128,9 +128,9 @@ const TotalCart = (props: IProps) => {
     };
 
     const handleCheckout = () => {
-        if (!user) {
+        if (!session) {
             message.warning("Bạn cần đăng nhập để tiếp tục thanh toán!");
-            router.push(`/login?redirect=/checkout`);
+            router.push(`/auth/signin?redirect=/checkout`);
             return;
         }
         router.push("/checkout");
@@ -151,7 +151,9 @@ const TotalCart = (props: IProps) => {
         <div className="basis-4/12 pl-[15px]">
             <div className="bg-white rounded-lg px-[15px]">
                 <div className="h-[50px] flex justify-between items-center">
-                    <div className="flex items-center gap-x-2 text-blue-text">
+                    <div
+                        onClick={showModal}
+                        className="flex items-center gap-x-2 text-blue-text cursor-pointer">
                         <RiCoupon3Fill className="text-[18px]" />
                         <span className="text-caption">KHUYẾN MÃI</span>
                     </div>

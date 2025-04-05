@@ -19,16 +19,6 @@ declare global {
         data?: T;
     }
 
-    interface IModelPaginate<T> {
-        meta: {
-            current: number;
-            pageSize: number;
-            pages: number;
-            total: number;
-        },
-        result: T[]
-    }
-
 
     interface IResponseImport {
         countSuccess: number;
@@ -118,6 +108,7 @@ declare global {
         discountAmount: number;
         order_total: number;
         isPaid: boolean;
+        paidAt?: string;
         status: number;
         id_user?: string;
         id_delivery?: string;
