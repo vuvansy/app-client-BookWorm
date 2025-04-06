@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Select, Image, Upload, FormProps, App } from 'antd';
 import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { sendRequest } from '@/utils/api';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
 
 type FieldType = {
     fullName: string;
@@ -17,11 +20,17 @@ type FieldType = {
 };
 
 const EditProfileForm = () => {
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            router.push("/auth/signin"); // Chuyển hướng đến trang đăng nhập chỉ khi xác định là chưa đăng nhập
+        },
+    });
     const { message, modal, notification } = App.useApp();
     const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null);
     const [file, setFile] = useState(null);
     const [user, setUser] = useState<IUser>();
-    const [userId, setUserId] = useState<string | undefined>(undefined);
+    // const [userId, setUserId] = useState<string | undefined>(undefined);
     const [cities, setCities] = useState<City[]>([]);
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
@@ -29,6 +38,7 @@ const EditProfileForm = () => {
     const [isLoadingUserData, setIsLoadingUserData] = useState(false);
     const [form] = Form.useForm();
     const defaultAvatarUrl = 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg'; // URL của ảnh avatar mặc định
+    const router = useRouter();
 
     useEffect(() => {
         fetch("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json")
@@ -63,42 +73,70 @@ const EditProfileForm = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                setIsLoadingUserData(true);
-                const Token = localStorage.getItem('access_token');
-                if (!Token) {
-                    message.error('Bạn chưa đăng nhập. Vui lòng đăng nhập trước.');
-                    return;
-                }
-                const res = await sendRequest<IBackendRes<IFetchAccount>>({
-                    url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/account`,
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${Token}`,
-                    },
-                    // useCredentials: true,
-                })
-                if (res.data) {
-                    const user = res.data.user;
-                    setUser(user);
-                    setUserId(user.id);
-                    setImageUrl(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/avatar/${user.image}`);
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    message.error(error.message);
-                } else {
-                    message.error('An unknown error occurred.');
-                }
-            } finally {
-                setIsLoadingUserData(false);
-            }
-        };
-        fetchUser();
-    }, []);
+    // useEffect(() => {
+    //     const fetchUser = async () => {
+    //         try {
+    //             setIsLoadingUserData(true);
+    //             const Token = session?.access_token;
 
+    //             const res = await sendRequest<IBackendRes<IFetchAccount>>({
+    //                 url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/auth/account`,
+    //                 method: "GET",
+    //                 headers: {
+    //                     Authorization: `Bearer ${Token}`,
+    //                 },
+    //                 // useCredentials: true,
+    //             })
+    //             if (res.data) {
+    //                 const user = res.data.user;
+    //                 setUser(user);
+    //                 setUserId(user.id);
+    //                 setImageUrl(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/avatar/${user.image}`);
+    //             }
+    //         } catch (error) {
+    //             if (error instanceof Error) {
+    //                 message.error(error.message);
+    //             } else {
+    //                 message.error('An unknown error occurred.');
+    //             }
+    //         } finally {
+    //             setIsLoadingUserData(false);
+    //         }
+    //     };
+    //     fetchUser();
+    // }, [ message, session?.access_token ]);
+
+    const fetcher = async (url: string) => {
+        if (!session?.access_token) return null;
+
+        const res = await sendRequest<{ data: any }>({
+            url,
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${session?.access_token}`,
+            },
+        });
+
+        return res.data; // Trả về phần data của response
+    };
+
+    const userId = session?.user?.id;
+
+    const { data: userData, isLoading, error } = useSWR(
+        userId && session?.access_token
+            ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/user/${userId}`
+            : null,
+        fetcher
+    );
+
+    useEffect(() => {
+        if (userData) {
+            setUser(userData);
+            setImageUrl(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/avatar/${userData.image}`);
+        } else if (error) {
+            message.error(error.message || "Không thể tải dữ liệu người dùng");
+        }
+    }, [userData, error, message]);
 
     useEffect(() => {
         if (user && cities.length > 0) {
@@ -161,11 +199,6 @@ const EditProfileForm = () => {
                 const formData = new FormData();
                 formData.append("fileImg", file);
 
-                const Token = localStorage.getItem('access_token');
-                if (!Token) {
-                    message.error('Bạn chưa đăng nhập. Vui lòng đăng nhập trước.');
-                    return;
-                }
                 const uploadRes = await fetch(
                     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/file/upload`,
                     {
@@ -175,9 +208,6 @@ const EditProfileForm = () => {
                         },
                         body: formData,
                     });
-                // if (uploadRes && uploadRes.data) {
-                //     imageFileName = uploadRes.data.filePath;
-                // }
                 const uploadData = await uploadRes.json();
                 if (!uploadRes.ok) {
                     throw new Error(uploadData.message);
@@ -200,12 +230,6 @@ const EditProfileForm = () => {
             };
             console.log('formattedData:', formattedData);
 
-
-            const Token = localStorage.getItem('access_token');
-            if (!Token) {
-                message.error('Bạn chưa đăng nhập. Vui lòng đăng nhập trước.');
-                return;
-            }
             const updateRes = await sendRequest<IBackendRes<IUser>>({
                 url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/user/${userId}`,
                 method: "PUT",
