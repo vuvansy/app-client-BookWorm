@@ -3,6 +3,7 @@ import React from 'react';
 import { App, Button, Checkbox, Form, Input } from 'antd';
 import { sendRequest } from '@/utils/api';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 type FieldType = {
     current_password: string;
@@ -11,14 +12,17 @@ type FieldType = {
 };
 
 const ChangePasswordForm = () => {
+    const { data: session } = useSession({
+            required: true,
+            onUnauthenticated() {
+                router.push("/auth/signin"); // Chuyển hướng đến trang đăng nhập chỉ khi xác định là chưa đăng nhập
+            },
+        });
     const router = useRouter();
     const [form] = Form.useForm();
     const { message, modal, notification } = App.useApp();
-    const Token = localStorage.getItem('access_token');
-    if (!Token) {
-        message.error('Bạn chưa đăng nhập. Vui lòng đăng nhập trước.');
-        return;
-    }
+    const Token = session?.access_token;
+    
     const onFinish = async (values: any) => {
         const { current_password, new_password, confirm_password } = values;
         const data = { current_password, new_password, confirm_password };
