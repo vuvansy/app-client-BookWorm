@@ -4,6 +4,7 @@ import { App, Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, useSession } from "next-auth/react";
 
@@ -23,7 +24,7 @@ const LoginForm = () => {
         if (session?.user && redirectTo) {
             router.push(redirectTo);
         }
-    }, [session?.user]);
+    }, [session?.user, searchParams, router]);
     
     useEffect(() => {
         if (session?.error) {
@@ -32,7 +33,7 @@ const LoginForm = () => {
                 description: session.error,
             });
         }
-    }, [session?.error]);
+    }, [session?.error, notification]);
 
     const onFinish = async (values: any) => {
         try {
@@ -108,18 +109,17 @@ const LoginForm = () => {
                 onClick={() => {
                     signIn("github")
                 }}
-                type="primary"
-                icon={<FaFacebook size={20} />}
-                className='w-full !text-body-bold items-center !flex justify-center mb-4'
+                icon={<FaGithub size={20} />}
+                className='w-full !text-body-bold items-center !flex justify-center mb-4 !bg-black !text-white !border !border-white'
             >
-                Đăng nhập với Facebook
+                Đăng nhập với Github
             </Button>
             <Button
                 onClick={() => {
                     signIn("google")
                 }}
                 icon={<FaGoogle size={20} />}
-                className='w-full !text-body-bold items-center !flex justify-center !border !border-black/30 !pr-8 !text-black'
+                className='w-full !text-body-bold items-center !flex justify-center !border !border-black/30  !text-black'
             >
                 Đăng nhập với Google
             </Button>
@@ -129,5 +129,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-
