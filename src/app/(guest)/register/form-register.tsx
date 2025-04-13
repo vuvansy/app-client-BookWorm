@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 
 
 type FieldType = {
@@ -106,13 +107,27 @@ const RegisterForm = () => {
                 <Link href="/forgot-password" className='!text-red1'>Quên Mật Khẩu</Link>
             </div>
             <div className='flex items-center justify-center text-body-bold mb-[10px]'>Hoặc</div>
-            <Button type="primary" icon={<FaFacebook size={20} />} className='w-full !text-body-bold items-center !flex justify-center mb-4'>Đăng nhập với Facebook</Button>
-            <Button icon={<FaGoogle size={20} />} className='w-full !text-body-bold items-center !flex justify-center !border !border-black/30  !pr-8  !text-black'>Đăng nhập với Google</Button>
+            <Button
+                onClick={() => {
+                    signIn("github")
+                }}
+                icon={<FaGithub size={20} />}
+                className='w-full !text-body-bold items-center !flex justify-center mb-4 !bg-black !text-white !border !border-white'
+            >
+                Đăng nhập với Github
+            </Button>
+            <Button
+                onClick={() => {
+                    signIn("google")
+                }}
+                icon={<FaGoogle size={20} />}
+                className='w-full !text-body-bold items-center !flex justify-center !border !border-black/30  !text-black'
+            >
+                Đăng nhập với Google
+            </Button>
 
         </Form>
     );
 };
 
 export default RegisterForm;
-
-

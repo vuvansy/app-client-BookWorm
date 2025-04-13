@@ -146,7 +146,9 @@ const DropDowCart = () => {
                 </Popover>
             </li>
             <li className='cursor-pointer'>
-                <LuPackageSearch className='icon-cart' />
+                <Link href={'/search-order'}>
+                    <LuPackageSearch className='icon-cart' />
+                </Link>
             </li>
             <li className="flex items-center cursor-pointer">
                 <DropDowAccount />
