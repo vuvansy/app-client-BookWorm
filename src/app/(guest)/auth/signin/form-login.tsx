@@ -85,7 +85,7 @@ const LoginForm = () => {
             </Form.Item>
 
             <Form.Item<FieldType>
-                label="Mật khẩu"
+                label="Mật Khẩu"
                 name="password"
                 rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
             >
@@ -98,10 +98,10 @@ const LoginForm = () => {
             >
                 Đăng Nhập
             </Button>
-            <div className=' my-[10px] text-body1 items-center flex justify-between'>
+            <div className='my-[8px] text-body1 items-center flex justify-between'>
                 <span>Bạn chưa có tài khoản? <Link href="/register" className='!text-red1'>Đăng ký ngay</Link></span>
             </div>
-            <div className=' mb-[10px] text-body1 items-center flex justify-between'>
+            <div className=' mb-[2px] text-body1 items-center flex justify-between'>
                 <Link href="/forgot-password" className='!text-red1'>Quên mật khẩu</Link>
             </div>
             <div className='flex items-center justify-center text-body-bold mb-[10px]'>Hoặc</div>

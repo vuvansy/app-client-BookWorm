@@ -8,13 +8,15 @@ import ModalGallery from "./modal.gallery";
 import { useCurrentApp } from "@/context/app.context";
 import { sendRequest } from "@/utils/api";
 import { notification } from "antd";
+import { useSession } from "next-auth/react";
 
 interface IProps {
   currentBook: IBookTable | null;
 }
 
 const GalleryComponent = ({ currentBook }: IProps) => {
-  const { user } = useCurrentApp();
+  const { data: session } = useSession();
+  const user = session?.user;
   const userId = user?.id;
   const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);

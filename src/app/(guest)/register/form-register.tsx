@@ -3,10 +3,9 @@ import React from 'react';
 import { Button, Checkbox, Form, Input, App } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
-
+import { signIn } from "next-auth/react";
 
 type FieldType = {
     fullName: string;
@@ -42,7 +41,7 @@ const RegisterForm = () => {
             if (d.data) {
                 //success
                 message.success("Đăng ký tài khoản thành công.");
-                router.push('/login');
+                router.push('/auth/signin');
             } else {
                 message.error(d.message);
             }
@@ -58,9 +57,6 @@ const RegisterForm = () => {
     return (
         <Form
             name="basic"
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 16 }}
-            // style={{ maxWidth: 600, marginTop: "50px" }}
             className='max-w-[800px]'
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -68,7 +64,7 @@ const RegisterForm = () => {
             layout='vertical'
         >
             <Form.Item<FieldType>
-                label="Họ và tên"
+                label="Họ Và Tên"
                 name="fullName"
                 rules={[{ required: true, message: 'Hãy Nhập Họ Tên!' }]}
             >
@@ -85,7 +81,7 @@ const RegisterForm = () => {
 
             <Form.Item<FieldType>
                 name="password"
-                label="Mật khẩu"
+                label="Mật Khẩu"
                 rules={[{ required: true, message: 'Hãy Nhập Mật Khẩu!' }]}
             >
                 <Input.Password />
@@ -100,11 +96,11 @@ const RegisterForm = () => {
             </Form.Item>
 
             <Button type="primary" htmlType="submit" className='w-full !bg-red1 !text-body-bold'>Đăng Ký</Button>
-            <div className=' my-[10px] text-body1 items-center flex justify-between'>
-                <span>Bạn đã có tài khoản? <Link href="/login" className='!text-red1'>Đăng Nhập Ngay</Link></span>
+            <div className=' my-[8px] text-body1 items-center flex justify-between'>
+                <span>Bạn đã có tài khoản? <Link href="/auth/signin" className='!text-red1'>Đăng nhập ngay</Link></span>
             </div>
-            <div className=' mb-[10px] text-body1 items-center flex justify-between'>
-                <Link href="/forgot-password" className='!text-red1'>Quên Mật Khẩu</Link>
+            <div className=' mb-[2px] text-body1 items-center flex justify-between'>
+                <Link href="/forgot-password" className='!text-red1'>Quên mật khẩu</Link>
             </div>
             <div className='flex items-center justify-center text-body-bold mb-[10px]'>Hoặc</div>
             <Button

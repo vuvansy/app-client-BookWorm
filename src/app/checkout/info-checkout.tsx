@@ -149,11 +149,11 @@ const InfoCheckout = () => {
         fetchCities();
     }, []);
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         router.replace("/auth/signin");
-    //     }
-    // }, [user, router]);
+    useEffect(() => {
+        if (!user) {
+            router.replace("/auth/signin");
+        }
+    }, [user, router]);
 
     useEffect(() => {
         if (user && cities.length > 0) {

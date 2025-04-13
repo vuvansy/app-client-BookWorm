@@ -39,6 +39,7 @@ const ChangePasswordForm = () => {
                 }
             );
             const d = await res.json();
+            console.log(d);
             if (d.statusCode === 200) {
                 message.success(d.message);
                 setTimeout(() => form.resetFields(), 0);
