@@ -76,6 +76,63 @@ const TotalCart = (props: IProps) => {
         }
     }, [total, minTotalRequired]);
 
+    // const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    //     try {
+    //         const res = await fetch(
+    //             `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/coupon/apply`,
+    //             {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 body: JSON.stringify({ code: values.code })
+    //             })
+    //         const data: IBackendRes<ICoupon> = await res.json();
+    //         if (res.ok) {
+    //             const { code, max_value, min_total, value, _id, status } = data.data as ICoupon;
+    //             if (status !== "active") {
+    //                 message.warning("Mã giảm giá hiện không khả dụng.");
+    //                 return;
+    //             }
+    //             if (total < min_total) {
+    //                 message.warning(
+    //                     `Mã giảm giá chỉ áp dụng cho đơn hàng từ ${new Intl.NumberFormat(
+    //                         "vi-VN"
+    //                     ).format(min_total)} đ trở lên.`
+    //                 );
+    //                 return;
+    //             }
+    //             const discountPercent = (value / 100) * total;
+    //             const discountValue = Math.min(discountPercent, max_value);
+
+    //             message.success("Mã đã được áp dụng");
+    //             setDiscount(discountValue);
+    //             setCouponCode(values.code ?? "");
+    //             setMinTotalRequired(min_total);
+    //             setAppliedCouponCode(values.code ?? "");
+
+    //             // localStorage
+    //             localStorage.setItem("appliedCoupon", JSON.stringify({
+    //                 _id,
+    //                 code,
+    //                 discount: discountValue,
+    //                 min_total: min_total
+    //             }));
+
+    //         } else {
+    //             message.error(data.message);
+    //             setDiscount(0);
+    //             setCouponCode("");
+    //             setMinTotalRequired(0);
+    //         }
+
+    //     } catch (error) {
+    //         console.error("Lỗi khi áp dụng mã:", error);
+    //     }
+    // };
+
+
+
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
             const res = await fetch(
@@ -86,46 +143,55 @@ const TotalCart = (props: IProps) => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ code: values.code })
-                })
+                });
+
             const data: IBackendRes<ICoupon> = await res.json();
-            if (res.ok) {
-                const { code, max_value, min_total, value, _id } = data.data as ICoupon;
-                if (total < min_total) {
-                    message.warning(
-                        `Mã giảm giá chỉ áp dụng cho đơn hàng từ ${new Intl.NumberFormat(
-                            "vi-VN"
-                        ).format(min_total)} đ trở lên.`
-                    );
-                    return;
-                }
-                const discountPercent = (value / 100) * total;
-                const discountValue = Math.min(discountPercent, max_value);
 
-                message.success("Mã đã được áp dụng");
-                setDiscount(discountValue);
-                setCouponCode(values.code ?? "");
-                setMinTotalRequired(min_total);
-                setAppliedCouponCode(values.code ?? "");
-
-                // localStorage
-                localStorage.setItem("appliedCoupon", JSON.stringify({
-                    _id,
-                    code,
-                    discount: discountValue,
-                    min_total: min_total
-                }));
-
-            } else {
-                message.error(data.message);
-                setDiscount(0);
-                setCouponCode("");
-                setMinTotalRequired(0);
+            if (!res.ok) {
+                message.error(data.message || "Mã giảm giá không hợp lệ");
+                return;
             }
+
+            const { code, max_value, min_total, value, _id, status } = data.data as ICoupon;
+
+            if (status !== "active") {
+                message.warning("Mã giảm giá hiện không khả dụng.");
+                return;
+            }
+
+            if (total < min_total) {
+                message.warning(
+                    `Mã giảm giá chỉ áp dụng cho đơn hàng từ ${new Intl.NumberFormat("vi-VN").format(min_total)} đ trở lên.`
+                );
+                return;
+            }
+
+            // Hợp lệ → tính giảm giá & áp dụng
+            const discountPercent = (value / 100) * total;
+            const discountValue = Math.min(discountPercent, max_value);
+
+            message.success("Mã đã được áp dụng");
+
+            setDiscount(discountValue);
+            setCouponCode(code);
+            setMinTotalRequired(min_total);
+            setAppliedCouponCode(code);
+
+            // Lưu localStorage
+            localStorage.setItem("appliedCoupon", JSON.stringify({
+                _id,
+                code,
+                discount: discountValue,
+                min_total: min_total
+            }));
 
         } catch (error) {
             console.error("Lỗi khi áp dụng mã:", error);
+            message.error("Đã có lỗi xảy ra khi áp dụng mã.");
+            // Không reset trạng thái ở đây nữa
         }
     };
+
 
     const handleCheckout = () => {
         if (!session) {
@@ -197,7 +263,7 @@ const TotalCart = (props: IProps) => {
                                 <p className="text-info-light text-gray-1">Áp dụng tối đa: 1</p>
                             </div>
                             <div className="mt-3 max-h-[320px] overflow-y-auto">
-                                {
+                                {/* {
                                     dataCoupon.map((coupon) => (
                                         <div key={coupon._id} className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
                                             <div className="relative flex flex-col items-center justify-center min-w-[100px] h-[100px] bg-yellow-400 rounded-lg">
@@ -238,7 +304,88 @@ const TotalCart = (props: IProps) => {
                                             </div>
                                         </div>
                                     ))
-                                }
+                                } */}
+
+                                {dataCoupon.length === 0 ? (
+                                    <p>Không có mã giảm giá.</p>
+                                ) : (
+                                    <>
+                                        {/* MÃ KHẢ DỤNG */}
+                                        {dataCoupon
+                                            .filter(coupon => total >= coupon.min_total && coupon.status === 'active')
+                                            .map(coupon => (
+                                                <div key={coupon._id} className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
+                                                    <div className="relative flex flex-col items-center justify-center min-w-[100px] h-[100px] bg-yellow-400 rounded-lg">
+                                                        <PiSealPercentBold className="text-[40px] text-white" />
+                                                        <span className="text-sm font-semibold text-white">Mã giảm</span>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <h3 className="font-semibold">Giảm {coupon.value}%</h3>
+                                                        <p className="font-semibold">CODE: {coupon.code}</p>
+                                                        <p>{coupon.description}</p>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-500">HSD: {new Date(coupon.end_date).toLocaleDateString("vi-VN")}</span>
+                                                            <button
+                                                                className={`py-[2px] px-2 rounded mr-3 ${appliedCouponCode === coupon.code
+                                                                    ? "border border-blue-500 text-blue-500"
+                                                                    : "bg-blue-500 text-white"
+                                                                    }`}
+                                                                onClick={() => {
+                                                                    if (appliedCouponCode === coupon.code) {
+                                                                        setAppliedCouponCode(null);
+                                                                        setCouponCode("");
+                                                                        setDiscount(0);
+                                                                        setMinTotalRequired(0);
+                                                                        message.info("Mã giảm giá đã được gỡ bỏ");
+                                                                        localStorage.removeItem("appliedCoupon");
+                                                                    } else {
+                                                                        form.setFieldsValue({ code: coupon.code });
+                                                                        form.submit();
+                                                                    }
+                                                                }}
+                                                            >
+                                                                {appliedCouponCode === coupon.code ? "Đã áp dụng" : "Áp dụng"}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+
+                                        {/* MÃ KHÔNG ĐỦ ĐIỀU KIỆN */}
+                                        {dataCoupon
+                                            .filter(coupon => total < coupon.min_total || coupon.status !== 'active')
+                                            .map(coupon => (
+                                                <div
+                                                    key={coupon._id}
+                                                    className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2 opacity-50"
+                                                >
+                                                    <div className="relative flex flex-col items-center justify-center min-w-[100px] h-[100px] bg-gray-300 rounded-lg">
+                                                        <PiSealPercentBold className="text-[40px] text-white" />
+                                                        <span className="text-sm font-semibold text-white">Không hợp lệ</span>
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <h3 className="font-semibold line-through">Giảm {coupon.value}%</h3>
+                                                        <p className="font-semibold">CODE: {coupon.code}</p>
+                                                        <p>{coupon.description}</p>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-500">HSD: {new Date(coupon.end_date).toLocaleDateString("vi-VN")}</span>
+                                                            <button
+                                                                className="py-[2px] px-2 rounded mr-3 border border-gray-400 text-gray-400 cursor-not-allowed"
+                                                                disabled
+                                                            >
+                                                                Không áp dụng
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                    </>
+                                )}
+
+
+
                             </div>
                         </div>
                     </Modal>

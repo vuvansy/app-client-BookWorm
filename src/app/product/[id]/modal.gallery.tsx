@@ -55,6 +55,7 @@ const ModalGallery = (props: IProps) => {
                                     return (
                                         <Col key={`image-${i}`}>
                                             <Image
+                                                alt={item.original}
                                                 className="cursor-pointer"
                                                 width={100}
                                                 height={100}
