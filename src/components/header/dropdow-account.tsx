@@ -18,7 +18,7 @@ const DropDowAccount = () => {
     const { message } = App.useApp();
     const { data: session } = useSession();
     const userType = session?.user?.type;
-    console.log("session CLIENT", session);
+    // console.log("session CLIENT", session);
 
     const guestItems = [
         {

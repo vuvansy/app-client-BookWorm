@@ -1,10 +1,13 @@
+import { Suspense } from "react";
 import ReturnURL from "./return-url";
 
 const CheckoutUrlPage = () => {
 
     return (
         <div className='pt-[30px] bg-bg-main'>
-            <ReturnURL />
+            <Suspense fallback={<div>Đang tải...</div>}>
+                <ReturnURL />
+            </Suspense>
         </div>
     );
 };

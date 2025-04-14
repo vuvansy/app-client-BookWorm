@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { App, Button, Form, Input } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
