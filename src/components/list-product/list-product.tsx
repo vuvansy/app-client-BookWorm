@@ -44,6 +44,7 @@ const ListProduct = ({
               total={totalPages * itemsPerPage}
               pageSize={itemsPerPage}
               onChange={onPageChange}
+              showSizeChanger={false}
             />
           </div>
         </>

@@ -14,7 +14,7 @@ interface Props {
   limit: number;
   genres: IGenre[];
   type: string;
-  totalPages: number; // Nhận totalPages từ API
+  totalPages: number; 
 }
 
 const BoxProductByType = ({
@@ -23,7 +23,7 @@ const BoxProductByType = ({
   limit,
   genres,
   type,
-  totalPages: initialTotalPages, // Nhận totalPages từ API
+  totalPages: initialTotalPages, 
 }: Props) => {
   const [books, setBooks] = useState<IBook[]>(initialData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,13 +31,12 @@ const BoxProductByType = ({
   const [sort, setSort] = useState<string>("name");
   const [totalItemsByCategory, setTotalItemsByCategory] =
     useState<number>(totalItems);
-  const [totalPages, setTotalPages] = useState<number>(initialTotalPages); // Sử dụng giá trị từ API
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages); 
 
   const initialBooksRef = useRef<IBook[]>(initialData);
 
   useEffect(() => {
     const fetchBooks = async () => {
-      // Nếu ở trang đầu tiên, không có bộ lọc nào -> sử dụng dữ liệu ban đầu
       if (currentPage === 1 && selectedGenre === "" && sort === "name") {
         setBooks(initialBooksRef.current);
         setTotalItemsByCategory(totalItems);
@@ -60,7 +59,7 @@ const BoxProductByType = ({
 
         setBooks(res?.data?.result || []);
         setTotalItemsByCategory(res?.data?.meta?.total || 0);
-        setTotalPages(res?.data?.meta?.pages || 1); // Cập nhật totalPages từ API
+        setTotalPages(res?.data?.meta?.pages || 1);
       } catch (error) {
         console.error("Lỗi khi lấy sản phẩm", error);
       }
@@ -121,7 +120,7 @@ const BoxProductByType = ({
         <ListProductByType
           books={books}
           currentPage={currentPage}
-          totalPages={totalPages} // Truyền totalPages từ API
+          totalPages={totalPages} 
           totalItems={totalItemsByCategory}
           limit={limit}
           onPageChange={setCurrentPage}
