@@ -155,7 +155,7 @@ const BoxProductHome = (props: IBook) => {
     router.push("/cart");
   };
   return (
-    <div className="group w-full sm:max-w-[200px] md:max-w-[232px] ">
+    <div className="group w-full sm:max-w-[200px] md:max-w-[232px]"key={_id}>
       <div className="relative bg-white group-hover:shadow-custom  overflow-hidden">
         {discount && (
           <div className="lg:w-[44px] w-[40px] lg:h-[44px] h-[40px] absolute z-10 top-[6px] left-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
