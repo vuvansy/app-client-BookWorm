@@ -214,7 +214,7 @@ const TotalCart = (props: IProps) => {
     };
 
     return (
-        <div className="basis-4/12 pl-[15px]">
+        <div className="basis-full lg:basis-4/12 md:pl-0 lg:pl-[15px]">
             <div className="bg-white rounded-lg px-[15px]">
                 <div className="h-[50px] flex justify-between items-center">
                     <div
@@ -319,7 +319,7 @@ const TotalCart = (props: IProps) => {
                                                         <PiSealPercentBold className="text-[40px] text-white" />
                                                         <span className="text-sm font-semibold text-white">Mã giảm</span>
                                                     </div>
-                                                    <div className="w-full">
+                                                    <div className="w-full text-[12px] sm:text-[14px]">
                                                         <h3 className="font-semibold">Giảm {coupon.value}%</h3>
                                                         <p className="font-semibold">CODE: {coupon.code}</p>
                                                         <p>{coupon.description}</p>
@@ -364,14 +364,14 @@ const TotalCart = (props: IProps) => {
                                                         <PiSealPercentBold className="text-[40px] text-white" />
                                                         <span className="text-sm font-semibold text-white">Không hợp lệ</span>
                                                     </div>
-                                                    <div className="w-full">
+                                                    <div className="w-full text-[12px] sm:text-[14px]">
                                                         <h3 className="font-semibold line-through">Giảm {coupon.value}%</h3>
                                                         <p className="font-semibold">CODE: {coupon.code}</p>
                                                         <p>{coupon.description}</p>
                                                         <div className="flex justify-between">
                                                             <span className="text-gray-500">HSD: {new Date(coupon.end_date).toLocaleDateString("vi-VN")}</span>
                                                             <button
-                                                                className="py-[2px] px-2 rounded mr-3 border border-gray-400 text-gray-400 cursor-not-allowed"
+                                                                className="py-[2px] px-1 sm:px-2 rounded mr-3 border border-gray-400 text-gray-400 cursor-not-allowed"
                                                                 disabled
                                                             >
                                                                 Không áp dụng
@@ -384,31 +384,29 @@ const TotalCart = (props: IProps) => {
                                     </>
                                 )}
 
-
-
                             </div>
                         </div>
                     </Modal>
                 </div>
                 <div className="pb-[16px]">
                     <div className="font-semibold">ĐƠN HÀNG</div>
-                    <p className=" pt-[8px] text-info-bold">Đừng quên nhập mã giảm giá</p>
-                    <div className="flex justify-between text-body1 py-[10px] text-[#333333]">
+                    <p className=" pt-[8px] text-[12px] sm:text-info-bold">Đừng quên nhập mã giảm giá</p>
+                    <div className="flex justify-between text-[14px] sm:text-body1 py-[10px] text-[#333333]">
                         <p className="basis-4/6">Thành tiền</p>
                         <span className="basis-2/6 flex justify-end items-center">{new Intl.NumberFormat("vi-VN").format(total) + " đ"}</span>
                     </div>
                     {couponCode && (
-                        <div className="flex justify-between text-body1 pb-[10px] text-[#333333]">
+                        <div className="flex justify-between text-[14px] sm:text-body1 pb-[10px] text-[#333333]">
                             <p className="basis-4/6">
                                 Giảm giá (Nhập mã thành công - Mã {couponCode} - Giảm tối đa {discount.toLocaleString("vi-VN")}đ)
                             </p>
-                            <span className="basis-2/6 flex justify-end items-center">
+                            <span className="basis-2/6 flex justify-end items-center text-[14px]">
                                 - {discount.toLocaleString("vi-VN")} đ
                             </span>
                         </div>
                     )}
                     <div className="border border-[#ededed]"></div>
-                    <div className="flex justify-between items-center text-red1 text-sub-heading-bold py-[10px]">
+                    <div className="flex justify-between items-center text-red1 text-caption-bold sm:text-sub-heading-bold py-[10px]">
                         <span>Tổng Số Tiền:</span>
                         <span>{new Intl.NumberFormat("vi-VN").format(total - discount) + " đ"}</span>
                     </div>
