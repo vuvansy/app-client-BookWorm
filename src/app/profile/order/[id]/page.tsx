@@ -20,9 +20,9 @@ const OrderDetailPage = async (props: Props) => {
     const { params } = props;
 
     return (
-        <main className="bg-bg-main pt-[30px]">
-            <div className="container bg-white rounded-lg pt-[10px] pb-[26px] px-[20px]">
-                <h2 className="text-sub-heading-bold py-[8px] border-b border-[#ced4da] uppercase">Chi tiết đơn hàng</h2>
+        <main className="bg-bg-main pt-[20px] md:pt-[30px]">
+            <div className="container bg-white rounded-lg pt-[10px] pb-[26px] px-[15px] md:px-[20px]">
+                <h2 className="text-caption-bold md:text-sub-heading-bold py-[8px] border-b border-[#ced4da] uppercase">Chi tiết đơn hàng</h2>
                 <InfoOrder
                     id={params.id}
                 />

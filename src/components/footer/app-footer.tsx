@@ -14,7 +14,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 const AppFooter = () => {
   return (
-    <footer className="pt-[30px] bg-bg-main ">
+    <footer className="pt-[20px] md:pt-[30px] bg-bg-main">
       <div className=" container bg-white flex flex-col lg:flex-row pt-[16px] rounded-lg">
         <div className="relative basis-2/6 text-info ">
           <div className=" w-full h-[69px] mb-[8px] py-2.5 px-[15px] ">

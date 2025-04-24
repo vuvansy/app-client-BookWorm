@@ -4,6 +4,7 @@ import { sendRequest } from "@/utils/api";
 import { App, Button, Popconfirm, Spin } from "antd"
 import { useEffect, useState } from "react";
 import Image from "next/image"
+import { FaPen } from "react-icons/fa";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import Swal from "sweetalert2";
 import useSWR, { mutate } from "swr";
@@ -28,7 +29,7 @@ const InfoOrder = (props: IProps) => {
     const [selectedOrderDetail, setSelectedOrderDetail] = useState<IOrderDetailTable | null>(null);
     const [reviewedItems, setReviewedItems] = useState<string[]>([]);
     // Lấy thông tin đơn hàng
-    const { data: orderData, error: orderError, isLoading: orderLoading } = useSWR<IBackendRes<IOrder>>(
+    const { data: orderData, error: orderError, isLoading: orderLoading } = useSWR<IBackendRes<IHistory>>(
         id ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/order-id/${id}` : null,
         fetcher
     );
@@ -133,38 +134,52 @@ const InfoOrder = (props: IProps) => {
     const address = typeof order?.address === "string" ? JSON.parse(order.address) : order?.address;
     return (
         <>
-            <div className="py-[10px] text-caption border-b border-[#ced4da]">
-                <h3 className="text-center text-body-bold py-[10px] uppercase">Thông tin khách hàng</h3>
+            <div className="py-[5px] md:py-[10px] text-caption border-b border-[#ced4da]">
+                <h3 className="text-center text-info-bold md:text-body-bold py-[5px] md:py-[10px] uppercase">Thông tin khách hàng</h3>
                 <div className="flex gap-2 mb-[8px]">
-                    <span className="text-caption-bold">Mã Đơn Hàng:</span>
-                    <p>{order?._id}</p>
+                    <span className="text-info-bold md:text-caption-bold">Mã Đơn Hàng:</span>
+                    <p className="text-info md:text-body">{order?._id}</p>
                 </div>
                 <div className="flex gap-2 mb-[8px]">
-                    <span className="text-caption-bold">Tên Khách Hàng:</span>
-                    <p>{order?.fullName}</p>
+                    <span className="text-info-bold md:text-caption-bold">Tên Khách Hàng:</span>
+                    <p className="text-info md:text-body">{order?.fullName}</p>
                 </div>
                 <div className="flex gap-2 mb-[8px]">
-                    <span className="text-caption-bold">Địa Chỉ Giao Hàng:</span>
-                    <p>
+                    <span className="text-info-bold md:text-caption-bold">Địa Chỉ Giao Hàng:</span>
+                    <p className="text-info md:text-body">
                         {`${address?.street}, ${address?.ward?.name}, ${address?.district?.name}, ${address?.city?.name}`}
                     </p>
                 </div>
                 <div className="flex gap-2 mb-[8px]">
-                    <span className="text-caption-bold">Email:</span>
-                    <p>{order?.email}</p>
+                    <span className="text-info-bold md:text-caption-bold">Email:</span>
+                    <p className="text-info md:text-body">{order?.email}</p>
                 </div>
                 <div className="flex gap-2 mb-[8px]">
-                    <span className="text-caption-bold">Số Điện Thoại:</span>
-                    <p>{order?.phone}</p>
+                    <span className="text-info-bold md:text-caption-bold">Số Điện Thoại:</span>
+                    <p className="text-info md:text-body">{order?.phone}</p>
                 </div>
                 <div className="flex gap-2 mb-[6px]">
-                    <span className="text-caption-bold">Ngày Đặt Hàng:</span>
-                    {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
+                    <span className="text-info-bold md:text-caption-bold">Ngày Đặt Hàng:</span>
+                    <p className="text-info md:text-body">{dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}</p>
                 </div>
+                <div className="flex gap-2 mb-[8px]">
+                    <span className="text-info-bold md:text-caption-bold">Phương Thức Thanh Toán:</span>
+                    <p className="text-info md:text-body">{order?.id_payment.name}</p>
+                </div>
+                <div className="flex gap-2 mb-[8px]">
+                    <span className="text-info-bold md:text-caption-bold">Phương Thức Giao Hàng:</span>
+                    <p className="text-info md:text-body">{order?.id_delivery.name}</p>
+                </div>
+                {order?.isPaid && order?.paidAt && (
+                    <div className="flex gap-2 mt-[8px]">
+                        <span className="text-info-bold md:text-caption-bold">Thời Gian Thanh Toán:</span>
+                        <p className="text-info md:text-body">{dayjs(order.paidAt).format("DD-MM-YYYY HH:mm:ss")}</p>
+                    </div>
+                )}
                 <div className="flex gap-6 items-center">
                     <div className="flex gap-2">
-                        <span className="text-caption-bold">Trạng Thái:</span>
-                        <span className={`${getStatusColor(order?.status)} text-white px-2 py-[2px] rounded-md font-medium`}>
+                        <span className="text-info-bold md:text-caption-bold">Trạng Thái:</span>
+                        <span className={`${getStatusColor(order?.status)} text-white px-2 py-[2px] rounded-md font-medium text-info md:text-body`}>
                             {getStatusLabel(order?.status as number)}
                         </span>
                     </div>
@@ -174,6 +189,7 @@ const InfoOrder = (props: IProps) => {
                             size="small"
                             type="dashed"
                             onClick={handleCancelOrder}
+                            className="text-info md:text-body"
                         >
                             Hủy
                         </Button>
@@ -181,46 +197,46 @@ const InfoOrder = (props: IProps) => {
                 </div>
             </div>
             <div>
-                <h3 className="text-center text-body-bold pb-[10px] pt-[20px] uppercase">Thông tin sản phẩm</h3>
+                <h3 className="text-center text-info-bold md:text-body-bold pb-[5px] md:pb-[10px] pt-[10px] md:pt-[20px] uppercase">Thông tin sản phẩm</h3>
                 <table className="table-auto border-collapse w-full text-[15px]">
                     <thead>
-                        <tr>
-                            <th className="w-[4%] p-[8px]">STT</th>
-                            <th className="w-[14%] p-[8px]">Ảnh</th>
-                            <th className="w-[40%] p-[8px] text-left">Sản Phẩm</th>
-                            <th className="w-[10%] p-[8px] text-left">Giá</th>
-                            <th className="w-[8%] p-[8px]">Số Lượng</th>
-                            <th className="w-[10%] p-[8px]">Thành Tiền</th>
-                            <th className="w-[14%] p-[8px]">Tác Vụ</th>
+                        <tr className="text-info-bold">
+                            <th className="w-[4%] p-[2px] md:p-[8px]">STT</th>
+                            <th className="w-[10%] md:w-[14%] p-[2px] md:p-[8px]">Ảnh</th>
+                            <th className="w-[34%] md:w-[40%] p-[2px] md:p-[8px] text-left">Sản Phẩm</th>
+                            <th className="w-[15%] md:w-[10%] p-[2px] md:p-[8px] text-left">Giá</th>
+                            <th className="w-[8%] p-[2px] md:p-[8px]">Số Lượng</th>
+                            <th className="w-[15%] md:w-[10%] p-[2px] md:p-[8px]">Thành Tiền</th>
+                            <th className="w-[14%] p-[2px] md:p-[8px]">Tác Vụ</th>
                         </tr>
                     </thead>
                     <tbody>
                         {orderDetails?.map((item, index) => (
                             <tr
                                 key={item._id}
-                                className="border-y border-solid border-[#ced4da] odd:bg-gray-100 even:bg-white text-caption">
+                                className="border-y border-solid border-[#ced4da] odd:bg-gray-100 even:bg-white text-[12px] md:text-caption">
                                 <th className="text-center">{index + 1}</th>
                                 <td className="">
-                                    <div className="relative w-[110px] h-[110px] mx-auto">
+                                    <div className="relative w-[60px] h-[60px] md:w-[110px] md:h-[110px] mx-auto">
                                         <Image
                                             src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${item.id_book.image}`}
                                             alt="" className="object-cover" fill />
                                     </div>
                                 </td>
-                                <td className="text-left pl-[8px] pr-[20px]">
+                                <td className="text-left pl-[2px] md:pl-[8px] md:pr-[20px]">
                                     {item.id_book.name}
                                 </td>
-                                <td className=" text-price-special px-[8px]">
+                                <td className=" text-price-special md:px-[8px]">
                                     <div className="flex flex-col justify-start text-left">
                                         <span className="text-red1 font-semibold">{(item.price).toLocaleString()} đ</span>
-                                        <span className="text-caption text-bg-text line-through">{(item.id_book.price_old).toLocaleString()} đ</span>
+                                        <span className="text-[12px] md:text-caption text-bg-text line-through">{(item.id_book.price_old).toLocaleString()} đ</span>
                                     </div>
                                 </td>
                                 <td className="text-center">
                                     {item.quantity}
                                 </td>
                                 <td className="text-center">
-                                    <span className="font-semibold ml-3">
+                                    <span className="font-semibold md:ml-3">
                                         {new Intl.NumberFormat("vi-VN").format(Number(item.price) * Number(item.quantity))} đ
                                     </span>
                                 </td>
@@ -230,10 +246,11 @@ const InfoOrder = (props: IProps) => {
                                             <span className="text-gray-500 font-semibold">Đã đánh giá</span>
                                         ) : (
                                             <button
-                                                className="bg-red1 text-white py-[10px] px-[16px] rounded-lg"
+                                                className="bg-red1 text-white py-[4px] px-[8px] md:py-[10px] md:px-[16px] rounded-lg"
                                                 onClick={() => handleOpenModal(item)}
                                             >
-                                                Đánh giá
+                                                 <FaPen className="text-sm md:hidden" />
+                                                 <span className="hidden md:inline">Đánh giá</span>
                                             </button>
                                         )
                                     ) : (
@@ -245,7 +262,7 @@ const InfoOrder = (props: IProps) => {
                                             showCancel={false}
                                             okButtonProps={{ style: { display: 'none' } }}
                                         >
-                                            <button className="bg-red1 opacity-50 text-white py-[10px] px-[16px] rounded-lg">
+                                            <button className="bg-red1 opacity-50 text-white text-[12px] py-[4px] md:py-[10px] px-[8px] md:px-[16px] rounded-lg">
                                                 Đánh giá
                                             </button>
                                         </Popconfirm>
@@ -256,19 +273,19 @@ const InfoOrder = (props: IProps) => {
                         ))}
                     </tbody>
                 </table>
-                <div className="flex items-center justify-end gap-2 py-[10px] border-b text-caption">
+                <div className="flex items-center justify-end gap-2 py-[4px] md:py-[10px] border-b text-info md:text-caption">
                     <div>Giảm Giá: </div>
                     <span>
                         {new Intl.NumberFormat("vi-VN").format(order?.discountAmount ?? 0)} đ
                     </span>
                 </div>
-                <div className="flex items-center justify-end gap-2 py-[10px] border-b text-caption">
+                <div className="flex items-center justify-end gap-2 py-[4px] md:py-[10px] border-b text-info md:text-caption">
                     <div>Phí Giao Hàng: </div>
                     <span>
                         {new Intl.NumberFormat("vi-VN").format(order?.shippingPrice ?? 0)} đ
                     </span>
                 </div>
-                <div className="flex items-center justify-end gap-2 py-[10px] border-b text-caption">
+                <div className="flex items-center justify-end gap-2 py-[4px] md:py-[10px] border-b text-info md:text-caption">
                     <div>Tổng Tiền: </div>
                     <span>
                         {new Intl.NumberFormat("vi-VN").format((order?.order_total ?? 0) + (order?.shippingPrice ?? 0))} đ

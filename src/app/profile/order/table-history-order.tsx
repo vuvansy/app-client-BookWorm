@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import Link from "next/link"
 import { useState } from "react";
+import { BsEyeFill } from "react-icons/bs";
 import useSWR from "swr";
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) =>
@@ -57,13 +58,32 @@ const TableHistoryOrder = () => {
     };
     const getStatusLabel = (status: number) => orderStatusMap[status] || "Không xác định";
     const items = [
-        { key: "", label: `Tất cả (${statusCounts[""] || 0})` },
-        { key: "0", label: `Chờ xác nhận (${statusCounts["0"] || 0})` },
-        { key: "1", label: `Đã xác nhận (${statusCounts["1"] || 0})` },
-        { key: "2", label: `Đang vận chuyển (${statusCounts["2"] || 0})` },
-        { key: "3", label: `Đã giao hàng (${statusCounts["3"] || 0})` },
-        { key: "4", label: `Đã hủy (${statusCounts["4"] || 0})` }
+        {
+            key: "",
+            label: <span>Tất cả ({statusCounts[""] || 0})</span>,
+        },
+        {
+            key: "0",
+            label: <span>Chờ xác nhận ({statusCounts["0"] || 0})</span>,
+        },
+        {
+            key: "1",
+            label: <span>Đã xác nhận ({statusCounts["1"] || 0})</span>,
+        },
+        {
+            key: "2",
+            label: <span>Đang vận chuyển ({statusCounts["2"] || 0})</span>,
+        },
+        {
+            key: "3",
+            label: <span>Đã giao hàng ({statusCounts["3"] || 0})</span>,
+        },
+        {
+            key: "4",
+            label: <span>Đã hủy ({statusCounts["4"] || 0})</span>,
+        },
     ];
+
     return (
         <>
             <div className="pb-[20px] px-[10px]">
@@ -77,34 +97,34 @@ const TableHistoryOrder = () => {
                 {orders && orders.length > 0 ? (
                     <table className="table-auto border-collapse w-full text-[15px]">
                         <thead>
-                            <tr>
-                                <th className="p-[10px] text-left">Mã Đơn Hàng</th>
-                                <th className="p-[10px] text-left">Ngày Đặt Hàng</th>
-                                <th className="p-[10px]">Tổng Tiền</th>
-                                <th className="p-[10px]">Hình thức thanh toán</th>
-                                <th className="p-[10px]">Trạng Thái</th>
-                                <th className="p-[10px]">Thao Tác</th>
+                            <tr className="text-[13px] md:text-[14px]">
+                                <th className="p-0 sm:p-[10px] text-left">Mã Đơn Hàng</th>
+                                <th className="p-0 sm:p-[10px] text-left hidden md:block">Ngày Đặt Hàng</th>
+                                <th className="p-0 sm:p-[10px]">Tổng Tiền</th>
+                                <th className="p-0 sm:p-[10px] hidden lg:block">Hình thức thanh toán</th>
+                                <th className="p-0 sm:p-[10px]">Trạng Thái</th>
+                                <th className="p-0 sm:p-[10px]">Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order._id} className="border-y odd:bg-gray-100 even:bg-white text-caption">
-                                    <td className="p-[10px] border-b border-solid border-[#ddd]">{order._id}</td>
-                                    <td className="p-[10px] text-left border-b border-solid border-[#ddd]">
+                                <tr key={order._id} className="border-y odd:bg-gray-100 even:bg-white text-[12px] md:text-caption">
+                                    <td className="p-0 sm:p-[10px] border-b border-solid border-[#ddd]">{order._id}</td>
+                                    <td className="p-0 sm:p-[10px] hidden md:block text-left border-b border-solid border-[#ddd]">
                                         {dayjs(order?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
                                     </td>
-                                    <td className="p-[10px] text-center text-price-special font-semibold border-b border-solid border-[#ddd]">
+                                    <td className="p-0 sm:p-[10px] text-center text-price-special font-semibold border-b border-solid border-[#ddd]">
                                         {new Intl.NumberFormat("vi-VN").format(order.order_total + order.shippingPrice)} đ
                                     </td>
-                                    <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
+                                    <td className="p-0 sm:p-[10px] hidden lg:block text-center border-b border-solid border-[#ddd]">
                                         {order.id_payment?.name || "Không xác định"}
                                     </td>
-                                    <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
+                                    <td className="p-0 sm:p-[10px] text-center border-b border-solid border-[#ddd]">
                                         {getStatusLabel(order.status)}
                                     </td>
-                                    <td className="p-[10px] text-center border-b border-solid border-[#ddd]">
-                                        <Link href={`/profile/order/${order._id}`} className="py-[6px] px-[16px] bg-price-special !text-white rounded-lg">
-                                            Chi Tiết
+                                    <td className="p-0 sm:p-[10px] text-center border-b border-solid border-[#ddd]">
+                                        <Link href={`/profile/order/${order._id}`} className="py-[2px] px-[8px] md:py-[6px] md:px-[16px] bg-price-special !text-white rounded-lg text-center text-[10px] md:text-caption">
+                                            <span className="">Chi Tiết</span>
                                         </Link>
                                     </td>
                                 </tr>
