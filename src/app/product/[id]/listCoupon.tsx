@@ -43,7 +43,7 @@ const ListCoupon = () => {
         };
 
         fetchCoupons();
-    }, []);
+    }, [message]);
 
     const showModalMore = () => {
 

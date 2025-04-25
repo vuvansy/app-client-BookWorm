@@ -102,7 +102,7 @@ const DropDowAccount = () => {
                 <Space className='!gap-x-[4px] cursor-pointer'>
                     <FaRegCircleUser className="icon-cart" />
                     {session && session.user?.fullName ? (
-                        <span>{session.user.fullName}</span>
+                        <div className="w-full max-w-[80px] truncate">{session.user.fullName}</div>
                     ) : (
                         <span>Tài Khoản</span>
                     )}

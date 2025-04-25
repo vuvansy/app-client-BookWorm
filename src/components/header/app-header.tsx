@@ -34,7 +34,7 @@ const AppHeader = async () => {
 
     return (
         <header>
-            <div className='bg-red1 h-[36px] px-2 xl:px-0 flex justify-between items-center'>
+            <div className='bg-red1 h-[36px] px-4 xl:px-0 flex justify-between items-center'>
                 <div className='container flex justify-between text-white'>
                     <div className='flex items-center gap-x-[4px] cursor-pointer'>
                         <MdOutlineMail />
@@ -48,7 +48,7 @@ const AppHeader = async () => {
                 </div>
             </div>
             <div className='header-center'>
-                <div className='bg-[#F4EDD3] h-[100px] lg:h-[60px] flex py-2 md:py-0 md:items-center px-2 xl:px-0'>
+                <div className='bg-[#F4EDD3] h-[100px] lg:h-[60px] flex py-2 md:py-0 md:items-center px-4 xl:px-0'>
                     <div className='container flex justify-between items-center flex-wrap'>
                         <div className='order-1 basis-5/12 py-2 lg:order-1 lg:basis-3/12'>
                             <Link href={"/"} className='w-[140px] lg:w-[200px]'>
