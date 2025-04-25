@@ -37,11 +37,11 @@ const CustomerReviews = (props: IProps) => {
                 </button>
             </div>
             {isOpen && (
-                <div className="bg-white rounded-b-lg py-2">
+                <div className="bg-white rounded-b-lg py-2 divide-y divide-bg-main">
                     {reviews.length > 0 ? (
                         reviews.map((review, index) => (
-                            <div key={index} className="bg-white rounded-lg flex flex-col lg:flex-row px-4">
-                                <div className="w-full lg:w-[12%] ">
+                            <div key={index} className="bg-white rounded-lg py-3 flex flex-col md:flex-row md:py-1 px-4">
+                                <div className="w-full md:w-[12%] ">
                                     <div className="text-caption ">{review.id_user.fullName}</div>
                                     <ConfigProvider
                                         theme={{
@@ -58,10 +58,10 @@ const CustomerReviews = (props: IProps) => {
                                         <Rate disabled value={review.rating} />
                                     </ConfigProvider>
                                 </div>
-                                <div className="w-full lg:w-[88%] text-caption">
-                                    <div className=" flex flex-col lg:flex-row lg:justify-between  ">
-                                        <div className="w-full my-2 lg:w-[85%] lg:my-0  ">{review.comment}</div>
-                                        <div className="w-full lg:w-[15%] lg:text-right">{review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'N/A'}</div>
+                                <div className="w-full md:w-[88%] text-caption">
+                                    <div className=" flex flex-col md:flex-row md:justify-between  ">
+                                        <div className="w-full my-1 md:pl-2 md:w-[85%] md:my-0  ">{review.comment}</div>
+                                        <div className="w-full md:w-[15%] md:text-right">{review.createdAt ? new Date(review.createdAt).toLocaleDateString() : 'N/A'}</div>
                                     </div>
                                 </div>
                             </div>
