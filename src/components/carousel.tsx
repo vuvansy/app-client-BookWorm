@@ -1,30 +1,47 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Carousel } from "antd";
 import Image from "next/image";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-
-const images = [
-  "/snapedit_1740666376597.jpg",
-  "/snapedit_1740666483358.jpg",
-  "/snapedit_1740666529015.jpg",
-];
+import { sendRequest } from "@/utils/api";
 
 const CarouselHome: React.FC = () => {
   const carouselRef = useRef<any>(null);
+  const [images, setImages] = useState<string[]>([]);
 
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const res = await sendRequest<IBackendRes<IBanner>>({
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/banner`,
+          method: "GET",
+        });
+
+        if (res.statusCode === 200 && Array.isArray(res.data)) {
+          const activeBanners = res.data.filter(
+            (banner) => banner.status === true
+          );
+          setImages(activeBanners.map((banner) => banner.image));
+        }
+      } catch (err) {
+        console.error("Failed to fetch banners:", err);
+      }
+    };
+
+    fetchBanners();
+  }, []);
   return (
     <div className="w-full max-w-[840px] relative">
       <Carousel ref={carouselRef} className="custom-carousel">
-        {images.map((src, index) => (
+        {images.map((img, index) => (
           <div key={index}>
             <Image
-              src={src}
+              src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/banner/${img}`}
               alt="Slide image"
               width={840}
               height={320}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 50vw"
-              className="w-full h-auto object-contain rounded-lg"
+              className="w-full h-[320px] object-cover rounded-lg"
             />
           </div>
         ))}
