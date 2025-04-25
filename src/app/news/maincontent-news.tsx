@@ -55,7 +55,7 @@ function MainContent() {
           className="flex flex-row items-start space-x-4 py-4 border-b border-gray-200"
         >
           <div className="flex-none w-[300px] h-[180px] shrink-0 relative">
-            <Link href="">
+            <Link href={`/news/${item.id}`}>
               <Image
                 src={item.image}
                 alt={item.title}
@@ -65,11 +65,11 @@ function MainContent() {
             </Link>
           </div>
           <div className="flex-1">
-            <Link href="">
+            <Link href={`/news/${item.id}`}>
               <h3 className="text-xl font-semibold">{item.title}</h3>
             </Link>
             <p className="text-info mt-2">{item.date}</p>
-            <Link href="">
+            <Link href={`/news/${item.id}`}>
               <p className="text-caption mt-2">{item.description}</p>
             </Link>
           </div>
