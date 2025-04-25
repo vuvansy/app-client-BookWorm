@@ -81,44 +81,45 @@ export default function FilterBarLeft({
           onClick={handleResetFilters}
         />
       </div>
-      <div className="h-[1px] w-[250px] opacity-50 bg-gray-300"></div>
+      <div className="h-[1px] w-full opacity-50 bg-gray-300"></div>
 
-      <Form name="category">
-        <p className="text-body1 my-5">Danh mục sản phẩm</p>
-        {genres.map((genre) => (
-          <div key={genre._id} className="mb-2 flex items-center">
-            <input
-              type="checkbox"
-              checked={selectedGenre.includes(genre._id)}
-              onChange={() => handleGenreChange(genre._id)}
-              className="mr-[13px] w-5 h-5 border border-gray-400 rounded-md appearance-none relative 
+      <div className="flex flex-col sm:flex-row sm:gap-5 lg:flex-col">
+        <Form name="category" className="w-1/2 sm:w-full">
+          <p className="text-body1 my-5">Danh mục sản phẩm</p>
+          {genres.map((genre) => (
+            <div key={genre._id} className="mb-2 flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedGenre.includes(genre._id)}
+                onChange={() => handleGenreChange(genre._id)}
+                className="mr-[13px] w-5 h-5 border border-gray-400 rounded-md appearance-none relative 
               checked:bg-red-500 checked:border-red-500 
               checked:after:content-['✓'] checked:after:absolute checked:after:top-[0px] checked:after:left-[4px] 
               checked:after:text-white checked:after:font-bold checked:after:text-[14px]"
-            />
-            <label className="text-caption">{genre.name}</label>
-          </div>
-        ))}
-      </Form>
+              />
+              <label className="text-caption">{genre.name}</label>
+            </div>
+          ))}
+        </Form>
 
-      <Form name="authors">
-        <p className="text-body1 my-5">Tác giả</p>
-        {authors.map((author) => (
-          <div key={author._id} className="mb-2 flex items-center">
-            <input
-              type="checkbox"
-              checked={selectedAuthor.includes(author._id)}
-              onChange={() => handleAuthorChange(author._id)}
-              className="mr-[13px] w-5 h-5 border border-gray-400 rounded-md appearance-none relative 
+        <Form name="authors" className="w-1/2 sm:w-full">
+          <p className="text-body1 my-5">Tác giả</p>
+          {authors.map((author) => (
+            <div key={author._id} className="mb-2 flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedAuthor.includes(author._id)}
+                onChange={() => handleAuthorChange(author._id)}
+                className="mr-[13px] w-5 h-5 border border-gray-400 rounded-md appearance-none relative 
               checked:bg-red-500 checked:border-red-500 
               checked:after:content-['✓'] checked:after:absolute checked:after:top-[0px] checked:after:left-[4px] 
               checked:after:text-white checked:after:font-bold checked:after:text-[14px]"
-            />
-            <label className="text-caption">{author.name}</label>
-          </div>
-        ))}
-      </Form>
-
+              />
+              <label className="text-caption">{author.name}</label>
+            </div>
+          ))}
+        </Form>
+      </div>
       <Form name="price-range">
         <div className="mt-4">
           <p className="text-body1 mb-5">Khoảng giá</p>
@@ -132,7 +133,9 @@ export default function FilterBarLeft({
               formatter={(value) =>
                 value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
               }
-              parser={(value) => (value ? parseInt(value.replace(/,/g, ""), 10) : 0)}
+              parser={(value) =>
+                value ? parseInt(value.replace(/,/g, ""), 10) : 0
+              }
               addonAfter="đ"
             />
             <div className="h-[1px] w-4 bg-gray-400"></div>
@@ -145,11 +148,12 @@ export default function FilterBarLeft({
               formatter={(value) =>
                 value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
               }
-              parser={(value) => (value ? parseInt(value.replace(/,/g, ""), 10) : 0)}
+              parser={(value) =>
+                value ? parseInt(value.replace(/,/g, ""), 10) : 0
+              }
               addonAfter="đ"
             />
           </div>
-
         </div>
         <button
           type="button"

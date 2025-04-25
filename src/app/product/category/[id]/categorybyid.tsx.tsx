@@ -105,7 +105,7 @@ const CategoryById = () => {
               `Lỗi khi fetch đánh giá cho sách ${book._id}:`,
               error
             );
-            return { ...book, rating: 0 }; 
+            return { ...book, rating: 0 };
           }
         });
 
