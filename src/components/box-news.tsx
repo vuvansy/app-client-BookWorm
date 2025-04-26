@@ -1,69 +1,62 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-//20240424_RFXcJbDd.jpeg
-//20240108_m2KOIfYJ.jpeg
-//20200115_AWqbYWkySz5ItGrwoLvHZfzR.jpeg
-//20240416_arOL3oEX.jpeg
 
-const promotions = [
-  {
-    id: 1,
-    image: "/20200509_h00usscv12jslgSaeESa0ZNg.png",
-    title: " Nền Giáo Dục Của Người Giàu ",
-    description:
-      "Cuốn sách không đưa bạn theo lối mòn, ru ngủ bạn với những điều mọi người trước nay vẫn nói với bạn: Học hành trong trường lớp là con đường duy nhất",
-    link: "/khuyen-mai/noel",
-  },
-  {
-    id: 2,
-    image: "/20240108_m2KOIfYJ.jpeg",
-    title: "Hành trình vươn tầm tri thức",
-    description:
-      "Được biết đến là một trong những thương hiệu hàng đầu về dòng sách quản trị kinh doanh, phát triển kỹ năng, tài chính, đầu tư…",
-    link: "/khuyen-mai/flash-sale",
-  },
-  {
-    id: 3,
-    image: "/20200115_AWqbYWkySz5ItGrwoLvHZfzR.jpg",
-    title: "NHỮNG THÁCH THỨC CỦA NHÀ LÃNH ĐẠO",
-    description:
-      "Những thách thức của nhà lãnh đạo” của hai tác giả James M. Kouzes và Barry Z.  ",
-    link: "/khuyen-mai/mua-1-tang-1",
-  },
-  {
-    id: 4,
-    image: "/20200807_4uHdOuWVgJRqVAjFZY32SGlk.jpg",
-    title: "6 Cuốn Sách Sẽ Thay Đổi Tư Duy",
-    description:
-      "Không phải kim cương hay đá quý, tư duy mới là thứ đắt đỏ nhất. Những ai sở hữu một tư duy logic sắc bén, người đó sẽ có cơ hội trở nên giàu có và thành công cao hơn những người khác. ",
-    link: "/khuyen-mai/deal-hot",
-  },
-];
-const NewsBox = () => {
+interface NewsBoxProps {
+  posts: IPost[]; // Bắt buộc phải có posts, không để dấu ? nữa
+}
+
+const NewsBox: React.FC<NewsBoxProps> = ({ posts }) => {
   return (
-    <div className="grid grid-cols-1  gap-4">
-      {promotions.map((item) => (
-        <Link key={item.id} href={item.link}>
-          <div className="w-full  flex gap-x-[16px] border cursor-pointer hover:bg-gray-100 transition">
+    <div className="flex gap-[30px] pb-5 px-5 lg:px-0">
+      {/* Lấy bài viết đầu tiên */}
+      {posts.length > 0 && (
+        <div className="w-[48%] lg:block hidden">
+          <Link href={`/news/${posts[0]._id}`}>
             <Image
-              src={item.image}
-              alt={item.title}
-              width={160}
-              height={105}
-              className="object-cover w-[120px] h-[80px] md:w-[140px] md:h-[90px] lg:w-[160px] lg:h-[105px]"
+              src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/post/${posts[0].image}`}
+              alt={posts[0].title}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: "100%", height: "auto" }}
+              className="w-full"
             />
-            <div>
-              <p className="lg:text-sub-heading-bold text-caption-bold line-clamp-1">
-                {item.title}
-              </p>
-              <p className="lg:text-caption text-info line-clamp-3">
-                {item.description}
-              </p>
-            </div>
+            <p className="text-sub-heading-bold pl-[10px] pt-[15px]">
+              {posts[0].title}
+            </p>
+            <p className="text-caption pl-[10px]">{posts[0].excerpt}</p>
+          </Link>
+        </div>
+      )}
+
+      {/* Danh sách posts từ API */}
+      <div className="lg:w-[48%] w-full flex flex-wrap gap-2">
+  <div className="grid grid-cols-1 gap-4">
+    {posts.slice(1).map((post) => (
+      <Link key={post._id} href={`/news/${post._id}`}>
+        <div className="w-full flex gap-x-[16px] border cursor-pointer hover:bg-gray-100 transition">
+          <Image
+            src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/post/${post.image}`}
+            alt={post.title}
+            width={160}
+            height={105}
+            className="object-cover w-[120px] h-[80px] md:w-[140px] md:h-[90px] lg:w-[160px] lg:h-[105px]"
+          />
+          <div>
+            <p className="lg:text-sub-heading-bold text-caption-bold line-clamp-1">
+              {post.title}
+            </p>
+            <p className="lg:text-caption text-info line-clamp-3">
+              {post.excerpt}
+            </p>
           </div>
-        </Link>
-      ))}
+        </div>
+      </Link>
+    ))}
+  </div>
+</div>
+
     </div>
   );
 };

@@ -12,6 +12,7 @@ import ListFlashSale from "@/components/list-flashsale";
 import ListCategoryHome from "@/components/list-Category";
 import CarouselHome from "@/components/carousel";
 import { Spin } from "antd";
+import ListNews from "@/components/listnewshome";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
@@ -206,8 +207,8 @@ const Home = () => {
           </Link>
         </div>
       </div>
-
-      <div className="container mt-5 bg-white rounded-lg">
+      
+      {/* <div className="container mt-5 bg-white rounded-lg">
         <p className="lg:text-heading3-bold text-sub-heading-bold lg:mb-5 mb-3 lg:pt-5 pt-3 text-center">
           Tin Tức
         </p>
@@ -239,10 +240,12 @@ const Home = () => {
             </Link>
           </div>
           <div className="lg:w-[48%] w-full flex flex-wrap gap-2 ">
-            <NewsBox />
-          </div>
+            {/* <NewsBox /> */}
+          {/* </div>
         </div>
-      </div>
+      </div> */}
+      
+        <ListNews />
       <div className="container bg-bg-main mt-5 px-2 lg:px-0 sm:px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {shipper.map((item, index) => (

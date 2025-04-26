@@ -236,5 +236,18 @@ declare global {
         id_user:string;
         id_book:IBook;
     }
+    interface IPost {
+        _id: string;
+        title: string;
+        image: string;
+        excerpt: string;
+        content: string;
+        status: boolean;
+        deleted: boolean;
+        createdAt: string;
+        updatedAt: string;
+        __v: number;
+      }
+ 
 
 }
