@@ -18,14 +18,14 @@ const LoginForm = () => {
     const { message, notification } = App.useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
-    
+
     useEffect(() => {
         const redirectTo = searchParams.get("redirect");
         if (session?.user && redirectTo) {
             router.push(redirectTo);
         }
     }, [session?.user, searchParams, router]);
-    
+
     useEffect(() => {
         if (session?.error) {
             notification.error({
@@ -38,7 +38,7 @@ const LoginForm = () => {
     const onFinish = async (values: any) => {
         try {
             const { email, password } = values;
-           
+
             const res = await signIn("credentials", {
                 redirect: false,
                 email: email,
@@ -47,7 +47,9 @@ const LoginForm = () => {
 
             if (!res?.error) {
                 message.success("Đăng nhập tài khoản thành công!");
-                router.push("/");
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectPath = urlParams.get('redirect') || '/';
+                router.push(redirectPath);
             } else {
                 notification.error({
                     message: "Lỗi Đăng Nhập",
