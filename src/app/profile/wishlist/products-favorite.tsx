@@ -23,7 +23,7 @@ const ProductFavorite = () => {
   const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
   const [ratings, setRatings] = useState<{ [key: string]: number }>({});
   const { data, error, isLoading } = useSWR(
-    user ? `http://localhost:4000/api/v1/book-like/${user.id}` : null,
+    user ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${user.id}` : null,
     fetcher
   );
 
@@ -40,7 +40,7 @@ const ProductFavorite = () => {
         favoriteList.map(async (item) => {
           try {
             const res = await fetch(
-              `http://localhost:4000/api/v1/review/book/${item.id_book._id}`
+              `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/review/book/${item.id_book._id}`
             );
             const data = await res.json();
             if (data?.data?.length) {
@@ -143,13 +143,13 @@ const ProductFavorite = () => {
     try {
       if (bookLikeId) {
         await sendRequest({
-          url: `http://localhost:4000/api/v1/book-like/${bookLikeId}`,
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${bookLikeId}`,
           method: "DELETE",
         });
         notification.success({ message: "Đã Bỏ Yêu Thích!" });
       } else {
         await sendRequest({
-          url: `http://localhost:4000/api/v1/book-like`,
+          url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like`,
           method: "POST",
           body: { id_user: user.id, id_book: bookId },
         });
