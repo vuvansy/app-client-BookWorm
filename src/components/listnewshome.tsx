@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import NewsBox from "./box-news";
 import { sendRequest } from "@/utils/api";

@@ -3,7 +3,7 @@ import Home from "./home";
 import CarouselHome from "@/components/carousel";
 import Link from "next/link";
 import Image from "next/image";
-import NewsBox from "@/components/box-news";
+import ListNews from "@/components/listnewshome";
 
 const shipper = [
   {
@@ -108,43 +108,7 @@ const page = () => {
           </Link>
         </div>
       </div>
-
-      <div className="container mt-5 bg-white rounded-lg">
-        <p className="lg:text-heading3-bold text-sub-heading-bold lg:mb-5 mb-3 lg:pt-5 pt-3 text-center">
-          Tin Tức
-        </p>
-        <div className="flex gap-[30px] pb-5 px-5 lg:px-0">
-          <div className="w-[48%] lg:block hidden">
-            <Link href="">
-              <Image
-                src="/lam-ra-lam-choi-ra-choi-diem-sach-1.jpg"
-                alt=""
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                className="w-full"
-              />
-              <p className="text-sub-heading-bold pl-[10px] pt-[15px]">
-                “Deep work” và “Shallow work”
-              </p>
-              <p className="text-caption pl-[10px]">
-                Cuốn sách tập trung phân tích hai khái niệm đáng chú ý: “Deep
-                work” (những việc đòi hỏi sự tập trung cao độ) và “Shallow work”
-                (công việc mang tính lặp, không đòi hỏi nhiều suy nghĩ). Tác giả
-                ví “Deep work” như một anh chàng siêu nhân trong nền kinh tế
-                ngày càng cạnh tranh hiện nay.
-              </p>
-            </Link>
-          </div>
-          <div className="lg:w-[48%] w-full flex flex-wrap gap-2 ">
-            <NewsBox />
-          </div>
-        </div>
-      </div>
+        <ListNews />
       <div className="container bg-bg-main mt-5 px-2 lg:px-0 sm:px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {shipper.map((item, index) => (
