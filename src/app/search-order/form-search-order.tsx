@@ -11,17 +11,21 @@ type FieldType = {
 };
 
 export default function FormSearchOrder() {
-    const { data: session } = useSession({
-        required: true,
-        onUnauthenticated() {
-            router.push("/auth/signin"); // Chuyển hướng đến trang đăng nhập chỉ khi xác định là chưa đăng nhập
-        },
-    });
+    const { data: session } = useSession();
     const id_user = session?.user.id;
     const { message, modal, notification } = App.useApp();
     const [form] = Form.useForm();
     const router = useRouter();
     const [orderData, setOrderData] = useState<IHistory | null>(null);
+
+    const handleSearchOrder = () => {
+        if (!session) {
+            message.warning("Bạn cần đăng nhập để tra cứu đơn hàng!");
+            router.push(`/auth/signin?redirect=/search-order`);
+            return;
+        }
+        router.push("/search-order");
+    };
 
     const onFinish = async (values: any) => {
         try {
@@ -103,7 +107,7 @@ export default function FormSearchOrder() {
                     <Input />
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit" className='w-[15%] !bg-red1 !text-body-bold'>Tra Cứu</Button>
+                <Button type="primary" htmlType="submit" className='w-[15%] !bg-red1 !text-body-bold' onClick={handleSearchOrder}>Tra Cứu</Button>
             </Form>
 
             {orderData && (
