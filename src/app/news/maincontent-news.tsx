@@ -1,82 +1,110 @@
+"use client";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { message, Skeleton, Pagination } from "antd";
+import useSWR from "swr";
+import { sendRequest } from "@/utils/api";
 
-function MainContent() {
-  const posts = [
-    {
-      id: 1,
-      image: "/post1.webp",
-      title:
-        "Bản tiếng Việt cuốn sách mới của Yuval Noah Harari sắp ra mắt độc giả Việt Nam “NEXUS: A Brief History of Information Networks from the Stone Age to AI",
-      description:
-        "Ấn bản tiếng Việt của cuốn sách “NEXUS: A Brief History of Information Networks from the Stone Age to AI” của tác giả Yuval Noah Harari sẽ chính thức ra mắt vào cuối tháng 9/2024 tới đây, được ấn hành bởi Omega Plus Books.",
-      date: "07/02/2023",
-    },
-    {
-      id: 2,
-      image: "/post7.png",
-      title: "Top 100 cuốn sách kỹ năng hay nhất",
-      description:
-        "Cuốn sách không đưa bạn theo lối mòn, ru ngủ bạn với những điều mọi người trước nay vẫn nói với bạn: Học hành trong trường lớp là con đường duy nhất. Đương nhiên, bạn có thể học được rất nhiều điều thú vị từ trường đại học, nhưng thực tế",
-      date: "22/04/2023",
-    },
-    {
-      id: 3,
-      image: "/post3.jpeg",
-      title:
-        "Review sách: Nền Giáo Dục Của Người Giàu - Những Bài Học Để Thành Công Chỉ Trường Đời Mới Dạy",
-      description:
-        "“Thiết Kế Game Nâng Cao: Phương Pháp Tư Duy Hệ Thống” của tác giả Michael Sellers là cuốn sách thiết kế game mới nhất dành cho những nhà Thiết kế Game mong muốn bước chân vào con đường Thiết kế game chuyên nghiệp.",
-      date: "07/03/2023",
-    },
-    {
-      id: 4,
-      image: "/post4.jpeg",
-      title:
-        "Thiết Kế Game Nâng Cao – Nâng Nghệ Thuật Thiết Kế Game Lên Tầm Cao Mới",
-      description:
-        "Sách “Chuyển đổi số - năm giai đoạn triển khai công nghệ số cho doanh nghiệp” của Lindsay Herbert nêu định nghĩa và các bước đi cụ thể của hành trình chuyển đổi số",
-      date: "01/02/2023",
-    },
-    {
-      id: 5,
-      image: "/post5.jpeg",
-      title: "Hành trình vươn tầm tri thức",
-      description:
-        "Được biết đến là một trong những thương hiệu hàng đầu về dòng sách quản trị kinh doanh, phát triển kỹ năng, tài chính, đầu tư… với các cuốn sách hướng dẫn khởi nghiệp, các bài học, phương pháp và kinh nghiệm quản trị của các chuyên gia",
-      date: "07/02/2013",
-    },
-  ];
+type PostData = {
+  meta: {
+    page: number;
+    limit: number;
+    pages: number;
+    total: number;
+  };
+  result: IPost[];
+};
+
+export default function MainContent() {
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [meta, setMeta] = useState({ pages: 0, total: 0 });
+
+  const fetchPosts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await sendRequest<IBackendRes<PostData>>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/post`,
+        method: "GET",
+        queryParams: { page, limit },
+      });
+      if (res.data?.result) {
+        setPosts(res.data.result);
+        setMeta({ pages: res.data.meta.pages, total: res.data.meta.total });
+      } else {
+        message.error("Không tải được danh sách Post.");
+      }
+    } catch (err) {
+      console.error(err);
+      message.error("Lỗi khi lấy dữ liệu Post.");
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
+
+
   return (
-    <div className="space-y-4">
-      {posts.map((item) => (
-        <div
-          key={item.id}
-          className="flex flex-row items-start space-x-4 py-4 border-b border-gray-200"
-        >
-          <div className="flex-none w-[300px] h-[180px] shrink-0 relative">
-            <Link href={`/news/${item.id}`}>
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover rounded"
-              />
-            </Link>
+    <Skeleton active loading={loading} paragraph={{ rows: limit }}>
+      <div className="space-y-4 min-h-[200px]">
+        {posts.length ? (
+          posts
+            .filter((item) => item.status)
+            .map((item) => (
+              <div
+                key={item._id}
+                className="flex flex-row items-start space-x-4 py-4 border-b border-gray-200"
+              >
+                <div className="flex-none w-[300px] h-[180px] shrink-0">
+                  <Link
+                    href={`/news/${item._id}`}
+                    className="block relative w-full h-full"
+                  >
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/post/${item.image}`}
+                      alt={item.title}
+                      fill
+                      sizes="300px"
+                      className="object-cover rounded"
+                    />
+                  </Link>
+                </div>
+
+                <div className="flex-1">
+                  <Link href={`/news/${item._id}`}>
+                    <h3 className="text-xl font-semibold">{item.title}</h3>
+                  </Link>
+                  <p className="text-info mt-2"> {new Date(item.updatedAt).toLocaleString("vi-VN")}</p>
+                  <Link href={`/news/${item._id}`}>
+                    <p className="text-caption mt-2">{item.excerpt}</p>
+                  </Link>
+                </div>
+              </div>
+            ))
+        ) : (
+          <div className="text-gray-500 text-center py-8">
+            Chưa có bài viết.
           </div>
-          <div className="flex-1">
-            <Link href={`/news/${item.id}`}>
-              <h3 className="text-xl font-semibold">{item.title}</h3>
-            </Link>
-            <p className="text-info mt-2">{item.date}</p>
-            <Link href={`/news/${item.id}`}>
-              <p className="text-caption mt-2">{item.description}</p>
-            </Link>
-          </div>
+        )}
+
+        <div className="flex justify-center pt-4">
+          <Pagination
+            current={page}
+            pageSize={limit}
+            total={meta.total}
+            onChange={(page) => {
+              setPage(page);
+            }}
+          />
         </div>
-      ))}
-    </div>
+      </div>
+    </Skeleton>
   );
 }
-
-export default MainContent;

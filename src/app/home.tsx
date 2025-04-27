@@ -9,6 +9,7 @@ import ListProductHome from "@/components/list-product/list-product-home";
 import ListFlashSale from "@/components/list-flashsale";
 import ListCategoryHome from "@/components/list-Category";
 import { Spin } from "antd";
+import ListNews from "@/components/listnewshome";
 import { BiCategory } from "react-icons/bi";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
@@ -164,6 +165,47 @@ const Home = () => {
             Xu Hướng Mua Sắm
           </p>
         </div>
+        {bookLoading ? (
+          <div className="bg-white overflow-hidden ">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 mt-4 lg:mb-6 mb-3">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center space-y-3 bg-gray-200 p-4 rounded shadow-sm w-full"
+                >
+                  <div className="w-full h-48 bg-gray-300 rounded-xl"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center lg:mb-6 mb-4">
+              <span className="h-9 w-48 flex justify-center items-center gap-x-2 text-red-500 text-body-bold bg-white border border-red-500 rounded-lg hover:text-white hover:bg-red-500 transition">
+                Xem thêm
+              </span>
+            </div>
+          </div>
+        ) : (
+          <ListProductHome
+            dataBooks={dataBookNew?.data}
+            link="/product/by/new"
+          />
+        )}
+      </div>
+
+      <div className="container h-auto rounded-lg overflow-hidden mt-5 mb-5">
+        <div className="flex bg-[#FCDDEF] pt-4 pr-4 pl-4 pb-3">
+          <Image
+            width={32}
+            height={32}
+            alt="Xu Hướng Mua Sắm"
+            src="/icon_dealhot_new.png"
+          />
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black ">
+            Xu Hướng Mua Sắm
+          </p>
+        </div>
         {bookTrendLoading ? (
           <div className="bg-white overflow-hidden ">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 mt-4 lg:mb-6 mb-3">
@@ -191,7 +233,7 @@ const Home = () => {
             link="/product/by/trending"
           />
         )}
-      </div>
+</div>
     </>
   );
 };
