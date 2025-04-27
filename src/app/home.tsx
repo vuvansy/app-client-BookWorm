@@ -20,28 +20,41 @@ const Home = () => {
     data: dataFlasSale,
     error: flsError,
     isLoading: flsLoading,
-  } = useSWR("http://localhost:4000/api/v1/book/flash-sale", fetcher);
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/flash-sale`,
+    fetcher
+  );
 
   const {
     data: dataGenre,
     error: genreError,
     isLoading: genreLoading,
-  } = useSWR("http://localhost:4000/api/v1/genre", fetcher);
+  } = useSWR(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/genre`, fetcher);
 
   const {
     data: dataBookNew,
     error: bookError,
     isLoading: bookLoading,
-  } = useSWR("http://localhost:4000/api/v1/book/new?limit=10", fetcher);
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/new?limit=10`,
+    fetcher
+  );
 
   const {
     data: dataBookTrend,
     error: bookTrendError,
     isLoading: bookTrendLoading,
-  } = useSWR("http://localhost:4000/api/v1/book/trending?limit=10", fetcher);
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book/trending?limit=10`,
+    fetcher
+  );
 
   if (genreError || bookError || flsError || bookTrendError)
-    return <div>Lỗi tải dữ liệu</div>;
+    return (
+      <div className="container text-center text-red1 text-heading4-bold my-5">
+        Lỗi Dữ Liệu !
+      </div>
+    );
 
   return (
     <>
@@ -233,7 +246,7 @@ const Home = () => {
             link="/product/by/trending"
           />
         )}
-</div>
+      </div>
     </>
   );
 };
