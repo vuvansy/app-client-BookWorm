@@ -254,4 +254,6 @@ declare global {
         updatedAt?: Date;
     }
 
+   
+
 }

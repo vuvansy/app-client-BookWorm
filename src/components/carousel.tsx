@@ -32,7 +32,7 @@ const CarouselHome: React.FC = () => {
   }, []);
   return (
     <div className="w-full max-w-[840px] relative">
-      <Carousel ref={carouselRef} className="custom-carousel">
+      <Carousel ref={carouselRef} autoplay className="custom-carousel">
         {images.map((img, index) => (
           <div key={index}>
             <Image
