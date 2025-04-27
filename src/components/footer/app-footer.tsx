@@ -14,24 +14,22 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 const AppFooter = () => {
   return (
-    <footer className="pt-[30px] bg-bg-main ">
+    <footer className="pt-[20px] md:pt-[30px] bg-bg-main">
       <div className=" container bg-white flex flex-col lg:flex-row pt-[16px] rounded-lg">
         <div className="relative basis-2/6 text-info ">
-          <div className=" w-full h-[69px] mb-[8px] py-2.5 pr-[15px] ">
-              <div className="relative w-[300px] h-[49px] ">
+          <div className=" w-full h-[69px] mb-[8px] py-2.5 px-[15px] ">
             <Link href={"/"}>
-                <Image
+              <div className="relative w-[270px] h-[50px] ">
+            <Image
                   src={"/icon/logo.png"}
                   alt="logo BookWorm"
-                  layout="fill"
-                  objectFit="contain"
+                  fill
                   priority
-                  className="w-full h-full"
+                  className="object-contain w-full h-full"
                 />
-            </Link>
               </div>
+            </Link>
           </div>
-
           <div className="ml-[10px] mt-[10px] ">
             <p className="pr-[15px] pl-[10px]">
               Lầu 3, 387-389 Hai Bà Trưng, Quận 3, TP. HCM <br />
@@ -42,21 +40,21 @@ const AppFooter = () => {
             BookWorm nhận đặt hàng trực tuyến và giao hàng tận nơi. KHÔNG hỗ trợ đặt mua và nhận hàng trực tiếp tại văn phòng cũng như tất cả Hệ Thống  BookWorm trên toàn quốc.
             </p>
             <div className="flex mt-[20px] pl-[10px] pb-[15px] md:mt-[10px] ">
-              <a className="pr-[10px]" href="#">
+              <Link className="pr-[10px]" href={"https://www.pinterest.com/vovankhang184/_profile/"}>
                 <FaPinterest className="w-[25px] h-[25px]" />
-              </a>
-              <a className="pr-[10px]" href="#">
+              </Link>
+              <Link className="pr-[10px]" href={"https://x.com/VoFpl95717"}>
                 <FaTwitter className="w-[25px] h-[25px]" />
-              </a>
-              <a className="pr-[10px]" href="#">
+              </Link>
+              <Link className="pr-[10px]" href={"https://www.youtube.com/@khangvovan6195/community"}>
                 <FaYoutube className="w-[25px] h-[25px]" />
-              </a>
-              <a className="pr-[10px]" href="#">
+              </Link> 
+              <Link className="pr-[10px]" href={"https://www.facebook.com/zankhng"}>
                 <FaFacebook className="w-[25px] h-[25px]" />
-              </a>
-              <a className="pr-[10px]" href="#">
+              </Link>
+              <Link className="pr-[10px]" href={"https://www.instagram.com/vankhng11/"}>
                 <AiFillInstagram className="w-[25px] h-[25px]" />
-              </a>
+              </Link>
             </div>
           </div>
           <div className="absolute right-0 top-1/2 transform -translate-y-1/2 h-[95%] border-r border-[#cecece]"></div>
@@ -67,7 +65,7 @@ const AppFooter = () => {
               <h3 className="text-body-bold  ">DỊCH VỤ</h3>
               <ul className="text-info  mt-[10px] space-y-[5px] md:space-y-[10px] ">
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -75,10 +73,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Điều khoản sử dụng
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -86,10 +84,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chính sách bảo mật thông tin
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -97,11 +95,11 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chính sách bảo mật thanh toán
                     </span>
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696] "
                   >
@@ -109,10 +107,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem]  group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Giới thiệu BookWorm
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -120,7 +118,7 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Hệ thống trung tâm - nhà sách
                     </span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -128,7 +126,7 @@ const AppFooter = () => {
               <h3 className="text-body-bold ">HỖ TRỢ</h3>
               <ul className="text-info  mt-[10px] space-y-[5px] md:space-y-[10px]">
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -136,10 +134,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chính sách đổi - trả - hoàn tiền
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -147,10 +145,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chính sách bảo hành - bồi hoàn
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -158,10 +156,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chính sách vận chuyển
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -169,7 +167,7 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chính sách khách sỉ
                     </span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -178,7 +176,7 @@ const AppFooter = () => {
               <h3 className="text-body-bold ">TÀI KHOẢN CỦA TÔI</h3>
               <ul className="text-info  mt-[10px] space-y-[5px] md:space-y-[10px]">
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -186,10 +184,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Đăng nhập/Tạo mới tài khoản
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -197,10 +195,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Thay đổi địa chỉ khách hàng
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -208,10 +206,10 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Chi tiết tài khoản
                     </span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="#"
                     className="group flex items-center space-x-2 hover:text-[#ea7696]"
                   >
@@ -219,7 +217,7 @@ const AppFooter = () => {
                     <span className="inline-block transform translate-x-[-1.5rem] group-hover:translate-x-0 transition-transform duration-1000 ease-in-out text-base md:text-xl lg:text-2xl">
                       Lịch sử mua hàng
                     </span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

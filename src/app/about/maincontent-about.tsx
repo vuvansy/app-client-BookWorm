@@ -67,7 +67,7 @@ function MaincontentAbout() {
         </p>
         <p className="pt-4 leading-5 text-[16px]">
           Bộ ấn phẩm Harvard Business Review (HBR) danh tiếng toàn cầu được
-          BookWorm “bản địa hoá" thành công và ra mắt tại Việt Nam với những bộ
+          BookWorm  &ldquo;bản địa hoá&rdquo; thành công và ra mắt tại Việt Nam với những bộ
           sách chất lượng hàng đầu, nhận được rất nhiều sự yêu thích và đón chờ
           từ độc giả, đặc biệt bởi Shark Nguyễn Thanh Việt, Bà Nguyễn Phương
           Thảo Tổng Giám đốc Vietjet Air, Bà Hà Thu Thanh Chủ tịch Deloitte Việt

@@ -122,7 +122,7 @@ const DropDowCart = () => {
 
 
     return (
-        <ul className='flex items-center gap-x-[20px]'>
+        <ul className='flex items-center gap-x-[10px] lg:gap-x-[20px]'>
             <li className='cursor-pointer'>
                 <Popover
                     placement="bottom"
@@ -146,7 +146,9 @@ const DropDowCart = () => {
                 </Popover>
             </li>
             <li className='cursor-pointer'>
-                <LuPackageSearch className='icon-cart' />
+                <Link href={'/search-order'}>
+                    <LuPackageSearch className='icon-cart' />
+                </Link>
             </li>
             <li className="flex items-center cursor-pointer">
                 <DropDowAccount />

@@ -1,6 +1,6 @@
 'use client'
 import { sendRequest } from '@/utils/api';
-import { App, Modal } from 'antd';
+import { App, ConfigProvider, Modal } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { GrFormNext } from "react-icons/gr";
 import { PiSealPercentBold } from 'react-icons/pi';
@@ -43,7 +43,7 @@ const ListCoupon = () => {
         };
 
         fetchCoupons();
-    }, []);
+    }, [message]);
 
     const showModalMore = () => {
 
@@ -77,37 +77,45 @@ const ListCoupon = () => {
                 <div className="text-sub-heading-bold">Ưu đãi liên quan</div>
                 <div>
                     <div onClick={showModalMore} className="w-[115px] flex items-center justify-center text-caption text-blue-text-bold cursor-pointer">Xem thêm <GrFormNext /> </div>
-                    <Modal
-
-                        open={isOpenMore}
-                        onCancel={handleCancel}
-                        maskClosable={true}
-                        footer={null}  // Ẩn phần footer
+                    <ConfigProvider
+                        theme={{
+                            token: {
+                                colorBgMask: 'rgba(0,0,0,0.3)',
+                            },
+                        }}
                     >
-                        <div>
-                            <div className="flex items-center">
-                                <p className="text-info-bold">Mã giảm giá</p>
-                            </div>
-                            <div className="mt-3 max-h-[350px] overflow-y-auto">
-                                {coupons.map((couponMore, index) => (
-                                    <div key={index} className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
-                                        <div className="bg-yellow-1 h-[100px] w-[100px] rounded-lg flex justify-center items-center">
-                                            <PiSealPercentBold className="text-[40px] text-white" />
-                                        </div>
-                                        <div className='py-1 md:py-0'>
-                                            <h3 className="uppercase font-semibold truncate w-[200px] md:w-[300px]">Mã Giảm {couponMore.value}%</h3>
-                                            <div className='text-caption text-price-old pt-1 pb-4'>
-                                                {couponMore.description}
+                        <Modal
+
+                            open={isOpenMore}
+                            onCancel={handleCancel}
+                            maskClosable={true}
+                            footer={null}  // Ẩn phần footer
+                        >
+                            <div>
+                                <div className="flex items-center">
+                                    <p className="text-info-bold">Mã giảm giá</p>
+                                </div>
+                                <div className="mt-3 max-h-[350px] overflow-y-auto">
+                                    {coupons.map((couponMore, index) => (
+                                        <div key={index} className="flex items-center gap-x-5 rounded-lg shadow-custom mb-2">
+                                            <div className="bg-yellow-1 h-[100px] w-[100px] rounded-lg flex justify-center items-center">
+                                                <PiSealPercentBold className="text-[40px] text-white" />
                                             </div>
-                                            <div className='text-caption text-blue-text'>
-                                                HSD: {couponMore.end_date ? new Date(couponMore.end_date).toLocaleDateString() : 'N/A'}
+                                            <div className='py-1 md:py-0'>
+                                                <h3 className="uppercase font-semibold truncate w-[200px] md:w-[300px]">Mã Giảm {couponMore.value}%</h3>
+                                                <div className='text-caption text-price-old pt-1 pb-4'>
+                                                    {couponMore.description}
+                                                </div>
+                                                <div className='text-caption text-blue-text'>
+                                                    HSD: {couponMore.end_date ? new Date(couponMore.end_date).toLocaleDateString() : 'N/A'}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    </Modal>
+                        </Modal>
+                    </ConfigProvider>
                 </div>
             </div>
             <div className='w-full hidden lg:flex lg:flex-wrap items-center gap-4'>
@@ -121,19 +129,27 @@ const ListCoupon = () => {
                             </div>
                             <div className='w-[110px] p-2 text-caption truncate'>Mã giảm {couponlist.value}%</div>
                         </div>
-                        <Modal title="Mã Giảm Giá" open={isOpenList} onOk={handleOk} onCancel={handleCancel} footer={null}>
-                            {selectedCoupon && (
-                                <div>
-                                    <div className='mb-2 px-4 py-2 bg-yellow-1 bg-opacity-25 text-yellow-3 rounded-md'>
-                                        {/* Mã giảm giá {selectedCoupon.value} Tối đa {formatNumber(selectedCoupon.max_value)} */}
-                                        {selectedCoupon.description}
+                        <ConfigProvider
+                            theme={{
+                                token: {
+                                    colorBgMask: 'rgba(0,0,0,0.1)',
+                                },
+                            }}
+                        >
+                            <Modal title="Mã Giảm Giá" open={isOpenList} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                                {selectedCoupon && (
+                                    <div>
+                                        <div className='mb-2 px-4 py-2 bg-yellow-1 bg-opacity-25 text-yellow-3 rounded-md'>
+                                            {/* Mã giảm giá {selectedCoupon.value} Tối đa {formatNumber(selectedCoupon.max_value)} */}
+                                            {selectedCoupon.description}
+                                        </div>
+                                        {/* <div>- Áp dụng cho đơn hàng có tổng giá trị đơn hàng từ {formatNumber(selectedCoupon.min_total)}</div> */}
+                                        <div>- Hạn sử dụng đến hết ngày {selectedCoupon.end_date ? new Date(selectedCoupon.end_date).toLocaleDateString() : 'N/A'}</div>
                                     </div>
-                                    {/* <div>- Áp dụng cho đơn hàng có tổng giá trị đơn hàng từ {formatNumber(selectedCoupon.min_total)}</div> */}
-                                    <div>- Hạn sử dụng đến hết ngày {selectedCoupon.end_date ? new Date(selectedCoupon.end_date).toLocaleDateString() : 'N/A'}</div>
-                                </div>
 
-                            )}
-                        </Modal>
+                                )}
+                            </Modal>
+                        </ConfigProvider>
                     </div>
                 ))}
             </div>

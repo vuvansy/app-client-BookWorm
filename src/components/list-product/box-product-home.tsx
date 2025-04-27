@@ -11,13 +11,14 @@ import type { RootState } from "@/redux/store";
 import { App } from "antd";
 import { useRouter } from "next/navigation";
 import { MdFavorite } from "react-icons/md";
-import { useCurrentApp } from "@/context/app.context";
 import { useEffect } from "react";
 import { sendRequest } from "@/utils/api";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const BoxProductHome = (props: IBook) => {
-  const { user } = useCurrentApp();
+  const { data: session } = useSession();
+  const user = session?.user;
   const userId = user?.id;
   const { _id, image, name, price_old, price_new, quantity } = props;
   const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
@@ -155,7 +156,7 @@ const BoxProductHome = (props: IBook) => {
     router.push("/cart");
   };
   return (
-    <div className="group w-full sm:max-w-[200px] md:max-w-[232px] ">
+    <div className="group w-full sm:max-w-[200px] md:max-w-[232px]" key={_id}>
       <div className="relative bg-white group-hover:shadow-custom  overflow-hidden">
         {discount && (
           <div className="lg:w-[44px] w-[40px] lg:h-[44px] h-[40px] absolute z-10 top-[6px] left-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
@@ -177,12 +178,14 @@ const BoxProductHome = (props: IBook) => {
             className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
             onClick={() => handleToggleFavorite(_id)}
           >
-            {!loading &&
-              (favoriteList.some((item) => item.id_book._id === _id) ? (
-                <MdFavorite className="text-[22px] text-red-500" />
-              ) : (
-                <MdOutlineFavoriteBorder className="text-[22px] text-red-500" />
-              ))}
+            {!user ? (
+              <MdOutlineFavoriteBorder className="text-[22px] text-red-500" /> // Trái tim trắng khi chưa đăng nhập
+            ) : !loading &&
+              favoriteList.some((item) => item.id_book._id === _id) ? (
+              <MdFavorite className="text-[22px] text-red-500" /> // Trái tim đỏ khi đã thích
+            ) : (
+              <MdOutlineFavoriteBorder className="text-[22px] text-red-500" /> // Trái tim viền đỏ khi chưa thích
+            )}
           </div>
         </div>
         <div className="p-3 flex flex-col justify-center items-center">
@@ -232,7 +235,7 @@ const BoxProductHome = (props: IBook) => {
           <div className="pb-[4px]">
             <button
               onClick={() => handleBuyNow(props)}
-              className="xl:px-[25px] px-[30px] py-[5px] flex justify-center items-center gap-x-2 text-red1 lg:text-body-bold text-caption-bold bg-white border border-red1 rounded-lg hover:text-white hover:bg-red1"
+              className="lg:px-[25px] px-[25px] py-[5px] flex justify-center items-center gap-x-2 text-red1 lg:text-body-bold text-caption-bold bg-white border border-red1 rounded-lg hover:text-white hover:bg-red1"
             >
               <MdShoppingCart className="text-[22px] hidden md:block" />
               <span>Mua ngay</span>

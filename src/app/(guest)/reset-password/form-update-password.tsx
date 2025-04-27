@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { App, Button, Form, Input } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -42,7 +42,7 @@ const UpdatePasswordForm = () => {
             if (d.statusCode === 200) {
                 // success
                 message.success(d.message);
-                router.push('/login');
+                router.push('/auth/signin');
             } if (d.statusCode === 400) {
                 message.error(d.message);
             }

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { App, Button, Result, Skeleton } from 'antd';
 import Link from 'next/link';

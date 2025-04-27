@@ -12,6 +12,7 @@ interface IProps {
     }[];
     title: string;
 }
+
 const ModalGallery = (props: IProps) => {
     const {
         isOpen, setIsOpen,
@@ -19,61 +20,66 @@ const ModalGallery = (props: IProps) => {
     } = props;
     const [activeIndex, setActiveIndex] = useState(0);
     const refGallery = useRef<ImageGallery>(null);
+
     useEffect(() => {
         if (isOpen) {
             setActiveIndex(currentIndex);
         }
-    }, [isOpen, currentIndex])
+    }, [isOpen, currentIndex]);
+
     return (
         <Modal
-            width={'60vw'}
             open={isOpen}
             onCancel={() => setIsOpen(false)}
-            footer={null} //hide footer
-            closable={false} //hide close button
+            footer={null}
+            closable={false}
+            width="60vw"
             className="modal-gallery"
         >
-            <Row gutter={[20, 20]}>
-                <Col span={16}>
-                    <ImageGallery
-                        ref={refGallery}
-                        items={items}
-                        showPlayButton={false} //hide play button
-                        showFullscreenButton={false} //hide fullscreen button
-                        startIndex={currentIndex} // start at current index
-                        showThumbnails={false} //hide thumbnail
-                        onSlide={(i) => setActiveIndex(i)}
-                        slideDuration={0} //duration between slices
-                    />
-                </Col>
-                <Col span={8}>
-                    <div className="pt-[5px] pb-5 text-body">{title}</div>
-                    <div>
-                        <Row gutter={[20, 20]}>
-                            {
-                                items?.map((item, i) => {
-                                    return (
-                                        <Col key={`image-${i}`}>
-                                            <Image
-                                                className="cursor-pointer"
-                                                width={100}
-                                                height={100}
-                                                src={item.original}
-                                                preview={false}
-                                                onClick={() => {
-                                                    refGallery?.current?.slideToIndex(i);
-                                                }}
-                                            />
-                                            <div className={activeIndex === i ? "active" : ""}></div>
-                                        </Col>
-                                    )
-                                })
-                            }
-                        </Row>
+            <div className="w-full">
+                <div className="flex flex-col xl:flex-row">
+                    {/* Gallery */}
+                    <div className="w-full xl:w-2/3">
+                        <ImageGallery
+                            ref={refGallery}
+                            items={items}
+                            showPlayButton={false}
+                            showFullscreenButton={false}
+                            startIndex={currentIndex}
+                            showThumbnails={false}
+                            onSlide={(i) => setActiveIndex(i)}
+                            slideDuration={0}
+                            showNav={false}
+                        />
                     </div>
-                </Col>
-            </Row>
+
+                    {/* Sidebar thumbnails + title */}
+                    <div className="w-full xl:w-1/3">
+                        <div className="pb-4 text-body text-lg font-semibold">{title}</div>
+                        <div className="flex flex-wrap justify-center gap-3">
+                            {items?.map((item, i) => (
+                                <div key={`image-${i}`} className="relative">
+                                    <Image
+                                        alt={item.original}
+                                        className="cursor-pointer rounded-md"
+                                        width={100}
+                                        height={100}
+                                        src={item.original}
+                                        preview={false}
+                                        onClick={() => {
+                                            refGallery?.current?.slideToIndex(i);
+                                        }}
+                                    />
+                                    <div className={activeIndex === i ? "active" : ""}></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </Modal>
-    )
-}
+    );
+};
+
 export default ModalGallery;
+

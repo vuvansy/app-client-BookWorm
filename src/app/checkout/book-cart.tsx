@@ -20,8 +20,8 @@ const BookCart = () => {
                 <div className="py-1">
                     {cartItems.map((book) => (
                         <div key={book._id} className="pt-1 pb-2 border-t border-[#ced4da]">
-                            <div className="flex py-1">
-                                <div className="relative w-[145px] h-[145px]">
+                            <div className="flex justify-between py-1">
+                                <div className="relative w-[100px] h-[100px] md:w-[145px] md:h-[145px]">
                                     <Image
                                         src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/images/book/${book.detail.image}`}
                                         alt=""
@@ -36,21 +36,39 @@ const BookCart = () => {
                                         className="w-full object-cover"
                                     />
                                 </div>
-                                <div className="flex text-caption px-1 w-[calc(100%-145px)]">
-                                    <div className="w-[calc(100%-345px)]">
+                                <div className="flex flex-col md:flex-row text-caption px-1 w-full md:w-[calc(100%-145px)]">
+                                    <div className="w-full md:w-[calc(100%-345px)]">
                                         {book.detail.name}
                                     </div>
-                                    <div className="w-[100px] pb-1 text-center">
-                                        <div>{new Intl.NumberFormat("vi-VN").format(book.detail.price_new ?? 0)} đ</div>
-                                        <div className="text-[#bfbfbf] line-through">
-                                            {new Intl.NumberFormat("vi-VN").format(book.detail.price_old)} đ
+                                    <div className="w-full md:w-[100px] pb-1 text-left md:text-center">
+                                        <div className="flex items-center gap-2 md:hidden">
+                                            <span className="text-base text-black font-medium">
+                                                {new Intl.NumberFormat("vi-VN").format(book.detail.price_new ?? 0)}đ
+                                            </span>
+                                            <span className="text-[#bfbfbf] line-through text-sm">
+                                                {new Intl.NumberFormat("vi-VN").format(book.detail.price_old)}đ
+                                            </span>
+                                        </div>
+
+                                        <div className="hidden md:block">
+                                            <div className="text-base text-black font-medium">
+                                                {new Intl.NumberFormat("vi-VN").format(book.detail.price_new ?? 0)}đ
+                                            </div>
+                                            <div className="text-[#bfbfbf] line-through text-sm">
+                                                {new Intl.NumberFormat("vi-VN").format(book.detail.price_old)}đ
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="w-[100px] pb-1 text-center">1</div>
-                                    <div className="text-yellow-2 w-[100px] text-center font-semibold">
+                                    <div className="w-full md:w-[100px] pb-1 text-left md:text-center">
+                                        <div className="flex md:block items-center gap-1">
+                                            <span className="block md:hidden">Số lượng:</span>
+                                            {book.quantity}
+                                        </div>
+                                    </div>
+                                    <div className="text-yellow-2 w-[100px] text-left md:text-center font-semibold">
                                         {new Intl.NumberFormat("vi-VN").format(
                                             (book.detail.price_new ?? 0) * book.quantity
-                                        )} đ
+                                        )}đ
                                     </div>
                                 </div>
                             </div>

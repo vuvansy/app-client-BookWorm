@@ -34,7 +34,7 @@ const AppHeader = async () => {
 
     return (
         <header>
-            <div className='bg-red1 h-[36px] px-2 xl:px-0 flex justify-between items-center'>
+            <div className='bg-red1 h-[36px] px-4 xl:px-0 flex justify-between items-center'>
                 <div className='container flex justify-between text-white'>
                     <div className='flex items-center gap-x-[4px] cursor-pointer'>
                         <MdOutlineMail />
@@ -48,11 +48,11 @@ const AppHeader = async () => {
                 </div>
             </div>
             <div className='header-center'>
-                <div className='bg-[#F4EDD3] h-[80px] lg:h-[60px] flex py-2 md:py-0 md:items-center px-2 xl:px-0'>
+                <div className='bg-[#F4EDD3] h-[100px] lg:h-[60px] flex py-2 md:py-0 md:items-center px-4 xl:px-0'>
                     <div className='container flex justify-between items-center flex-wrap'>
-                        <div className='order-1 basis-2/6 lg:order-1 lg:basis-3/12'>
-                            <Link href={"/"} className='w-[200px]'>
-                                <div className="relative w-[200px]">
+                        <div className='order-1 basis-5/12 py-2 lg:order-1 lg:basis-3/12'>
+                            <Link href={"/"} className='w-[140px] lg:w-[200px]'>
+                                <div className="relative w-[140px] lg:w-[200px]">
                                     <Image
                                         src={"/icon/logo.png"}
                                         alt={'logo BookWorm'}
@@ -72,7 +72,7 @@ const AppHeader = async () => {
                         <div className='order-4 basis-10/12 lg:order-2 lg:basis-6/12'>
                             <SearchForm />
                         </div>
-                        <div className='order-2 basis-4/6 lg:order-3 lg:basis-3/12 flex justify-end'>
+                        <div className='order-2 basis-7/12 lg:order-3 lg:basis-3/12 flex justify-end'>
                             <DropDowCart />
                         </div>
                         <div className='order-3 basis-1/12 cursor-pointer lg:hidden'>
@@ -105,13 +105,13 @@ const AppHeader = async () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href={''} className='px-[10px] py-[8px] capitalize'>Cửa hàng</Link>
+                                <Link href={'/shop'} className='px-[10px] py-[8px] capitalize'>Cửa hàng</Link>
                             </li>
                             <li >
-                                <Link href={''} className='px-[10px] py-[8px] capitalize'>Liên hệ</Link>
+                                <Link href={'/contact'} className='px-[10px] py-[8px] capitalize'>Liên hệ</Link>
                             </li>
                             <li>
-                                <Link href={''} className='px-[10px] py-[8px] capitalize'>Tuyển dụng</Link>
+                                <Link href={'/recruitment'} className='px-[10px] py-[8px] capitalize'>Tuyển dụng</Link>
                             </li>
                             <li>
                                 <Link href={'/news'} className='px-[10px] py-[8px] capitalize'>Tin tức</Link>

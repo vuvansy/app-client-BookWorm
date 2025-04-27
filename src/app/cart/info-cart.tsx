@@ -27,7 +27,7 @@ const InfoCart = (props: IProps) => {
     return (
         <div className="container">
             {cartItems.length > 0 ? (
-                <div className="flex justify-between items-start">
+                <div className="flex justify-between items-start flex-wrap">
                     <TableCart />
                     <TotalCart dataCoupon={dataCoupon} />
                 </div>

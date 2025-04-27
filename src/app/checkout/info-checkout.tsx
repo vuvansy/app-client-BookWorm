@@ -9,11 +9,10 @@ import { useEffect, useMemo, useState } from "react";
 const { TextArea } = Input;
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useCurrentApp } from "@/context/app.context";
 import { useRouter } from "next/navigation";
 import { sendRequest } from "@/utils/api";
 import { clearCart } from "@/redux/slices/cartSlice";
-import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 
 type FieldType = {
     fullName: string;
@@ -30,7 +29,8 @@ type FieldType = {
 
 const InfoCheckout = () => {
     const [form] = Form.useForm();
-    const { user } = useCurrentApp();
+    const { data: session } = useSession();
+    const user = session?.user;
     const dispatch = useDispatch();
     const router = useRouter();
     const { message } = App.useApp();
@@ -58,6 +58,7 @@ const InfoCheckout = () => {
             ),
         [cartItems]
     );
+    // console.log(total);
 
     //fetchDelivery
     useEffect(() => {
@@ -114,6 +115,7 @@ const InfoCheckout = () => {
     useEffect(() => {
         setClientTotal(total);
     }, [total]);
+    // console.log("clientTotal", clientTotal);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -149,7 +151,7 @@ const InfoCheckout = () => {
 
     useEffect(() => {
         if (!user) {
-            router.replace("/login");
+            router.replace("/auth/signin");
         }
     }, [user, router]);
 
@@ -274,26 +276,6 @@ const InfoCheckout = () => {
             id_coupons: appliedCoupon?._id ?? null,
         };
 
-        // try {
-        //     const order = await createOrder(formattedData);
-        //     const orderDetails = cartItems.map((item) => ({
-        //         quantity: item.quantity,
-        //         price: item.detail.price_new,
-        //         id_book: item._id,
-        //         id_order: order?.data?._id
-        //     }));
-        //     // console.log("Sending order details:", orderDetails);
-        //     await createOrderDetail(orderDetails);
-        //     message.success("Đặt hàng thành công!");
-        //     dispatch(clearCart());
-        //     router.push("/order");
-        // } catch (error) {
-        //     console.error(error);
-        //     alert("Đã có lỗi xảy ra.");
-        // } finally {
-        //     setIsLoading(false);
-        // }
-
         try {
             const selectedPaymentMethod = listPayment.find(method => method.value === selectedPayment);
             //COD
@@ -402,13 +384,14 @@ const InfoCheckout = () => {
             autoComplete="off"
             onFinish={onFinish}
             layout="vertical"
-            className="flex justify-between pb-[20px]"
+            className="pb-[20px]"
         >
-            <div className="basis-8/12 ">
-                <div className="bg-white rounded-lg px-[16px] py-[8px]">
-                    <div className="uppercase py-[8px] text-body-bold">Địa chỉ giao hàng</div>
-                    <div>
-                        <div className="flex justify-between items-center gap-x-4">
+            <div className="flex justify-between flex-wrap">
+                <div className="basis-full md:basis-8/12">
+                    <div className="bg-white rounded-lg px-[16px] py-[8px]">
+                        <div className="uppercase py-[8px] text-body-bold">Địa chỉ giao hàng</div>
+
+                        <div className="flex justify-between flex-wrap items-center gap-x-4">
                             <Form.Item<FieldType>
                                 label="Họ Và Tên"
                                 name="fullName"
@@ -419,7 +402,7 @@ const InfoCheckout = () => {
                                     }
                                 ]}
                                 style={{ minHeight: "70px" }}
-                                className="basis-6/12 !mb-3"
+                                className="w-full md:w-[calc(50%-8px)] !mb-3"
                             >
                                 <Input />
                             </Form.Item>
@@ -427,7 +410,7 @@ const InfoCheckout = () => {
                                 label="Email"
                                 name="email"
                                 style={{ minHeight: "70px" }}
-                                className="basis-6/12 !mb-3"
+                                className="w-full md:w-[calc(50%-8px)] !mb-3"
                             >
                                 <Input />
                             </Form.Item>
@@ -445,12 +428,12 @@ const InfoCheckout = () => {
                         >
                             <Input />
                         </Form.Item>
-                        <div className="flex justify-between items-center gap-x-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <Form.Item<FieldType>
                                 label="Chọn Tỉnh/Thành Phố"
                                 name="city"
                                 rules={[{ required: true, message: 'Vui lòng chọn Tỉnh/Thành Phố' }]}
-                                className="basis-4/12 !mb-3"
+                                className="!mb-3"
                             >
                                 <Select
                                     showSearch
@@ -464,7 +447,7 @@ const InfoCheckout = () => {
                                 label="Chọn Quận/Huyện"
                                 name="district"
                                 rules={[{ required: true, message: 'Vui lòng chọn Quận/Huyện' }]}
-                                className="basis-4/12 !mb-3"
+                                className="!mb-3"
                             >
                                 <Select
                                     showSearch
@@ -481,7 +464,7 @@ const InfoCheckout = () => {
                                 label="Chọn Phường/Xã"
                                 name="ward"
                                 rules={[{ required: true, message: 'Vui lòng chọn Phường/Xã' }]}
-                                className="basis-4/12 !mb-3"
+                                className="!mb-3"
                             >
                                 <Select
                                     placeholder="Chọn Phường/Xã"
@@ -513,11 +496,11 @@ const InfoCheckout = () => {
                         >
                             <TextArea rows={2} />
                         </Form.Item>
-                        <div className="flex justify-between items-center gap-x-4">
+                        <div className="flex justify-between flex-wrap items-center gap-x-4">
                             <Form.Item<FieldType>
                                 name="shippingMethod"
                                 rules={[{ required: true, message: 'Vui lòng chọn phương thức Vận chuyển!' }]}
-                                className="basis-6/12"
+                                className="w-full md:w-[calc(50%-8px)]"
                             >
                                 <div>
                                     <div className="mb-2 font-medium flex items-center gap-x-1">
@@ -540,7 +523,7 @@ const InfoCheckout = () => {
                             <Form.Item<FieldType>
                                 name="paymentMethod"
                                 rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
-                                className="basis-6/12"
+                                className="w-full md:w-[calc(50%-8px)]"
                             >
                                 <div>
                                     <div className="mb-2 font-medium flex items-center gap-x-1">
@@ -563,45 +546,45 @@ const InfoCheckout = () => {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="basis-4/12 pl-[15px]">
-                <div className="bg-white rounded-lg px-[16px] py-[8px]">
-                    <h2 className="text-body-bold uppercase pt-2">Đơn hàng</h2>
-                    <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
-                        <p>Tạm tính</p>
-                        <span>{new Intl.NumberFormat("vi-VN").format(clientTotal) + " đ"}</span>
-                    </div>
-                    <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
-                        <p>Giảm giá</p>
-                        <span>
-                            - {new Intl.NumberFormat("vi-VN").format(appliedCoupon?.discount || 0)} đ
-                        </span>
-                    </div>
-                    <div className="flex justify-between items-center mt-[8px] mb-[16px] text-caption font-semibold">
-                        <p>Phí vận chuyển</p>
-                        <p>{new Intl.NumberFormat("vi-VN").format(shippingPrice)}</p>
-                    </div>
-                    <div className="my-[10px]">
-                        <hr className="border-dashed border border-bg-text" />
-                        <div className="flex justify-between items-center py-[8px] text-red1 text-sub-heading-bold">
-                            <h3>Tổng Tiền</h3>
+                <div className="basis-full md:basis-4/12 pl-0 md:pl-[15px]">
+                    <div className="bg-white rounded-lg px-[16px] py-[8px]">
+                        <h2 className="text-body-bold uppercase pt-2">Đơn hàng</h2>
+                        <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
+                            <p>Tạm tính</p>
+                            <span>{new Intl.NumberFormat("vi-VN").format(total) + " đ"}</span>
+                        </div>
+                        <div className="flex justify-between items-center my-[8px] text-caption font-semibold">
+                            <p>Giảm giá</p>
                             <span>
-                                {new Intl.NumberFormat("vi-VN").format(
-                                    clientTotal - (appliedCoupon?.discount || 0) + shippingPrice
-                                )} đ
+                                - {new Intl.NumberFormat("vi-VN").format(appliedCoupon?.discount || 0)} đ
                             </span>
                         </div>
-                        <hr className="border-dashed border border-bg-text" />
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className={`flex justify-center items-center mt-[20px] 
+                        <div className="flex justify-between items-center mt-[8px] mb-[16px] text-caption font-semibold">
+                            <p>Phí vận chuyển</p>
+                            <p>{new Intl.NumberFormat("vi-VN").format(shippingPrice)}</p>
+                        </div>
+                        <div className="my-[10px]">
+                            <hr className="border-dashed border border-bg-text" />
+                            <div className="flex justify-between items-center py-[8px] text-red1 text-sub-heading-bold">
+                                <h3>Tổng Tiền</h3>
+                                <span>
+                                    {new Intl.NumberFormat("vi-VN").format(
+                                        total - (appliedCoupon?.discount || 0) + shippingPrice
+                                    )} đ
+                                </span>
+                            </div>
+                            <hr className="border-dashed border border-bg-text" />
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className={`flex justify-center items-center mt-[20px] 
                              ${isLoading ? "opacity-70 bg-red1 cursor-not-allowed" : "bg-red1"} 
                              text-white uppercase text-caption-bold h-[40px] w-full rounded-[8px]`}
-                        >
-                            {isLoading ? "Đang xử lý..." : "Xác Nhận Thanh Toán"}
-                        </button>
+                            >
+                                {isLoading ? "Đang xử lý..." : "Xác Nhận Thanh Toán"}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

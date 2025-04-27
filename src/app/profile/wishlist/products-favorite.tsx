@@ -1,21 +1,73 @@
 "use client";
-import React from "react";
-import { Empty, Spin, Rate, ConfigProvider } from "antd";
+import React, { useState, useEffect } from "react";
+import { Empty, Spin, Rate, ConfigProvider, notification } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
-import { useCurrentApp } from "@/context/app.context";
+import { BsCartPlus } from "react-icons/bs";
+import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
+import { sendRequest } from "@/utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "@/redux/slices/cartSlice";
+import Swal from "sweetalert2";
+import { RootState } from "@/redux/store";
+import { useSession } from "next-auth/react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProductFavorite = () => {
-  const { user } = useCurrentApp();
-
-  const { data, error, isLoading } = useSWR<IBackendRes<IBookLike[]>>(
+  const { data: session } = useSession();
+  const user = session?.user;
+  const dispatch = useDispatch();
+  const cart = useSelector((state: RootState) => state.cart);
+  const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
+  const [ratings, setRatings] = useState<{ [key: string]: number }>({});
+  const { data, error, isLoading } = useSWR(
     user ? `http://localhost:4000/api/v1/book-like/${user.id}` : null,
     fetcher
   );
 
+  useEffect(() => {
+    if (data?.data) {
+      setFavoriteList(data.data);
+    }
+  }, [data]);
+  useEffect(() => {
+    const fetchRatings = async () => {
+      if (!favoriteList.length) return;
+      const ratingsData: { [key: string]: number } = {};
+      await Promise.all(
+        favoriteList.map(async (item) => {
+          try {
+            const res = await fetch(
+              `http://localhost:4000/api/v1/review/book/${item.id_book._id}`
+            );
+            const data = await res.json();
+            if (data?.data?.length) {
+              const avgRating =
+                data.data.reduce(
+                  (sum: number, review: { rating: number }) =>
+                    sum + review.rating,
+                  0
+                ) / data.data.length;
+              ratingsData[item.id_book._id] = avgRating;
+            } else {
+              ratingsData[item.id_book._id] = 0;
+            }
+          } catch (error) {
+            console.error(
+              `Lỗi lấy đánh giá cho sách ${item.id_book._id}:`,
+              error
+            );
+          }
+        })
+      );
+
+      setRatings(ratingsData);
+    };
+
+    fetchRatings();
+  }, [favoriteList]);
   if (isLoading)
     return (
       <div className="flex items-center justify-center min-h-[200px]">
@@ -35,21 +87,93 @@ const ProductFavorite = () => {
       </div>
     );
 
-  const favoriteBooks = Array.isArray(data?.data)
-    ? data.data.map((item) => item.id_book).filter((book) => book)
-    : [];
+  const favoriteBooks = favoriteList
+    .map((item) => item.id_book)
+    .filter(Boolean);
 
   if (!favoriteBooks.length)
     return (
       <div className="flex justify-center py-6">
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            <span>Bạn chưa có sản phẩm yêu thích nào để hiển thị</span>
-          }
+          description={<span>Bạn chưa có sản phẩm yêu thích nào.</span>}
         />
       </div>
     );
+
+  const handleAddToCart = (currentBook: IBook) => {
+    const maxQuantity = currentBook.quantity || 0;
+    const currentCartQuantity =
+      cart.items.find((item) => item._id === currentBook._id)?.quantity || 0;
+
+    if (currentCartQuantity + 1 > maxQuantity) {
+      notification.warning({
+        message: "Lỗi Số Lượng",
+        description: `Số lượng yêu cầu (${currentCartQuantity + 1
+          }) không có sẵn.`,
+      });
+      return;
+    }
+
+    dispatch(addToCart({ item: currentBook, quantity: 1 }));
+    Swal.fire({
+      icon: "success",
+      title: "Sản phẩm đã thêm vào giỏ hàng!",
+      showConfirmButton: false,
+      timer: 2000,
+      background: "rgba(0, 0, 0, 0.7)",
+      color: "#ffffff",
+    });
+  };
+
+  const handleToggleFavorite = async (bookId: string) => {
+    if (!user) {
+      notification.warning({
+        message: "Thông báo",
+        description: "Bạn cần đăng nhập để thích sản phẩm!",
+      });
+      return;
+    }
+
+    const bookLikeItem = favoriteList.find(
+      (item) => item.id_book._id === bookId
+    );
+    const bookLikeId = bookLikeItem?._id;
+
+    try {
+      if (bookLikeId) {
+        await sendRequest({
+          url: `http://localhost:4000/api/v1/book-like/${bookLikeId}`,
+          method: "DELETE",
+        });
+        notification.success({ message: "Đã Bỏ Yêu Thích!" });
+      } else {
+        await sendRequest({
+          url: `http://localhost:4000/api/v1/book-like`,
+          method: "POST",
+          body: { id_user: user.id, id_book: bookId },
+        });
+        notification.success({ message: "Đã Thêm Vào Yêu Thích!" });
+      }
+
+      const resFavorites = await sendRequest<{
+        message: string;
+        data: IBookLike[];
+      }>({
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${user.id}`,
+        method: "GET",
+      });
+
+      if (resFavorites?.data) {
+        setFavoriteList(resFavorites.data);
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật yêu thích:", error);
+      notification.error({
+        message: "Không thể cập nhật danh sách yêu thích.",
+      });
+    }
+  };
 
   return (
     <div className="bg-white overflow-hidden pb-4">
@@ -68,13 +192,31 @@ const ProductFavorite = () => {
               className="group w-full sm:max-w-[200px] md:max-w-[232px]"
             >
               <div className="relative bg-white group-hover:shadow-custom overflow-hidden">
-                {discount && (
-                  <div className="lg:w-[44px] w-[40px] lg:h-[44px] h-[40px] absolute z-10 top-[6px] right-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
+                {discount && discount > 0 && (
+                  <div className="lg:w-[44px] w-[40px] lg:h-[44px] h-[40px] absolute z-10 top-[6px] left-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
                     <span className="text-white lg:text-body-bold text-caption-bold">
                       -{discount}%
                     </span>
                   </div>
                 )}
+                <div className="absolute z-10 top-[6px] right-[6px] opacity-0 transition-all ease-in-out duration-1000 group-hover:opacity-100 flex flex-col gap-[4px]">
+                  <div
+                    className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
+                    onClick={() => handleAddToCart(book)}
+                  >
+                    <BsCartPlus className="text-[22px] text-red1" />
+                  </div>
+                  <div
+                    className="lg:w-9 w-8 lg:h-9 h-8 shadow-custom bg-white flex justify-center items-center cursor-pointer"
+                    onClick={() => handleToggleFavorite(_id)}
+                  >
+                    {favoriteList.some((item) => item.id_book._id === _id) ? (
+                      <MdFavorite className="text-[22px] text-red-500" />
+                    ) : (
+                      <MdOutlineFavoriteBorder className="text-[22px] text-red-500" />
+                    )}
+                  </div>
+                </div>
                 <div className="p-3 flex flex-col justify-center items-center">
                   <div className="w-[190px] h-[190px] mb-2 overflow-hidden">
                     <div className="relative">
@@ -126,8 +268,8 @@ const ProductFavorite = () => {
                         },
                       }}
                     >
-                      {rating && rating > 0 ? (
-                        <Rate disabled allowHalf value={rating} />
+                      {ratings[_id] && ratings[_id] > 0 ? (
+                        <Rate disabled allowHalf value={ratings[_id]} />
                       ) : (
                         <span className="text-gray-500 text-info">
                           Chưa có đánh giá

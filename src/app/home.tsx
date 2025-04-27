@@ -5,14 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 import { FaAngleRight, FaBook } from "react-icons/fa";
-import { FaArrowTrendUp } from "react-icons/fa6";
-import NewsBox from "@/components/box-news";
 import ListProductHome from "@/components/list-product/list-product-home";
 import ListFlashSale from "@/components/list-flashsale";
 import ListCategoryHome from "@/components/list-Category";
-import CarouselHome from "@/components/carousel";
 import { Spin } from "antd";
 import ListNews from "@/components/listnewshome";
+import { BiCategory } from "react-icons/bi";
 
 const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
@@ -44,83 +42,30 @@ const Home = () => {
 
   if (genreError || bookError || flsError || bookTrendError)
     return <div>Lỗi tải dữ liệu</div>;
-  if (genreLoading || bookLoading || flsLoading || bookTrendLoading)
-    return (
-      <div className="flex items-center justify-center min-h-[100px]">
-        <Spin size="large">
-          <span className="">Loading...</span>
-        </Spin>
-      </div>
-    );
-
-  const shipper = [
-    {
-      img: "/Frame139.png",
-      title: "Hàng Hóa Chất Lượng",
-      desc: "Tận hưởng các mặt hàng chất lượng hàng đầu với giá cả hợp lý",
-    },
-    {
-      img: "/Frame140.png",
-      title: "Hỗ Trợ 24/7",
-      desc: "Nhận hỗ trợ ngay lập tức bất cứ khi nào bạn cần",
-    },
-    {
-      img: "/Frame141.png",
-      title: "Vận Chuyển Nhanh Chóng",
-      desc: "Tùy chọn giao hàng nhanh chóng và đáng tin cậy",
-    },
-    {
-      img: "/Frame142.png",
-      title: "Thanh Toán An Toàn",
-      desc: "Nhiều phương thức thanh toán an toàn",
-    },
-  ];
 
   return (
-    <main className="bg-bg-main">
-      <div className="container py-5 gap-[10px] px-[15px] lg:px-0 flex lg:justify-between justify-center  ">
-        <CarouselHome></CarouselHome>
-        <div className="hidden lg:flex lg:flex-col lg:w-[32%] lg:gap-y-[10px]">
-          <div className="w-full min-h-[155px] rounded-lg overflow-hidden">
-            <Link href="">
-              <Image
-                className="rounded-lg"
-                src="/UuDai_T1_392x156.webp"
-                alt="banner"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </Link>
+    <>
+      {genreLoading ? (
+        <div className="bg-white container mb-6 rounded-[10px] hidden md:block">
+          <div className="container h-[64px] p-4 flex items-center rounded-t-[10px]">
+            <BiCategory className="text-[red] w-[30px] h-[30px] mr-[10px]" />
+            <div className="text-sub-heading-bold">Danh mục sản phẩm</div>
           </div>
-          <div className="w-full min-h-[155px] rounded-lg overflow-hidden">
-            <Link href="">
-              <Image
-                className="rounded-lg"
-                src="/ShopeeT1_392x156.webp"
-                alt="banner"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </Link>
+          <div className="flex container rounded-b-[10px] flex-row justify-between p-4">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="w-[120px] flex flex-col items-center">
+                <div className="w-full h-[140px] bg-bg-main"></div>
+                <p className="mt-2 w-full h-4 bg-bg-main"></p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-      <ListCategoryHome genre={dataGenre?.data} />
+      ) : (
+        <ListCategoryHome genre={dataGenre?.data} />
+      )}
       <div className="bg-bg-sale py-5">
         <div className="container px-4 lg:px-0">
-          <div className=" w-full  flex items-center justify-between  rounded-lg lg:px-6 px-4 lg:py-[18px] py-[10px] mb-4 bg-white">
+          <div className="w-full flex items-center justify-between rounded-lg lg:px-6 px-4 lg:py-[18px] py-[10px] mb-4 bg-white">
             <div className="flex items-center">
               <Link href={""} className="">
                 <div className="lg:w-[129px] w-[100px] lg:h-[26px] h-[20px] relative">
@@ -134,7 +79,7 @@ const Home = () => {
               </Link>
             </div>
             <div className="">
-              <Link href={""}>
+              <Link href="/product/by/flash-sale">
                 <div className="flex items-center justify-center">
                   <span className="lg:text-caption-bold text-info text-[#1478FC]">
                     Xem tất cả
@@ -147,128 +92,149 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <ListFlashSale products={dataFlasSale?.data} />
+        {flsLoading ? (
+          <div className="container px-4 lg:px-0">
+            <div className="grid grid-cols-5 gap-6">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center space-y-3 bg-gray-200 p-4 rounded shadow-sm w-full"
+                >
+                  <div className="w-full h-48 bg-gray-300 rounded-xl"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <ListFlashSale products={dataFlasSale?.data} />
+        )}
       </div>
-      <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
-        <div className=" flex bg-[#FCDDEF]  lg:py-4 py-2 pr-4 pl-4">
-          <FaBook className="text-[#C92127] text-[25px] lg:text-[32px]" />
-          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127] ">
+      <div className="container h-auto rounded-lg overflow-hidden mt-5 mb-5">
+        <div className="flex bg-[#FCDDEF] lg:py-4 py-2 pr-4 pl-4">
+          <Image
+            width={32}
+            height={32}
+            alt="Sản Phẩm Mới Ra Mắt"
+            src="/ico_sachtrongnuoc.svg"
+          />
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black ">
             Sản Phẩm Mới Ra Mắt
           </p>
         </div>
-        <ListProductHome dataBooks={dataBookNew?.data} link="/product/by/new" />
+        {bookLoading ? (
+          <div className="bg-white overflow-hidden ">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 mt-4 lg:mb-6 mb-3">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center space-y-3 bg-gray-200 p-4 rounded shadow-sm w-full"
+                >
+                  <div className="w-full h-48 bg-gray-300 rounded-xl"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center lg:mb-6 mb-4">
+              <span className="h-9 w-48 flex justify-center items-center gap-x-2 text-red-500 text-body-bold bg-white border border-red-500 rounded-lg hover:text-white hover:bg-red-500 transition">
+                Xem thêm
+              </span>
+            </div>
+          </div>
+        ) : (
+          <ListProductHome
+            dataBooks={dataBookNew?.data}
+            link="/product/by/new"
+          />
+        )}
       </div>
-      <div className="container  h-auto rounded-lg overflow-hidden mt-5 mb-5">
-        <div className=" flex bg-[#FCDDEF]  pt-4 pr-4 pl-4 pb-3">
-          <FaArrowTrendUp className="text-[#C92127] text-[25px] lg:text-[32px]" />
-          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-[#C92127] ">
+
+      <div className="container h-auto rounded-lg overflow-hidden mt-5 mb-5">
+        <div className="flex bg-[#FCDDEF] pt-4 pr-4 pl-4 pb-3">
+          <Image
+            width={32}
+            height={32}
+            alt="Xu Hướng Mua Sắm"
+            src="/icon_dealhot_new.png"
+          />
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black ">
             Xu Hướng Mua Sắm
           </p>
         </div>
-        <ListProductHome
-          dataBooks={dataBookTrend?.data}
-          link="/product/by/trending"
-        />
-      </div>
-      <div className="container  bg-white rounded-lg overflow-hidden">
-        <div className="flex items-center gap-x-3  w-full max-w-full whitespace-nowrap">
-          <Link href="">
-            <div className="bg-[#FF7507] px-4 md:px-5 py-[5px] md:py-[7px] lg:text-caption-bold text-info-light  text-white rounded-t-lg hover:text-black text-sm md:text-base">
-              Sách Tư Duy - Kỹ Năng
+        {bookLoading ? (
+          <div className="bg-white overflow-hidden ">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 mt-4 lg:mb-6 mb-3">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center space-y-3 bg-gray-200 p-4 rounded shadow-sm w-full"
+                >
+                  <div className="w-full h-48 bg-gray-300 rounded-xl"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                </div>
+              ))}
             </div>
-          </Link>
-          <Link href="">
-            <div className="px-4 md:px-5 py-[5px] md:py-[7px] text-black lg:text-caption text-info-light hover:text-[#C92127] text-sm md:text-base">
-              Sách Tư Duy
+            <div className="flex justify-center lg:mb-6 mb-4">
+              <span className="h-9 w-48 flex justify-center items-center gap-x-2 text-red-500 text-body-bold bg-white border border-red-500 rounded-lg hover:text-white hover:bg-red-500 transition">
+                Xem thêm
+              </span>
             </div>
-          </Link>
-          <div className="hidden lg:block">|</div>
-          <Link href="">
-            <div className="hidden md:block px-4 md:px-5 py-[5px] md:py-[7px] text-black lg:text-caption text-info-light hover:text-[#C92127] text-sm md:text-base">
-              Sách Kỹ Năng
-            </div>
-          </Link>
-        </div>
-
-        <div className="relative w-full">
-          <Link href="">
-            <Image
-              src="/20240318_22FUnfy4.png"
-              alt="Sách Tư Duy - Kỹ Năng"
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{
-                width: "100%",
-                height: "auto",
-              }}
-              className="w-full"
-            />
-          </Link>
-        </div>
-      </div>
-      
-      {/* <div className="container mt-5 bg-white rounded-lg">
-        <p className="lg:text-heading3-bold text-sub-heading-bold lg:mb-5 mb-3 lg:pt-5 pt-3 text-center">
-          Tin Tức
-        </p>
-        <div className="flex gap-[30px] pb-5 px-5 lg:px-0">
-          <div className="w-[48%] lg:block hidden">
-            <Link href="">
-              <Image
-                src="/lam-ra-lam-choi-ra-choi-diem-sach-1.jpg"
-                alt=""
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                className="w-full"
-              />
-              <p className="text-sub-heading-bold pl-[10px] pt-[15px]">
-                “Deep work” và “Shallow work”
-              </p>
-              <p className="text-caption pl-[10px]">
-                Cuốn sách tập trung phân tích hai khái niệm đáng chú ý: “Deep
-                work” (những việc đòi hỏi sự tập trung cao độ) và “Shallow work”
-                (công việc mang tính lặp, không đòi hỏi nhiều suy nghĩ). Tác giả
-                ví “Deep work” như một anh chàng siêu nhân trong nền kinh tế
-                ngày càng cạnh tranh hiện nay.
-              </p>
-            </Link>
           </div>
-          <div className="lg:w-[48%] w-full flex flex-wrap gap-2 ">
-            {/* <NewsBox /> */}
-          {/* </div>
-        </div>
-      </div> */}
-      
-        <ListNews />
-      <div className="container bg-bg-main mt-5 px-2 lg:px-0 sm:px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {shipper.map((item, index) => (
-            <div
-              key={index}
-              className="rounded bg-white text-center px-4 py-4 sm:px-6 sm:py-5 shadow-md"
-            >
-              <div className="md:w-10 w-8 md:h-10 h-8 sm:w-[50px] sm:h-[50px] mx-auto">
-                <Image
-                  src={item.img}
-                  alt={item.title}
-                  width={50}
-                  height={50}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <p className=" sm:text-caption-bold pt-2">{item.title}</p>
-              <p className="text-info sm:text-caption">{item.desc}</p>
-            </div>
-          ))}
-        </div>
+        ) : (
+          <ListProductHome
+            dataBooks={dataBookNew?.data}
+            link="/product/by/new"
+          />
+        )}
       </div>
-    </main>
+
+      <div className="container h-auto rounded-lg overflow-hidden mt-5 mb-5">
+        <div className="flex bg-[#FCDDEF] pt-4 pr-4 pl-4 pb-3">
+          <Image
+            width={32}
+            height={32}
+            alt="Xu Hướng Mua Sắm"
+            src="/icon_dealhot_new.png"
+          />
+          <p className="ml-2 lg:text-sub-heading-bold text-sub-heading-bold text-black ">
+            Xu Hướng Mua Sắm
+          </p>
+        </div>
+        {bookTrendLoading ? (
+          <div className="bg-white overflow-hidden ">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 mt-4 lg:mb-6 mb-3">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center space-y-3 bg-gray-200 p-4 rounded shadow-sm w-full"
+                >
+                  <div className="w-full h-48 bg-gray-300 rounded-xl"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-1/2 h-4 bg-gray-300 rounded"></div>
+                  <div className="w-3/4 h-4 bg-gray-300 rounded"></div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center lg:mb-6 mb-4">
+              <span className="h-9 w-48 flex justify-center items-center gap-x-2 text-red-500 text-body-bold bg-white border border-red-500 rounded-lg hover:text-white hover:bg-red-500 transition">
+                Xem thêm
+              </span>
+            </div>
+          </div>
+        ) : (
+          <ListProductHome
+            dataBooks={dataBookTrend?.data}
+            link="/product/by/trending"
+          />
+        )}
+</div>
+    </>
   );
 };
 

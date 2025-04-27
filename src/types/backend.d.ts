@@ -25,6 +25,14 @@ declare global {
             pageSize: number;
             pages: number;
             total: number;
+            statusCounts?: {
+                "0": number;
+                "1": number;
+                "2": number;
+                "3": number;
+                "4": number;
+                "": number;
+            };
         },
         result: T[]
     }
@@ -231,10 +239,10 @@ declare global {
         updatedAt?: Date;
     }
 
-    interface IBookLike{
-        _id:string;
-        id_user:string;
-        id_book:IBook;
+    interface IBookLike {
+        _id: string;
+        id_user: string;
+        id_book: IBook;
     }
     interface IPost {
         _id: string;
@@ -249,5 +257,16 @@ declare global {
         __v: number;
       }
  
+
+    interface IBanner {
+        _id?: string;
+        name: string;
+        image: string;
+        status: boolean;  // true = hiển thị, false = ẩn
+        createdAt?: Date;
+        updatedAt?: Date;
+    }
+
+   
 
 }

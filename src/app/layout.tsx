@@ -6,6 +6,7 @@ import AppFooter from "@/components/footer/app-footer";
 import { App } from "antd";
 import Providers from "@/redux/Provider";
 import { AppProvider } from "@/context/app.context";
+import NextAuthWrapper from "@/lib/next.auth.wrapper";
 
 
 export const metadata: Metadata = {
@@ -20,17 +21,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="h-screen">
+      <body>
         <StyledComponentsRegistry>
-          <AppProvider>
-            <Providers>
-              <App>
-                <AppHeader />
-                {children}
-                <AppFooter />
-              </App>
-            </Providers>
-          </AppProvider>
+          <NextAuthWrapper>
+            <AppProvider>
+              <Providers>
+                <App>
+                  <AppHeader />
+                  {children}
+                  <AppFooter />
+                </App>
+              </Providers>
+            </AppProvider>
+          </NextAuthWrapper>
         </StyledComponentsRegistry>
       </body>
     </html>
