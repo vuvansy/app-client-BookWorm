@@ -107,7 +107,7 @@ export default function FormSearchOrder() {
                     <Input />
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit" className='w-[15%] !bg-red1 !text-body-bold' onClick={handleSearchOrder}>Tra Cứu</Button>
+                <Button type="primary" htmlType="submit" className='w-[44px] !bg-red1 !text-body-bold' onClick={handleSearchOrder}>Tra Cứu</Button>
             </Form>
 
             {orderData && (

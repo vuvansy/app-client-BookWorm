@@ -23,7 +23,9 @@ const ProductFavorite = () => {
   const [favoriteList, setFavoriteList] = useState<IBookLike[]>([]);
   const [ratings, setRatings] = useState<{ [key: string]: number }>({});
   const { data, error, isLoading } = useSWR(
-    user ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${user.id}` : null,
+    user
+      ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/book-like/${user.id}`
+      : null,
     fetcher
   );
 
@@ -109,8 +111,9 @@ const ProductFavorite = () => {
     if (currentCartQuantity + 1 > maxQuantity) {
       notification.warning({
         message: "Lỗi Số Lượng",
-        description: `Số lượng yêu cầu (${currentCartQuantity + 1
-          }) không có sẵn.`,
+        description: `Số lượng yêu cầu (${
+          currentCartQuantity + 1
+        }) không có sẵn.`,
       });
       return;
     }
@@ -183,7 +186,7 @@ const ProductFavorite = () => {
             book;
           const discount =
             price_new && price_old
-              ? Math.round(((price_old - price_new) / price_old) * 100)
+              ? Math.round(((price_old - price_new) / price_old) * 100) || null
               : null;
 
           return (
@@ -192,7 +195,7 @@ const ProductFavorite = () => {
               className="group w-full sm:max-w-[200px] md:max-w-[232px]"
             >
               <div className="relative bg-white group-hover:shadow-custom overflow-hidden">
-                {discount && discount > 0 && (
+                {typeof discount === "number" && discount > 0 && (
                   <div className="lg:w-[44px] w-[40px] lg:h-[44px] h-[40px] absolute z-10 top-[6px] left-[6px] rounded-full bg-yellow-3 flex justify-center items-center">
                     <span className="text-white lg:text-body-bold text-caption-bold">
                       -{discount}%
